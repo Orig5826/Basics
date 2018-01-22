@@ -35,8 +35,9 @@ hi User6 cterm=bold ctermfg=Magenta 	"ctermbg=White
 set laststatus=2 "2.总是显示状态栏 1.多窗口时显示 0.不显示
 
 
+set showcmd	"显示Normal模式下的当前命令
 set autoindent	"自动缩进
 set nu		"显示行号
-set ruler	"显示最后一行的状态
-set showmode 	"左下角那行的状态
+"set ruler	"显示最后一行的状态 --- 据说设置了statusline之后，这个就没用了
+"set showmode 	"左下角那行的状态
 syntax on	"语法检查
