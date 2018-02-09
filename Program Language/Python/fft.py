@@ -67,6 +67,7 @@ plt.subplot(411)
 plt.axis([0,10,-10,10])
 plt.plot(t,x,'b')
 
+
 #1.1 频谱
 plt.subplot(412)
 y1 = np.abs(y)/N		#显示绝对值
@@ -86,7 +87,8 @@ plt.plot(freq,y1,'r')
 #2.1fft逆变换之后
 plt.subplot(414)
 plt.axis([0,10,-10,10])
-plt.plot(t,x2,'b')
+plt.plot(t,x2.real,'b')	#直接x2这里有warning，是不是应该x2.real
+						#因为x2为Complex
 
 plt.show()
 
