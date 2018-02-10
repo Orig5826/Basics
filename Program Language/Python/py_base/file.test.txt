@@ -1,0 +1,11 @@
+Hello world！
+这个测试用的文件
+
+
+I am Bruce !
+
+English 90
+Chinese 100
+Math    95
+Write File Test is End!
+('the answer', 42)
