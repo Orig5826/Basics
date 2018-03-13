@@ -6,6 +6,7 @@
 import urllib
 import urllib.request
 import re
+import os
 
 
 def getHtml(url, code="utf8"):
@@ -20,11 +21,22 @@ def getImg(html):
     imgre = re.compile(reg)
     imglist = re.findall(imgre, html)
     print(imglist)
+
+    if not os.path.exists(r'.\image'):
+        os.mkdir(r'.\image')
     # 核心是urllib.urlretrieve()方法,直接将远程数据下载到本地，图片通过x依次递增命名
     x = 0
     for imgurl in imglist:
-        urllib.request.urlretrieve(imgurl, '.\image\%s.jpg' % x)
+        try:
+            urllib.request.urlretrieve(imgurl, r'.\image\%s.jpg' % x)
+        except:
+            print('[%d] url错误，跳过' % x)
+            pass
         x += 1
+    if os.path.exists(r'.\image\0.jpg'):
+        os.remove(r'.\image\0.jpg')
+
+
 
 # 应该是该网页上直接有原图的话，可以直接下载，否则需要跳转
 # 我猜测。
