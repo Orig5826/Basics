@@ -6,7 +6,8 @@
     > --global表示本机器所有的仓库都使用该配置
 - init
     > 仓库初始化（会在当前目录下创建.git目录，用来跟踪版本库）
---------------------------------------------------------------------
+
+----------------------------------------------------------------
 ## 本地常用操作
     - 和svn本地管理类似
     - 相关概念
@@ -46,13 +47,14 @@
 - rm
     > 从版本库中删除文件
 
---------------------------------------------------------------------
+----------------------------------------------------------------
 ## 远程常用操作 --- GitHub为例
     - Git Bash
         > 利用Git Bash创建SSH Key
         > ssh-keygen -t rsa -C "Orig5826@163.com"
         > 随后在用户主目录下会出现.ssh文件，里面含有rsa的公钥和私钥
         > 登陆GitHub，在Setting中想办法将公钥数据添加到SSH key中，题目自己定
+`其实除了Github之外，中国也有Git托管：诸如gitee.com，coding.net`
 - clone
     > 从远程服务器中克隆一个本地库
     >
@@ -60,8 +62,26 @@
 - remote
     > 将本地仓库和GitHub上新建的仓库关联
     - git remote add origin git@github.com:Orig5826/Basics.git
-    > 
+        > origin 远程库名称，可以修改
+    - git push -u origin master
+        > -u 的作用，推送+关联
+        >
+        > 此时就可以在GitHub页面看到远程库和本地库一致了
+    - git push origin master
+        > 以后就可以使用该命令将更新的代码提交到远程库中
 
+----------------------------------------------------------------
+## 其他操作
+- 忽略特殊文件
+    > ？是利用.gitignore吗？
+    >
+    > ？还是git更新了，我在./git/info/exclude中添加了文件，可以忽略？
+
+- 配置别名
+    1. git config --global alias.st status
+        > 可以直接输入 git st
+    2. git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+        > 这个是真的好，之前还想git log --pretty=oneline 有点信息不全呢，哈哈
 
 
 
