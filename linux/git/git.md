@@ -77,6 +77,9 @@
     > ？是利用.gitignore吗？
     >
     > ？还是git更新了，我在./git/info/exclude中添加了文件，可以忽略？
+    - ./git/infor/exclude
+        - **/.vscode/
+            > 忽略本地仓库中所有的./vscode文件
 
 - 配置别名
     1. git config --global alias.st status
