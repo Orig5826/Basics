@@ -1,4 +1,5 @@
 # Basics 基础知识
+![apaki](./apaki.jpg)
 `2018.4.16 modified by jianfeng`
 
 ## linux

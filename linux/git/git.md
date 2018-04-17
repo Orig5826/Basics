@@ -1,4 +1,5 @@
 # **Git的使用笔记**
+![apaki](../../apaki.jpg)
 `2018.04.16 by jianfeng`
 #### 知识来源：[廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
 - config --global user.name "Your Name" 
