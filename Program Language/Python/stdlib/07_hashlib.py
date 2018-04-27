@@ -10,4 +10,5 @@ plain = b"12345678"
 m = hashlib.sha256()
 m.update(plain)
 ret = m.digest()
+print(ret)
 print(m.hexdigest())
