@@ -3,6 +3,6 @@
 
 int main(void)
 {
-	tim_wait_all_demo();
+	uart1_demo();
 	return 0;
 }
