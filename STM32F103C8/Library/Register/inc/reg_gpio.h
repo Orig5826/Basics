@@ -7,7 +7,7 @@
 //stm32f10x
 #define LED1_ON			(GPIOB->BRR = GPIO_BRR_BR8)
 #define LED1_OFF		(GPIOB->BSRR = GPIO_BSRR_BS8)
-
+#define LED1_FLIP		(GPIOB->ODR ^= GPIO_BSRR_BS8)
 
 // Interface
 void reg_gpio_init(void);

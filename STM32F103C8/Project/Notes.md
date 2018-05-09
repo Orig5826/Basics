@@ -36,7 +36,10 @@
 			- GPIOE->BSRR = 0x80; GPIOE->BRR = 0x40;
 - **定时器**
 	- 无论向上或者向下计数，范围都是：0 - 自动加载值。
-
+- **UART**
+	1. 非中断的情况下接收数据，一直等不到RXNE标识到来，会卡死在循环中
+	> 经过查看和分析，确认RX引脚，需要配置为Floating Input。我之前的错误原因是将RX引脚配置为和TX一样了(Alternate function output Push-pull)
+	> 因此接收不到数据
 
 ## **问题小结**
 - STM32F10X_MD定义问题

@@ -9,10 +9,10 @@ void reg_uart_init(void)
 	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
 	//配置速度
 	GPIOA->CRH &= ~(GPIO_CRH_MODE9 | GPIO_CRH_MODE10);
-	GPIOA->CRH |= GPIO_CRH_MODE9_1 | GPIO_CRH_MODE10_1;		//2MHz
+	GPIOA->CRH |= GPIO_CRH_MODE9_1 ;//| GPIO_CRH_MODE10_1;				//RX->Input,TX->OUT 2MHz
 	//复用,推挽输出
 	GPIOA->CRH &= ~(GPIO_CRH_CNF9 | GPIO_CRH_CNF10);
-	GPIOA->CRH |= GPIO_CRH_CNF9_1 | GPIO_CRH_CNF10_1;
+	GPIOA->CRH |= GPIO_CRH_CNF9_1 | GPIO_CRH_CNF10_0;//RX->Floating input, TX->AF_OUT Push-pull
 	
 	//AFIO 时钟开启
 	RCC->APB2ENR |=RCC_APB2ENR_AFIOEN;
@@ -98,7 +98,6 @@ uint8_t reg_uart_recvbyte(void)
 {
 	uint8_t temp;
 	
-	USART1->SR &= ~USART_SR_RXNE;
 	while(!(USART1->SR & USART_SR_RXNE));
 	temp = (uint8_t)USART1->DR;
 	
