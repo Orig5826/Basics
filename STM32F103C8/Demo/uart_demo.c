@@ -15,3 +15,16 @@ void uart1_demo(void)
 		reg_uart_sendhex(sBuf,8);
 	}
 }
+
+void uart1_shell_demo(void)
+{
+	uint8_t temp = 0x55;
+	reg_uart_init();
+	reg_uart_sendstr((const uint8_t *)"uart1_shell_demo\r\n",0);
+
+	while(1)
+	{
+		temp = reg_uart_recvbyte();
+		reg_uart_sendbyte(temp);
+	}
+}

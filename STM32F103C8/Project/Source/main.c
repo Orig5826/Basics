@@ -3,6 +3,6 @@
 
 int main(void)
 {
-	uart1_demo();
+	uart1_shell_demo();
 	return 0;
 }

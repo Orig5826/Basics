@@ -35,6 +35,7 @@ void reg_gpio_delay(uint32_t n);
 void gpio_demo(void);
 //		UART
 void uart1_demo(void);
+void uart1_shell_demo(void);
 //		TIM
 void tim_wait_all_demo(void);
 void tim_intr_demo(void);
