@@ -3,7 +3,12 @@
 
 void tim_intr_demo(void)
 {
+	reg_gpio_init();
 	
+	while(1)
+	{
+
+	}
 }
 
 void tim_wait_all_demo(void)

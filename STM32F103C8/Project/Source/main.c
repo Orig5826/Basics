@@ -3,6 +3,7 @@
 
 int main(void)
 {
-	uart1_shell_demo();
+	//uart1_shell_demo();
+	tim_intr_demo();
 	return 0;
 }

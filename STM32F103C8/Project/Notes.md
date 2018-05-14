@@ -40,6 +40,27 @@
 	1. 非中断的情况下接收数据，一直等不到RXNE标识到来，会卡死在循环中
 	> 经过查看和分析，确认RX引脚，需要配置为Floating Input。我之前的错误原因是将RX引脚配置为和TX一样了(Alternate function output Push-pull)
 	> 因此接收不到数据
+- **NVIC 中断控制** Nested Vectored Interrupt Controller
+	- **ISER** Interrupt Set Enable Register
+		> 中断使能寄存器 CM3有256个中断，由8个32位寄存器控制，写1有效
+	- **ICER**Interrupt Clear Enable Register
+		> 中断清除使能寄存器，写1有效
+	- **ISPR** Interrupt Set Pending Register
+		> 中断挂起寄存器组，将正在执行的中断挂起，而执行同级或更高级别的中断。写1有效
+	- **ICPR** Interrupt Clear Pending Register
+		> 中断清除挂起寄存器,写1有效
+	- **IABR** Interrupt Active bit Register
+		> 激活标志位寄存器组,若为1表示该位正在被执行。通过该位判断当前正在执行的中断。中断执行完毕，硬件清零
+	- **IP** Interrupt Priority Register
+		> 中断优先级控制寄存器,240个8位寄存器，STM32只有60个(IP[59]-IP[0]),每个中断8位中，只占用高4位。该4位又分为抢占式优先级和响应式优先级。而而这两个优先级各占几个字节，又要根据SCB->AIRCR寄存器的bit[10:8]位来定义
+		- 优先级高的抢占可以打断优先级低的，但响应优先级高的不能打断优先级低的
+		- 若两个中断抢占和响应优先级均一样，则数值越小，优先级越高
+	- **STIR**
+		> ?
+
+
+
+
 
 ## **问题小结**
 - STM32F10X_MD定义问题

@@ -22,3 +22,12 @@ void reg_tim2_init(void)
 	//定时器使能
 	TIM2->CR1 |= TIM_CR1_CEN; 
 }
+
+// --------------------------------------
+// Time2中断配置
+void reg_time2_intr_init(void)
+{
+	//配置中断向量表
+	SCB->VTOR = NVIC_VectTab_FLASH | (0x0000 & (uint32_t)0x1FFFFF80);
+	
+}
