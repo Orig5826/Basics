@@ -74,12 +74,10 @@
 ----------------------------------------------------------------
 ## 其他操作
 - 忽略特殊文件
-    > ？是利用.gitignore吗？
-    >
-    > ？还是git更新了，我在./git/info/exclude中添加了文件，可以忽略？
-    - ./git/infor/exclude
-        - **/.vscode/
-            > 忽略本地仓库中所有的./vscode文件
+    - 直接在.gitignore文件中添加所需要忽略的文件/文件夹即可
+    - 当然了在..git/info/exclude中添加了文件，也可以。但是一般不去手动修改.git中的文件
+        - .git/infor/exclude
+            > 在exclude中添加 **/.vscode/,忽略本地仓库中所有的./vscode文件
 
 - 配置别名
     1. git config --global alias.st status
