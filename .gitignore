@@ -1,3 +1,10 @@
+# MDK-ARM  2018.5.14 by jf
+**/Project/DebugConfig
+**/Project/Listings
+**/Project/Objects
+**/Project/*.uvoptx
+**/Project/*.uvguix.*
+
 # Prerequisites
 *.d
 
