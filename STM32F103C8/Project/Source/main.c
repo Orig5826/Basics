@@ -3,7 +3,6 @@
 
 int main(void)
 {
-	//uart1_shell_demo();
-	tim_intr_demo();
+	flash_demo();
 	return 0;
 }

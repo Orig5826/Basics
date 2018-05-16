@@ -63,14 +63,14 @@ uint32_t reg_uart_sendhex(const uint8_t * str,uint32_t len)
 {
 	uint32_t i = 0;
 	uint8_t temp = 0x00;
-	while(*(str+i) != '\0')
+	while(i < len)
 	{
 		//发送一个字节
-		temp = "01234567890abcdef"[(*(str+i) & 0xf0) >> 4];
+		temp = "0123456789ABCDEF"[(*(str+i) & 0xf0) >> 4];
 		while(!(USART1->SR & USART_SR_TXE));
 		USART1->DR = temp;
 		
-		temp = "01234567890abcdef"[(*(str+i) & 0x0f)];
+		temp = "0123456789ABCDEF"[(*(str+i) & 0x0f)];
 		while(!(USART1->SR & USART_SR_TXE));
 		USART1->DR = temp;
 		

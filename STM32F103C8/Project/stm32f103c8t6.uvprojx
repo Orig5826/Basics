@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Library\CoreSupport;..\Library\DeviceSupport\STM32F10x;..\Library\Drivers\inc;..\Library\Register\inc;.\Source;..\Example;..\Demo</IncludePath>
+              <IncludePath>..\Library;..\Library\CoreSupport;..\Library\DeviceSupport\STM32F10x;..\Library\Drivers\inc;..\Library\Register\inc;.\Source;..\Example;..\Demo</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -509,6 +509,11 @@
               <FileName>tim_demo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Demo\tim_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Demo\flash_demo.c</FilePath>
             </File>
           </Files>
         </Group>

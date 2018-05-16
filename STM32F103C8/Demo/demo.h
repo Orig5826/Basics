@@ -5,28 +5,13 @@
 //------------------------------------------
 //		register  driver 
 #include "stm32f10x.h"
-
-typedef enum _BOOL
-{
-	FALSE = 0,
-	TRUE
-}BOOL;
-
-#if 0
-typedef uint8_t 			BOOL;
-#ifndef TRUE
-#define TRUE				1
-#endif
-#ifndef FALSE
-#define FALSE				0
-#endif
-#endif
-
+#include "typedef.h"
 //------------------------------------------
 //		register  driver 
 #include "reg_gpio.h"
 #include "reg_uart.h"
 #include "reg_tim.h"
+#include "reg_flash.h"
 
 //------------------------------------------
 //			demo
@@ -39,5 +24,7 @@ void uart1_shell_demo(void);
 //		TIM
 void tim_wait_all_demo(void);
 void tim_intr_demo(void);
+//		FLASH
+void flash_demo(void);
 
 #endif
