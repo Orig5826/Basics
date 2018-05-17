@@ -160,6 +160,11 @@ void SysTick_Handler(void)
   * @}
   */
 
+// --------------------------------
+// 该定义和相关说明，见demo.h
+// --------------------------------
+#ifdef _INTR_DEMO_
+
 //------------------------------------------
 //		2017.2.18 by jianfeng
 //	定时器2中断，在中断向量表中,可以查到
@@ -188,6 +193,6 @@ void TIM2_IRQHandler(void)
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update); 
 }
 
-
+#endif
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

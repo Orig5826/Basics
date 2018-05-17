@@ -7,6 +7,7 @@
 **/Project/Objects
 **/Project/*.uvoptx
 **/Project/*.uvguix.*
+**/Project/*.scvd
 
 # Prerequisites
 *.d

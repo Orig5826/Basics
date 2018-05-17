@@ -3,6 +3,6 @@
 
 int main(void)
 {
-	flash_demo();
+	tim_intr_demo();
 	return 0;
 }

@@ -25,9 +25,25 @@ void reg_tim2_init(void)
 
 // --------------------------------------
 // Time2中断配置
+#define NVIC_ADDR	0x08000000		//Flash Addr
+#define NVIV_OFFSET	0x0000			//偏移 = 0x200 * N
 void reg_time2_intr_init(void)
 {
-	//配置中断向量表
-	SCB->VTOR = NVIC_VectTab_FLASH | (0x0000 & (uint32_t)0x1FFFFF80);
+	//配置中断向量表,Flash
+	SCB->VTOR = NVIC_ADDR | (NVIV_OFFSET & (uint32_t)0x1FFFFF80);
+	// 配置中断优先级,注意STM32用的是高4bit
+	// 配置抢占式优先级和响应式优先级各自占2bit
+	SCB->AIRCR = 0x05FA0500;
+	// 配置抢占式中段级别为2，响应式中断级别为2
+	//NVIC->IP[TIM2_IRQn] |= 0xa0;
+	//使能中断
+	//NVIC->ISER[TIM2_IRQn/8] |= 1 << (TIM2_IRQn%8);
+
+	NVIC->IP[28] |= 0xa0;
+	//使能中断
+	NVIC->ISER[3] |= 1 << 5;
+	NVIC->IABR[3] |= 1 << 5;
 	
+	//开启TIM2中断
+	TIM2->DIER |= TIM_DIER_TIE;
 }

@@ -2,6 +2,11 @@
 #ifndef _DEMO_H_
 #define _DEMO_H_
 
+// 若使用的reg*中的中断，则需要保留该注释
+// 若使用库函数，则需要将该定义注释掉
+#define _INTR_DEMO_
+
+
 //------------------------------------------
 //		register  driver 
 #include "stm32f10x.h"

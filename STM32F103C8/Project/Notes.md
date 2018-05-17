@@ -40,6 +40,7 @@
 	1. 非中断的情况下接收数据，一直等不到RXNE标识到来，会卡死在循环中
 	> 经过查看和分析，确认RX引脚，需要配置为Floating Input。我之前的错误原因是将RX引脚配置为和TX一样了(Alternate function output Push-pull)
 	> 因此接收不到数据
+
 - **NVIC 中断控制** Nested Vectored Interrupt Controller
 	- **ISER** Interrupt Set Enable Register
 		> 中断使能寄存器 CM3有256个中断，由8个32位寄存器控制，写1有效
@@ -57,6 +58,19 @@
 		- 若两个中断抢占和响应优先级均一样，则数值越小，优先级越高
 	- **STIR**
 		> ?
+- **SCB** System Control Block
+	- **VTOR** Vector Table Offset Regester
+		> 中断向量表，偏移配置
+	- **AIRCR**
+		> Application Interrupt and Reset Control Register
+		- 配置抢占式优先级和响应式优先级，可以参见上面IP寄存器的介绍
+
+```
+	[记录]2018.5.17 by jianfeng
+	还是不能很好的理解，中断机制
+	我觉得3部分最难理解：
+	1. FLASH(暂时已经理解，且写下简单的Demo)  2. 中断(部分理解，但未能实现代码)  3.DMA（完全不懂）
+```
 
 --------------------------------------------------------------------
 ## **MDK-ARM**
