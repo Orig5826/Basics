@@ -26,7 +26,12 @@ void TimerInit(void)
 void TimerNVIC_Config(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure;
+	//配置中断向量表地址
     NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0000);
+	//指定抢占优先级为两位，响应优先级为2位
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+
+	//配置TIM2，抢占优先级为0，响应优先级为1
     NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;

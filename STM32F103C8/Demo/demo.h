@@ -4,8 +4,7 @@
 
 // 若使用的reg*中的中断，则需要保留该注释
 // 若使用库函数，则需要将该定义注释掉
-#define _INTR_DEMO_
-
+#define _REG_INTR_DEMO_
 
 //------------------------------------------
 //		register  driver 

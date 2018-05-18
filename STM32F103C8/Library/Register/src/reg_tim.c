@@ -20,7 +20,7 @@ void reg_tim2_init(void)
 	TIM2->CR1 |= TIM_CR1_DIR;		//downcounter
 	//配置
 	//定时器使能
-	TIM2->CR1 |= TIM_CR1_CEN; 
+	TIM2->CR1 |= TIM_CR1_CEN;
 }
 
 // --------------------------------------
@@ -33,17 +33,14 @@ void reg_time2_intr_init(void)
 	SCB->VTOR = NVIC_ADDR | (NVIV_OFFSET & (uint32_t)0x1FFFFF80);
 	// 配置中断优先级,注意STM32用的是高4bit
 	// 配置抢占式优先级和响应式优先级各自占2bit
-	SCB->AIRCR = 0x05FA0500;
-	// 配置抢占式中段级别为2，响应式中断级别为2
-	//NVIC->IP[TIM2_IRQn] |= 0xa0;
+	SCB->AIRCR |= 0x05FA0000 | (0x101 << 8);
+	// 配置抢占式中段级别为0，响应式中断级别为1
+	NVIC->IP[TIM2_IRQn] = 0x10;
 	//使能中断
-	//NVIC->ISER[TIM2_IRQn/8] |= 1 << (TIM2_IRQn%8);
+	NVIC->ISER[TIM2_IRQn >> 5] |= 1 << (TIM2_IRQn & 0x1f);
 
-	NVIC->IP[28] |= 0xa0;
-	//使能中断
-	NVIC->ISER[3] |= 1 << 5;
-	NVIC->IABR[3] |= 1 << 5;
-	
+	//清除中断标记
+	TIM2->SR &= ~TIM_SR_UIF;
 	//开启TIM2中断
-	TIM2->DIER |= TIM_DIER_TIE;
+	TIM2->DIER |= TIM_DIER_UIE;
 }
