@@ -8,8 +8,8 @@
 	[MSDN] The result is undefined if the right operand of a shift expression is negative or if the right operand is greater than or equal to the number of bits in the (promoted) left operand.
 	```
 
-## **C语言中的默认类型转换**
-- 运算和比较中的默认类型转换
+## **默认类型转换**
+- "运算和比较"的默认类型转换
 	1. 例如：
 		```
 		short a = 0;
@@ -48,3 +48,30 @@
 			printf("HHH");
 		}
 		```
+		- 结果输出为：HHH
+
+## **sizeof数组自身**
+- 代码示例如下
+```
+unsigned char config[5] =
+{
+	0x09,0x02,
+	sizeof(config),
+	0x55,0xaa
+};
+```
+- 此时，你认为数组config的第三个元素的值为多少？
+	- VS2017,直接报错处理
+		> 报错也好，省得不同的编译器处理不用，而导致移植性差。
+	- CodeWarrior,在代码运行后，第三个元素赋值为2。
+		> 这当然和我原本的目的不一致了，似乎该编译器把sizeof所在的偏移作了当前的数组大小。
+- **[建议] 若在数组中需要计算自身大小，建议定义数组时，就显示的指明数的大小**
+	> 经测试，VS2010和CodeWarrior现象一致。
+```
+unsigned char config[5] =
+{
+	0x09,0x02,
+	sizeof(config),
+	0x55,0xaa
+};
+```
