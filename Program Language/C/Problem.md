@@ -53,7 +53,7 @@
 ## **sizeof数组自身**
 - 代码示例如下
 ```
-unsigned char config[5] =
+unsigned char config[] =
 {
 	0x09,0x02,
 	sizeof(config),
