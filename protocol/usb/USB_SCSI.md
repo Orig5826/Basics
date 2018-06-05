@@ -1,6 +1,9 @@
-# **Doxygen使用笔记**
+# **USB笔记**
 ![apaki](../../apaki.jpg)
 `2018.05.30 by jianfeng`
+
+### USB 枚举
+- [USB_Setup](.\USB_Standard.docx)
 
 ### USB_SCSI 命令简介
 - INQUIRY (0x12)
@@ -21,3 +24,8 @@ READ_FORMAT_CAPACITIES命令的一个子集。
 - TEST_UNIT_READY (0x00)
 	> 在没有其它命令进行操作时，PC端会每隔一定时间，就会发送该命令，主要是为了
 探测Mass Storage设备是否存在（类似心跳信号）。
+
+### USB_HID 
+- 报告描述符详解
+	- [博客：小脸龙的老巢](https://blog.csdn.net/cazicaquw/article/details/6724951)
+	- [HID鼠标和键盘描述符](.\HID_Report_Descriptor.docx)
