@@ -1,3 +1,6 @@
+# .vs
+*.vs
+
 # .vscode
 *.json
 
