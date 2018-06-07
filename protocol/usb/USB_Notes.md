@@ -29,3 +29,13 @@ READ_FORMAT_CAPACITIES命令的一个子集。
 - 报告描述符详解
 	- [博客：小脸龙的老巢](https://blog.csdn.net/cazicaquw/article/details/6724951)
 	- [HID鼠标和键盘描述符](.\HID_Report_Descriptor.docx)
+
+	- Logic Minimum / Maximum
+		> 逻辑最大最小，表示该字段的取值范围
+	- Usage Minimum / Maximum
+		> 用于作为数组或者bit位，相对应的作用，比如键盘HID报告描述符中的[E0,E7]。若按下左侧ctrl,发送的第一个字节为0x01,他的含义是E0。关于E0表示左侧的Ctrl，可以参见《HID usage table1.pdf》
+	
+- Windows HID设备
+	1. SetFeature/GetFeature是由特定命令的，通过端点0进行发送和接收
+	2. 在使用ReadFile等接口时，若涉及到ID，则需要根据HID报告描述符进行判断，若有ID项，则根据ID项配置（且发送的数据的第一个字节必须时ID？）。若报告描述符中没有ID项，则需要将ReadFile传递的参数的第一个字节配置为0。
+	
