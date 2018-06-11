@@ -3,6 +3,7 @@
 
 #include <string.h>
 
+
 void uart1_demo(void)
 {
 	uint8_t sBuf[9] = "\x1f\x2e\x3d\x4c\x5b\x6a\x79\x80";

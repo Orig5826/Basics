@@ -104,4 +104,18 @@ uint8_t reg_uart_recvbyte(void)
 	return temp;
 }
 
-
+/**
+ * @brief printf,scanf需要重定义的函数
+ * 
+ * 需要注意的是，若此种方式，则需要在MDK中target中勾选
+ * USE MicroLIB选项
+ */
+int fputc(int ch, FILE *f)  
+{
+	reg_uart_sendbyte(ch);
+    return ch;
+}
+int fgetc(FILE *f)
+{
+	return reg_uart_recvbyte();
+}
