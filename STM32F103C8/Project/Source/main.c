@@ -1,14 +1,12 @@
 #include "stm32f10x_conf.h"
+// Demo
 #include "demo.h"
-#include <stdio.h>
+//Example
+#include "i2c.h"
 
 int main(void)
 {
-	#ifdef _REG_INTR_DEMO_
-	//tim_intr_demo();
-	uart1_demo();
-	#else
-	Timer_Example();
-	#endif
+	I2C_Example();
+
 	return 0;
 }
