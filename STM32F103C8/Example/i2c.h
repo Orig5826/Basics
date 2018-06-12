@@ -14,7 +14,8 @@
 #include "stm32f10x_conf.h"
 
 
-extern u32 g_TimeUs;
+extern u32 volatile g_TimeUs;
+extern void SysTick_DelayUs(u32 TimeUs);
 /*------------------------------------------------
 				3.	函数声明
 ------------------------------------------------*/

@@ -30,18 +30,25 @@ void UartInit(void)
 
 	// 2.使能UART
 	USART_Cmd(USART1, ENABLE);
+	
+	// 注意：STM32 上电第一个字节丢失问题
+	// 在写第一个字节之前，需要先清除TC标志
+	// 1.读取SR，然后写入DR(复位的时候，直接写入DR，没有读取SR过程，若没有手动清除TC，
+	//		会出现上述情况)
+	USART_GetFlagStatus(USART1, USART_FLAG_TC);	//1.
 }
 
 void UartSendString(const uint8_t *str, uint32_t strlen)
 {
 	uint32_t i = 0;
+	
 	if (0 == strlen)
 	{
 		for (i = 0; *str != '\0'; i++)
 		{
+			USART_SendData(USART1, *str);
 			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 				; //等待数据发送完,需要放在USART_SendData前面，否则丢失上电的第一个字节
-			USART_SendData(USART1, *str);
 			str++;
 		}
 	}
@@ -49,9 +56,9 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 	{
 		for (i = 0; i < strlen; i++)
 		{
+			USART_SendData(USART1, *str);
 			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 				; //等待数据发送完,需要放在USART_SendData前面，否则丢失上电的第一个字节
-			USART_SendData(USART1, *str);
 			str++;
 		}
 	}
@@ -61,30 +68,32 @@ void UART_SendHex(const uint8_t *str, uint32_t strlen)
 {
 	uint32_t i = 0;
 	uint8_t temp = 0;
-	uint8_t enter[2] = "\r\n";
+	uint8_t enter[3] = "\r\n";
 	
 	for (i = 0; i < strlen; i++)
 	{
 		temp = "0123456789ABCDEF"[(*(str + i) >> 4) & 0x0f];
+		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
-		USART_SendData(USART1, temp);
+
 
 		temp = "0123456789ABCDEF"[*(str + i) & 0x0f];
+		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
-		USART_SendData(USART1, temp);
+
 
 		temp = 0x20;
+		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
-		USART_SendData(USART1, temp);
 	}
 
 	for (i = 0; i < 2; i++)
 	{
+		USART_SendData(USART1, enter[i]);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
-		USART_SendData(USART1, enter[i]);
 	}
 }

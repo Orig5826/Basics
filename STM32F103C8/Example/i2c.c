@@ -42,8 +42,16 @@
 		GPIO_Init(GPIOB, &gpio_config);            \
 	}
 
-//全局变量，用来判定SystemTick延时
-u32 g_TimeUs = 0;
+/**
+ * @brief 全局变量，用来判定SystemTick延时
+ * 
+ * 之前出现了一个很奇怪的现象。
+ * 串口发送函数调用单数次卡死，双数次正常
+ * (调试发现不是卡死，而是g_TimeUs便的太大，而导致一直在while循环中出不来。但这和逻辑不符合呀)
+ * 终于想到了可能是优化导致的在中断中被改变，但优化之后，并没有直接读取该值，二十为了快速读取了寄存器中的值。
+ * 而导致出现的g_TimeUs在某种特定情况下发生逻辑错误。于是添加了volatile关键字修饰。问题解决。
+ */
+u32 volatile g_TimeUs = 0;
 /**
  * @brief 
  * 
@@ -76,7 +84,8 @@ void I2C_Example(void)
 	LED_Init();
 	UartInit();
 	Init_I2c();
-	UartSendString((const u8 *)"I2C OK!\r\n",0);
+	UartSendString((const u8 *)"I2C OK!\r\n",9);
+	//UartSendString((const u8 *)"I2C OK!\r\n",0);
 	while (1)
 	{
 		I2C_Send(SLAVE_ADDR,sBuf,BUF_SIZE);
@@ -84,7 +93,7 @@ void I2C_Example(void)
 		UART_SendHex(sBuf,BUF_SIZE);
 		UART_SendHex(rBuf,BUF_SIZE);
 		
-		SysTick_DelayUs(500*1000);
+		SysTick_DelayUs(500000);
 	}
 }
 
