@@ -26,7 +26,7 @@
 	{                                                  \
 		GPIO_InitTypeDef gpio_config;                  \
 		GPIO_StructInit(&gpio_config);                 \
-		gpio_config.GPIO_Speed = GPIO_Speed_50MHz;     \
+		gpio_config.GPIO_Speed = GPIO_Speed_10MHz;     \
 		gpio_config.GPIO_Pin = GPIO_Pin_7;             \
 		gpio_config.GPIO_Mode = GPIO_Mode_IN_FLOATING; \
 		GPIO_Init(GPIOB, &gpio_config);                \
@@ -36,7 +36,7 @@
 	{                                              \
 		GPIO_InitTypeDef gpio_config;              \
 		GPIO_StructInit(&gpio_config);             \
-		gpio_config.GPIO_Speed = GPIO_Speed_50MHz; \
+		gpio_config.GPIO_Speed = GPIO_Speed_10MHz; \
 		gpio_config.GPIO_Pin = GPIO_Pin_7;         \
 		gpio_config.GPIO_Mode = GPIO_Mode_Out_PP;  \
 		GPIO_Init(GPIOB, &gpio_config);            \
@@ -70,20 +70,22 @@ void I2C_Example(void)
 #define BUF_SIZE	8
 	uint8_t sBuf[BUF_SIZE] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
 	uint8_t rBuf[BUF_SIZE] = {0};
-	Init_I2c();
+	
+	SysTick_Config(72);
+	
+	LED_Init();
 	UartInit();
-	SysTick_CLKSourceConfig(72000000);
-
-	SysTick_DelayUs(1000);
-	UartSendString((uint8_t *)"I2C OK!\r\n",0);
+	Init_I2c();
+	UartSendString((const u8 *)"I2C OK!\r\n",0);
 	while (1)
 	{
 		I2C_Send(SLAVE_ADDR,sBuf,BUF_SIZE);
 		I2C_Recv(SLAVE_ADDR,rBuf,BUF_SIZE);
-		
 		UART_SendHex(sBuf,BUF_SIZE);
 		UART_SendHex(rBuf,BUF_SIZE);
-		SysTick_DelayUs(2000000);
+		
+		SysTick_DelayUs(1000000);
+		UartSendString((uint8_t *)"I2C TEST!\r\n",0);
 	}
 }
 
@@ -99,7 +101,7 @@ void Init_I2c(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
 	GPIO_StructInit(&gpio_config);
-	gpio_config.GPIO_Speed = GPIO_Speed_50MHz;
+	gpio_config.GPIO_Speed = GPIO_Speed_10MHz;
 
 	//将PB6和PB7配置为I2C复用引脚
 	gpio_config.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
@@ -114,7 +116,8 @@ void Init_I2c(void)
   */
 void Start_I2c(void)
 {
-	I2C_SDA_OUT I2C_SDA(1); //发送起始条件的数据信号
+	I2C_SDA_OUT
+	I2C_SDA(1); //发送起始条件的数据信号
 
 	_Nop(1);
 	I2C_SCL(1);
@@ -138,7 +141,8 @@ void Start_I2c(void)
   */
 void Stop_I2c(void)
 {
-	I2C_SDA_OUT I2C_SDA(0); //发送结束条件的数据信号
+	I2C_SDA_OUT
+	I2C_SDA(0); //发送结束条件的数据信号
 
 	//结束条件建立时间大于4u
 	_Nop(1);
@@ -203,7 +207,8 @@ unsigned char WaitAck()
 	//-------------------------------
 	//	配置SDA为输入，等待接受ACK
 	//-------------------------------
-	I2C_SDA_IN I2C_SCL(1);
+	I2C_SDA_IN
+	I2C_SCL(1);
 
 	_Nop(3);
 
@@ -267,7 +272,8 @@ unsigned char RcvByte(void)
 void Ack_I2c(void)
 {
 	//配置为输出
-	I2C_SDA_OUT I2C_SDA(0); //注意：应答是拉低
+	I2C_SDA_OUT
+	I2C_SDA(0); //注意：应答是拉低
 
 	_Nop(5);
 
@@ -288,7 +294,8 @@ void Ack_I2c(void)
 void NoAck_I2c(void)
 {
 	//配置为输出
-	I2C_SDA_OUT I2C_SDA(1);
+	I2C_SDA_OUT
+	I2C_SDA(1);
 
 	_Nop(3);
 	I2C_SCL(1);
@@ -434,10 +441,7 @@ unsigned char I2C_Recv(unsigned char slave_addr, unsigned char *rBuf, unsigned i
 	{
 		return (0);
 	}
-
-	if (0 == WaitAck())
-		return (0);
-
+	
 	for (i = 0; i < rLen - 1; i++)
 	{
 		*rBuf = RcvByte(); //发送数据

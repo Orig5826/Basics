@@ -33,10 +33,9 @@ void UartInit(void)
 }
 
 void UartSendString(const uint8_t *str, uint32_t strlen)
-
 {
 	uint32_t i = 0;
-	if (strlen == 0)
+	if (0 == strlen)
 	{
 		for (i = 0; *str != '\0'; i++)
 		{
