@@ -39,9 +39,9 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 	{
 		for (i = 0; *str != '\0'; i++)
 		{
-			USART_SendData(USART1, *str);
 			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
-				; //等待数据发送完
+				; //等待数据发送完,需要放在USART_SendData前面，否则丢失上电的第一个字节
+			USART_SendData(USART1, *str);
 			str++;
 		}
 	}
@@ -49,9 +49,9 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 	{
 		for (i = 0; i < strlen; i++)
 		{
-			USART_SendData(USART1, *str);
 			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
-				; //等待数据发送完
+				; //等待数据发送完,需要放在USART_SendData前面，否则丢失上电的第一个字节
+			USART_SendData(USART1, *str);
 			str++;
 		}
 	}
@@ -60,32 +60,31 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 void UART_SendHex(const uint8_t *str, uint32_t strlen)
 {
 	uint32_t i = 0;
-	uint8_t temp = 0x00;
-
+	uint8_t temp = 0;
+	uint8_t enter[2] = "\r\n";
+	
 	for (i = 0; i < strlen; i++)
 	{
 		temp = "0123456789ABCDEF"[(*(str + i) >> 4) & 0x0f];
-		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
+		USART_SendData(USART1, temp);
 
 		temp = "0123456789ABCDEF"[*(str + i) & 0x0f];
-		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
+		USART_SendData(USART1, temp);
 
 		temp = 0x20;
-		USART_SendData(USART1, temp);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
 			; //等待数据发送完
+		USART_SendData(USART1, temp);
 	}
 
-	temp = '\r';
-	USART_SendData(USART1, temp);
-	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
-		; //等待数据发送完
-	temp = '\n';
-	USART_SendData(USART1, temp);
-	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
-		; //等待数据发送完
+	for (i = 0; i < 2; i++)
+	{
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) != SET)
+			; //等待数据发送完
+		USART_SendData(USART1, enter[i]);
+	}
 }

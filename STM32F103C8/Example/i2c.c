@@ -68,7 +68,7 @@ void SysTick_DelayUs(u32 TimeUs)
 void I2C_Example(void)
 {
 #define BUF_SIZE	8
-	uint8_t sBuf[BUF_SIZE] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+	uint8_t sBuf[BUF_SIZE] = {0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38};
 	uint8_t rBuf[BUF_SIZE] = {0};
 	
 	SysTick_Config(72);
@@ -84,8 +84,7 @@ void I2C_Example(void)
 		UART_SendHex(sBuf,BUF_SIZE);
 		UART_SendHex(rBuf,BUF_SIZE);
 		
-		SysTick_DelayUs(1000000);
-		UartSendString((uint8_t *)"I2C TEST!\r\n",0);
+		SysTick_DelayUs(500*1000);
 	}
 }
 
@@ -153,7 +152,7 @@ void Stop_I2c(void)
 	_Nop(5);
 
 	I2C_SDA(1); //发送I2C总线结束信号
-	_Nop(4);
+	_Nop(10);	//间隔太短，感觉不稳定，因此修改为10
 }
 
 /**
