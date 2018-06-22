@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usb_drive", "usb_drive\usb_drive.vcxproj", "{546B68A5-FF14-4C80-B183-5F8E9EF34441}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE} = {0F7F663A-599A-418C-AB89-7A7A87C2F4BE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usb_demo", "usb_demo\usb_demo.vcxproj", "{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM.ActiveCfg = Debug|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM.Build.0 = Debug|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM.Deploy.0 = Debug|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM64.Build.0 = Debug|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x64.ActiveCfg = Debug|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x64.Build.0 = Debug|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x64.Deploy.0 = Debug|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x86.ActiveCfg = Debug|Win32
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x86.Build.0 = Debug|Win32
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Debug|x86.Deploy.0 = Debug|Win32
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM.ActiveCfg = Release|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM.Build.0 = Release|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM.Deploy.0 = Release|ARM
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM64.ActiveCfg = Release|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM64.Build.0 = Release|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|ARM64.Deploy.0 = Release|ARM64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x64.ActiveCfg = Release|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x64.Build.0 = Release|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x64.Deploy.0 = Release|x64
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x86.ActiveCfg = Release|Win32
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x86.Build.0 = Release|Win32
+		{546B68A5-FF14-4C80-B183-5F8E9EF34441}.Release|x86.Deploy.0 = Release|Win32
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|ARM.ActiveCfg = Debug|ARM
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|ARM.Build.0 = Debug|ARM
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|ARM64.Build.0 = Debug|ARM64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|x64.ActiveCfg = Debug|x64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|x64.Build.0 = Debug|x64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|x86.ActiveCfg = Debug|Win32
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Debug|x86.Build.0 = Debug|Win32
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|ARM.ActiveCfg = Release|ARM
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|ARM.Build.0 = Release|ARM
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|ARM64.ActiveCfg = Release|ARM64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|ARM64.Build.0 = Release|ARM64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|x64.ActiveCfg = Release|x64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|x64.Build.0 = Release|x64
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|x86.ActiveCfg = Release|Win32
+		{0F7F663A-599A-418C-AB89-7A7A87C2F4BE}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76DA77C9-5330-400D-AD63-75EFD1929438}
+	EndGlobalSection
+EndGlobal
