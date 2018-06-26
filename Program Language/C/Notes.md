@@ -1,4 +1,4 @@
-# **C语言奇葩问题记录**
+# **C语言特殊笔记**
 `2018.05.30 by jianfeng`
 
 ## windows平台
@@ -16,4 +16,52 @@ Run-Time Check Failure #0 - The value of ESP was not properly saved across a fun
 */
 例如：
 typedef long (WINAPI * pCloseDevice)(long hDev);
+```
+
+## #define宏定义#和##的使用区别
+- #
+	> 主要用于参数的字符串化
+	- 例如：#define _J(x)	#x
+		若此时调用 _J(gbk)，则实际上是"gbk"字符串
+		若这样调用 _J("gbk"),则实际上是"\"gbk\""。
+		现在你理解了吗？
+	- 特殊(感觉很少用) #define  _B(x)  #@x
+		调用_B(1) 表示  '1'
+- ##
+	> 这个符号主要用于链接，使其成为一个整体
+	- 在某种程度上，可以减少代码量
+```
+#define GETDATA(TYPE,...)\
+case TYPE: \
+    {\
+        data=Get##TYPE(...)\
+        ....\
+    }break;\
+
+调用的时候处理为：
+switch(TYPE)
+{
+    GETDATA(TYPE,...);
+}
+```
+若不适用##,则实际需要按照如下方式写
+```
+switch(TYPE)
+{
+    case Int:
+    {
+        data=GetInt(...);
+        ...
+    }break;
+    case Double
+    {
+        data=GetDouble...);
+        ....
+    }break;
+    case U_Int:
+    {
+        data=GetU_Int(....);
+        ....
+    }break;
+}
 ```
