@@ -7,7 +7,7 @@
 #define GET_STR_DISP(x) {\
 len = sizeof(str);\
 USB_HID_GetString(str, len, ##x);\
-printf("["#x"]  %S \n",(PWSTR)str); /* %S 似乎是windows上用于显示wchar_t的*/ \
+printf("["#x"]:\n\t\t%S\n",(PWSTR)str); /* %S 似乎是windows上用于显示wchar_t的*/ \
 }
 
 void Display(unsigned char * data, unsigned int len)
@@ -40,42 +40,42 @@ int _cdecl main()
 	hid_cfg.PID = 0x5750;
 	hid_cfg.VID = 0x0483;
 
-	USB_HID_Connect(NULL);
-
-
-	// 获取厂商信息
-	GET_STR_DISP(GET_MANUFACTURE);
-	// 获取产品
-	GET_STR_DISP(GET_PRODUCT);
-	// 获取序列号
-	GET_STR_DISP(GET_SERIALNUM);
-
-	while (1)
+	if (TRUE == USB_HID_Connect(NULL))
 	{
-		for (i = 0; i < 64; i++)
+		// 获取厂商信息
+		GET_STR_DISP(GET_MANUFACTURE);
+		// 获取产品
+		GET_STR_DISP(GET_PRODUCT);
+		// 获取序列号
+		GET_STR_DISP(GET_SERIALNUM);
+
+		while (1)
 		{
-			sBuf[i] = (unsigned char)(num + i) & 0xff;
+			for (i = 0; i < 64; i++)
+			{
+				sBuf[i] = (unsigned char)(num + i) & 0xff;
+			}
+
+			sLen = 0x40;
+			USB_HID_Write(0, sBuf, sLen);
+			rLen = 0x40;
+			USB_HID_Read(0, rBuf, &rLen);
+
+			printf("[Read] \n");
+			Display(rBuf, rLen);
+
+			if (0 != memcmp(sBuf, rBuf, sLen))
+			{
+				printf("[Write] \n");
+				Display(sBuf, sLen);
+				printf("[ERROR] --- 读写不一致 ---\n\n");
+				break;
+			}
+
+			Sleep(1000);
+			num++;
+			printf("------------------------\n");
 		}
-
-		sLen = 0x40;
-		USB_HID_Write(0, sBuf, sLen);
-		rLen = 0x40;
-		USB_HID_Read(0, rBuf, &rLen);
-
-		printf("[Read] \n");
-		Display(rBuf, rLen);
-
-		if (0 != memcmp(sBuf, rBuf, sLen))
-		{
-			printf("[Write] \n");
-			Display(sBuf, sLen);
-			printf("读写不一致\n");
-			break;
-		}
-
-		Sleep(1000);
-		num++;
-		printf("------------------------\n");
 	}
 
 	USB_HID_Close();
