@@ -52,7 +52,7 @@
 	> 将二进制文件显示为十六进制(assic)
 - [SerialPortTools](./Project/SerialPortTools)
 	>uart_win.c 是windows下的命令行串口打印工具
-- [stm32f103c8t6](./Project/stm32f103c8t6)
+- [stm32f103c8t6](./Project/STM32F103C8)
 	> 例程：包括库的使用和寄存器调用
 - [USB](./Project/USB)
 	> 基于vs2017+WDK10.0的USB驱动

@@ -46,4 +46,3 @@ READ_FORMAT_CAPACITIES命令的一个子集。
 - Windows HID设备
 	1. SetFeature/GetFeature是由特定命令的，通过端点0进行发送和接收
 	2. 在使用ReadFile等接口时，若涉及到ID，则需要根据HID报告描述符进行判断，若有ID项，则根据ID项配置（且发送的数据的第一个字节必须时ID？）。若报告描述符中没有ID项，则需要将ReadFile传递的参数的第一个字节配置为0。
-	

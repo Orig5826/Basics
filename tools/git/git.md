@@ -72,6 +72,26 @@
         > 以后就可以使用该命令将更新的代码提交到远程库中
 
 ----------------------------------------------------------------
+## 分支合并等操作
+- merge
+    > 以合并两个git仓库为例子，在想整合的仓库(即本仓库)路径下执行以下命令
+    1. git remote add other repo_path 
+        > other为别名,repo_path为被合并的仓库路径。该命令本质上，相当于是将被合并的仓库当作远程仓库
+    2. git fetch other
+        > 从repo_path中抓取数据到本仓库
+    3. git checkout -b repo1 other/master
+        > 将repo_path仓库抓取的master分支作为新分支checkout到本地，新分支名称设置为repo1
+    4. git checkout master
+        > 切换为本仓库的master分支
+    5. git merge repo1
+        > 将repo1合并到master
+    
+    - 注意事项：
+        - 若merge的时候出现冲突，则需要先修改冲突。然后add,commit,push
+        - 若merge出现unrelated history的警告，则需要在命令结尾添加--allow-unrelated-histories参数进行强行合并
+
+
+----------------------------------------------------------------
 ## 其他操作
 - 忽略特殊文件
     - 直接在.gitignore文件中添加所需要忽略的文件/文件夹即可
