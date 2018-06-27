@@ -3,22 +3,22 @@
 `2018.4.16 modified by jianfeng`
 
 ## Program Language
-- bat
+- [Bat](./Lang/Bat)
 	> bat常用脚本整理和笔记记录
-- C
+- [C](./Lang/C)
 	- C文件操作
 	- 数据结构和算法
 		- KMP算法
 		- 排序算法整理
 	> C语言基础笔记/问题记录
-- Python
-	- dll
+- [Python](./Lang/Python)
+	- [dll](./Lang/Python/dll)
 		> python调用dll示例
-	- py_base
+	- [py_base](./Lang/Python/py_base)
 		> python基础知识
-	- stdlib
+	- [stdlib](./Lang/Python/stdlib)
 		> python标准库的一些使用
-	- site-package
+	- [site-package](./Lang/Python/site-package)
 		- numpy
 			> 数值计算
 		- matplotlib
@@ -34,23 +34,25 @@
 		- pyscard
 			> 智能卡操作
 
-## protocol
-- usb
+## Protocol
+- [usb](.\Protocal)
 	> USB协议规范学习
 
-## tools
-- vim
-- git
-- doxygen
-- vs
+## Tools
+- [vim](.\Tools\vim)
+- [git](.\Tools\git)
+- [doxygen](.\Tools\doxygen)
+- [vs](.\Tools\vs)
+- [svn](.\Tools\svn)
 
 ## Project
-### 小工具
-- SerialPortTools
+- [Calculator](.\Project\Calculator)
+	> 控制台下的简易计算器
+- [HexEditor](.\Project\HexEditor)
+	> 将二进制文件显示为十六进制(assic)
+- [SerialPortTools](.\Project\SerialPortTools)
 	>uart_win.c 是windows下的命令行串口打印工具
-
-### 小示例
-- stm32f103c8t6
+- [stm32f103c8t6](.\Project\stm32f103c8t6)
 	> 例程：包括库的使用和寄存器调用
-
-### 小项目
+- [USB](.\Project\USB)
+	> 基于vs2017+WDK10.0的USB驱动
