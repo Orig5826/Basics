@@ -35,24 +35,24 @@
 			> 智能卡操作
 
 ## Protocol
-- [usb](.\Protocal)
+- [usb](./Protocol)
 	> USB协议规范学习
 
 ## Tools
-- [vim](.\Tools\vim)
-- [git](.\Tools\git)
-- [doxygen](.\Tools\doxygen)
-- [vs](.\Tools\vs)
-- [svn](.\Tools\svn)
+- [vim](./Tools/vim)
+- [git](./Tools/git)
+- [doxygen](./Tools/doxygen)
+- [vs](./Tools/vs)
+- [svn](./Tools/svn)
 
 ## Project
-- [Calculator](.\Project\Calculator)
+- [Calculator](./Project/Calculator)
 	> 控制台下的简易计算器
-- [HexEditor](.\Project\HexEditor)
+- [HexEditor](./Project/HexEditor)
 	> 将二进制文件显示为十六进制(assic)
-- [SerialPortTools](.\Project\SerialPortTools)
+- [SerialPortTools](./Project/SerialPortTools)
 	>uart_win.c 是windows下的命令行串口打印工具
-- [stm32f103c8t6](.\Project\stm32f103c8t6)
+- [stm32f103c8t6](./Project/stm32f103c8t6)
 	> 例程：包括库的使用和寄存器调用
-- [USB](.\Project\USB)
+- [USB](./Project/USB)
 	> 基于vs2017+WDK10.0的USB驱动
