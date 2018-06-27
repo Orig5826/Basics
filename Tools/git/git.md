@@ -89,7 +89,24 @@
     - 注意事项：
         - 若merge的时候出现冲突，则需要先修改冲突。然后add,commit,push
         - 若merge出现unrelated history的警告，则需要在命令结尾添加--allow-unrelated-histories参数进行强行合并
-
+- fetch
+    > 相当于是从远程获取最新版到本地，不会自动merge。（当服务器被他人更改时）
+- pull
+    > 相当于fetch + merge。（当服务器被他人更改时）
+----------------------------------------------------------------
+## 搭建git服务器
+- 在linux上搭建git服务器
+    1. 安装git
+    2. sudo adduser git
+        > 新建一个git用户，用来运行git服务
+    3. 创建证书登陆,即将客户端的id_rsa.pub导入进来，将公钥都放在/home/git/.ssh/authorized_keys文件中，一行一个(也可以后续在做该步骤)
+    4. sudo git init --bare ubuntu.git
+        > cd到你所选定的目录下，初始化git仓库
+    5. sudo chown -R git:git ubuntu.git
+        > 记得一定要修改所有者，要不然远程登陆肯定失败呀
+    6. 同时，可以考虑禁用shell登陆，方法可以是：将/etc/passwd文件中的git用户的shell做如此修改 =>    /bin/bash -->  /usr/bin/git-shell
+        > 此后，git用户可以正常通过ssh使用git，但无法登陆shell，因为我们为git用户指定的git-shell每一次登陆就自动推出
+    7. [客户端]之后，就可以在各自的电脑上进行clone
 
 ----------------------------------------------------------------
 ## 其他操作
