@@ -6,15 +6,17 @@ echo %name%
 REM 删除Project下的某些文件
 cd .\Project
 
-del /Q /S .\Objects\*
-del /Q /S .\Listings\*
-del /Q /S .\DebugConfig\*
-
-del /Q /S *.uvguix.*
-del /Q /S *.uvoptx
-del /Q /S *.scvd
-
+for /R %%i in (Demo_Example Custom_HID) do (
+	echo cd %%i%
+	cd %%i%
+	
+	RD /S /Q .\Objects
+	RD /S /Q .\Listings
+	RD /S /Q .\DebugConfig
+	del /S /Q *.uvguix.*
+	del /S /Q *.uvoptx
+	del /S /Q *.scvd
+)
 cd ..
-
 
 REM pause

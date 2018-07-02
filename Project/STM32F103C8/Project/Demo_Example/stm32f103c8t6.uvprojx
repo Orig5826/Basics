@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Library;..\Library\CoreSupport;..\Library\DeviceSupport\STM32F10x;..\Library\Drivers\inc;..\Library\Register\inc;.\Source;..\Example;..\Demo</IncludePath>
+              <IncludePath>..\..\Library;..\..\Library\CoreSupport;..\..\Library\DeviceSupport\STM32F10x;..\..\Library\Drivers\inc;..\..\Library\Register\inc;..\..\Example;..\..\Demo;.\Source</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -383,7 +383,7 @@
             <File>
               <FileName>core_cm3.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\CoreSupport\core_cm3.c</FilePath>
+              <FilePath>..\..\Library\CoreSupport\core_cm3.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -393,12 +393,12 @@
             <File>
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\DeviceSupport\STM32F10x\system_stm32f10x.c</FilePath>
+              <FilePath>..\..\Library\DeviceSupport\STM32F10x\system_stm32f10x.c</FilePath>
             </File>
             <File>
               <FileName>startup_stm32f10x_md.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\Library\DeviceSupport\STM32F10x\startup\arm\startup_stm32f10x_md.s</FilePath>
+              <FilePath>..\..\Library\DeviceSupport\STM32F10x\startup\arm\startup_stm32f10x_md.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -408,27 +408,27 @@
             <File>
               <FileName>misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Drivers\src\misc.c</FilePath>
+              <FilePath>..\..\Library\Drivers\src\misc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Drivers\src\stm32f10x_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_rcc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Library\Drivers\src\stm32f10x_rcc.c</FilePath>
+              <FilePath>..\..\Library\Drivers\src\stm32f10x_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Drivers\src\stm32f10x_tim.c</FilePath>
+              <FilePath>..\..\Library\Drivers\src\stm32f10x_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Drivers\src\stm32f10x_usart.c</FilePath>
+              <FilePath>..\..\Library\Drivers\src\stm32f10x_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Library\Drivers\src\stm32f10x_rcc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -436,24 +436,24 @@
           <GroupName>Register</GroupName>
           <Files>
             <File>
-              <FileName>reg_gpio.c</FileName>
+              <FileName>reg_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Register\src\reg_gpio.c</FilePath>
+              <FilePath>..\..\Library\Register\src\reg_flash.c</FilePath>
             </File>
             <File>
-              <FileName>reg_uart.c</FileName>
+              <FileName>reg_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Register\src\reg_uart.c</FilePath>
+              <FilePath>..\..\Library\Register\src\reg_gpio.c</FilePath>
             </File>
             <File>
               <FileName>reg_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Register\src\reg_tim.c</FilePath>
+              <FilePath>..\..\Library\Register\src\reg_tim.c</FilePath>
             </File>
             <File>
-              <FileName>reg_flash.c</FileName>
+              <FileName>reg_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Library\Register\src\reg_flash.c</FilePath>
+              <FilePath>..\..\Library\Register\src\reg_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -471,29 +471,29 @@
           <GroupName>Example</GroupName>
           <Files>
             <File>
-              <FileName>uart.c</FileName>
+              <FileName>i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Example\uart.c</FilePath>
+              <FilePath>..\..\Example\i2c.c</FilePath>
             </File>
             <File>
               <FileName>led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Example\led.c</FilePath>
+              <FilePath>..\..\Example\led.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Example\stm32f10x_it.c</FilePath>
+              <FilePath>..\..\Example\stm32f10x_it.c</FilePath>
             </File>
             <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Example\timer.c</FilePath>
+              <FilePath>..\..\Example\timer.c</FilePath>
             </File>
             <File>
-              <FileName>i2c.c</FileName>
+              <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Example\i2c.c</FilePath>
+              <FilePath>..\..\Example\uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -501,24 +501,24 @@
           <GroupName>Demo</GroupName>
           <Files>
             <File>
-              <FileName>gpio_demo.c</FileName>
+              <FileName>flash_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Demo\gpio_demo.c</FilePath>
+              <FilePath>..\..\Demo\flash_demo.c</FilePath>
             </File>
             <File>
-              <FileName>uart_demo.c</FileName>
+              <FileName>gpio_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Demo\uart_demo.c</FilePath>
+              <FilePath>..\..\Demo\gpio_demo.c</FilePath>
             </File>
             <File>
               <FileName>tim_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Demo\tim_demo.c</FilePath>
+              <FilePath>..\..\Demo\tim_demo.c</FilePath>
             </File>
             <File>
-              <FileName>flash_demo.c</FileName>
+              <FileName>uart_demo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Demo\flash_demo.c</FilePath>
+              <FilePath>..\..\Demo\uart_demo.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -528,7 +528,7 @@
             <File>
               <FileName>Notes.md</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Notes.md</FilePath>
+              <FilePath>..\Notes.md</FilePath>
             </File>
           </Files>
         </Group>
