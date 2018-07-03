@@ -12,7 +12,7 @@ GET_SERIALNUM	=	3	#序列号
 
 # --------------------------------------
 # 声明数组类型
-STR = c_ubyte * 32
+STR = c_ubyte * 64
 # 自定义显示函数
 def disp(STR,hex = 0):
     # 问：如何按照Unicode来显示
@@ -38,8 +38,8 @@ api.usb_hid_test()
 
 # Structure
 hid_cfg=HID_Config()
-hid_cfg.PID = 0x084B
-hid_cfg.VID = 0x4853
+hid_cfg.PID = 0x5750
+hid_cfg.VID = 0x0483
 
 # C API
 ret = api.USB_HID_Connect(byref(hid_cfg))
@@ -52,15 +52,16 @@ if ret == True:
     api.USB_HID_GetString(byref(str),len(str),GET_SERIALNUM)
     disp(str)
 
-    BUFFER = c_ubyte * 64
+    BUFFER = c_ubyte * 65
     sBuf = BUFFER()
     rBuf = BUFFER()
+    sLen = 64
     rLen = c_uint(0)
     num = 0
     while(1):
         for i in range(64):
             sBuf[i] = 0xff & (num + i)
-        api.USB_HID_Write(0, sBuf, len(sBuf))
+        api.USB_HID_Write(0, sBuf, sLen)
         rLen.value = len(rBuf)
         api.USB_HID_Read(0, rBuf, byref(rLen))
         print("[Read]")

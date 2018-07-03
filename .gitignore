@@ -5,12 +5,12 @@
 *.json
 
 # MDK-ARM  2018.5.14 by jf
-**/Project/DebugConfig
-**/Project/Listings
-**/Project/Objects
-**/Project/*.uvoptx
-**/Project/*.uvguix.*
-**/Project/*.scvd
+DebugConfig/
+Listings/
+Objects/
+*.uvoptx
+*.uvguix.*
+*.scvd
 
 # Prerequisites
 *.d
