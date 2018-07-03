@@ -304,6 +304,7 @@ void USB_Interrupts_Config(void)
   NVIC_Init(&NVIC_InitStructure);
 #endif /* STM32L1XX_XD */
   
+  #if 0
   /* Enable the EXTI9_5 Interrupt */
   NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -318,7 +319,7 @@ void USB_Interrupts_Config(void)
   NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel1_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
   NVIC_Init(&NVIC_InitStructure);
-  
+  #endif
 }
 
 /*******************************************************************************
@@ -363,6 +364,7 @@ void EXTI_Configuration(void)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
   
+  #if 0
 #if defined (USE_STM32L152_EVAL)
   /* Configure RIGHT EXTI line to generate an interrupt on rising & falling edges */  
   EXTI_InitStructure.EXTI_Line = RIGHT_BUTTON_EXTI_LINE;
@@ -404,7 +406,7 @@ void EXTI_Configuration(void)
   EXTI_ClearITPendingBit(EXTI_Line13);
 #endif 
 #endif /* USE_STM32L152_EVAL */  
-  
+  #endif
   /* Configure the EXTI line 18 connected internally to the USB IP */
   EXTI_ClearITPendingBit(EXTI_Line18);
   EXTI_InitStructure.EXTI_Line = EXTI_Line18; 
@@ -527,13 +529,10 @@ void ADC_Configuration(void)
 void Get_SerialNum(void)
 {
   uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
-  static uint32_t serial_num[8] = {'H',0,'I',0,'D',0,' ',0};
-  static uint32_t version[4] = {'1','.','0','0'};
-  static uint32_t verLen = 0; 
 
-  Device_Serial0 = *(uint32_t*)&serial_num;
-  Device_Serial1 = *(uint32_t*)&version;
-  Device_Serial2 = *(uint32_t*)&verLen;
+  Device_Serial0 = *(uint32_t*)ID1;
+  Device_Serial1 = *(uint32_t*)ID2;
+  Device_Serial2 = *(uint32_t*)ID3;
   
   Device_Serial0 += Device_Serial2;
   

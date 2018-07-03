@@ -42,11 +42,14 @@
 #include "usb_lib.h"
 #include "usb_istr.h"
 
+#include <string.h>
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint8_t Receive_Buffer[2];
+uint8_t Receive_Buffer[64];
+extern __IO uint8_t Send_Buffer[64];
+extern __IO uint8_t Send_Length;
 extern __IO uint8_t PrevXferComplete;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -59,30 +62,12 @@ extern __IO uint8_t PrevXferComplete;
 *******************************************************************************/
 void EP1_OUT_Callback(void)
 {
-  BitAction Led_State;
-
-  /* Read received data (2 bytes) */  
-  USB_SIL_Read(EP1_OUT, Receive_Buffer);
+  uint32_t BufLen = 0; 
+  BufLen = USB_SIL_Read(EP1_OUT, Receive_Buffer);
   
-  if (Receive_Buffer[1] == 0)
-  {
-    Led_State = Bit_RESET;
-  }
-  else 
-  {
-    Led_State = Bit_SET;
-  }
- 
-  switch (Receive_Buffer[0])
-  {
-      break;
-  default:
-
-    break;
-  }
- 
+  memcpy((void *)Send_Buffer,Receive_Buffer,BufLen);
+  Send_Length = BufLen;
   SetEPRxStatus(ENDP1, EP_RX_VALID);
- 
 }
 
 /*******************************************************************************

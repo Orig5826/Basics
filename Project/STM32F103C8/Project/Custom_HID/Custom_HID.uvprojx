@@ -334,7 +334,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER</Define>
+              <Define>USE_STDPERIPH_DRIVER, STM32F10X_MD</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\Library;..\..\Library\CoreSupport;..\..\Library\DeviceSupport\STM32F10x;..\..\Library\Drivers\inc;..\..\Library\USB-FS-Device_Driver\inc;.\inc</IncludePath>
             </VariousControls>

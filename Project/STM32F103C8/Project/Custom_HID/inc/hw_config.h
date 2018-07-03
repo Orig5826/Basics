@@ -65,7 +65,7 @@ void Delay(__IO uint32_t nCount);
 
 
 extern void UartSendString(const uint8_t *str, uint32_t strlen);
-extern void UART_SendHex(const uint8_t *str, uint32_t strlen);
+extern void UartSendHex(const uint8_t *str, uint32_t strlen);
 #endif  /*__HW_CONFIG_H*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

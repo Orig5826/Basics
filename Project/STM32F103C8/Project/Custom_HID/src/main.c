@@ -41,6 +41,8 @@
 #include "usb_lib.h"
 #include "usb_pwr.h"
 
+#include <string.h>
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -116,7 +118,7 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 	}
 }
 
-void UART_SendHex(const uint8_t *str, uint32_t strlen)
+void UartSendHex(const uint8_t *str, uint32_t strlen)
 {
 	uint32_t i = 0;
 	uint8_t temp = 0;
@@ -159,7 +161,6 @@ void UART_SendHex(const uint8_t *str, uint32_t strlen)
 *******************************************************************************/
 int main(void)
 {
-  static uint8_t Buff[2];
   UartInit();
   UartSendString((uint8_t*)"Uart OK!\r\n",0);
   
@@ -170,19 +171,10 @@ int main(void)
   
   USB_Init();
   UartSendString((uint8_t*)"USB_Init\r\n",0);
-  Delay(1*2500*2000);
+  
   while (1)
   {
-      #if 1
-      Buff[0] = 0x06;
-      Buff[1] = 0x02;
-      /* Write the descriptor through the endpoint */    
-      USB_SIL_Write(EP1_IN, (uint8_t*) Buff, 2);
-      SetEPTxValid(ENDP1);
-      
-      UartSendString((uint8_t*)"USB_Write\r\n",0);
-      Delay(1*2500*2000);
-      #endif
+
   }
 }
 

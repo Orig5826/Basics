@@ -46,9 +46,10 @@
 #include "stm32f10x.h"
 
 // 注意,这几个ID是随便弄的，后续修改
-#define         ID1          (0x1FF80050)
-#define         ID2          (0x1FF80054)
-#define         ID3          (0x1FF80064)
+#define   UNIQUE_DEVICE_ID_BASE  (0x1FFFF7E8)
+#define         ID1          (UNIQUE_DEVICE_ID_BASE) //(0x1FF80050)
+#define         ID2          (UNIQUE_DEVICE_ID_BASE + 0x02) // (0x1FF80054)
+#define         ID3          (UNIQUE_DEVICE_ID_BASE + 0x04) // (0x1FF80064)
 #define ADC1_DR_Address                     ((uint32_t)0x4001244C)
 
 // STM32F103C8T6
