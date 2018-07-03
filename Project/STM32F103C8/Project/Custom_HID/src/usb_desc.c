@@ -138,13 +138,15 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     /* 41 */
   }
   ; /* CustomHID_ConfigDescriptor */
+
+#if 1
 const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
   {                    
     0x06, 0xFF, 0x00,      /* USAGE_PAGE (Vendor Page: 0xFF00) */                       
     0x09, 0x01,            /* USAGE (Demo Kit)               */    
     0xa1, 0x01,            /* COLLECTION (Application)       */            
     /* 6 */
-    
+   
     /* Led 1 */        
     0x85, 0x01,            /*     REPORT_ID (1)		     */
     0x09, 0x01,            /*     USAGE (LED 1)	             */
@@ -255,7 +257,24 @@ const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
 
     0xc0 	          /*     END_COLLECTION	             */
   }; /* CustomHID_ReportDescriptor */
-
+#else
+const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] = {
+  0x06, 0x00, 0xFF, //Usage Page:
+  0x09, 0x01,		  //Usage: Undefined
+  0xa1, 0x01,		  //Collection
+  0x15, 0x00,		  //Logical Minimum
+  0x25, 0xFF,		  //Logical Maximum
+  0x19, 0x01,		  //Usage Minimum
+  0x29, 0x08,		  //Usage Maximum
+  0x95, 0x02,		  //Report Count
+  0x75, 0x08,		  //Report Size
+  0x81, 0x02,		  //Input (Data, Variable, Absolute,Buffered Bytes)
+  0x19, 0x01,		  //Usage Minimum
+  0x29, 0x08,		  //Usage Maximum
+  0x91, 0x02,		  //Feature (Data, Variable, Absolute,Buffered Bytes)
+  0xc0			  //End Collection
+};
+#endif
 /* USB String Descriptors (optional) */
 const uint8_t CustomHID_StringLangID[CUSTOMHID_SIZ_STRING_LANGID] =
   {

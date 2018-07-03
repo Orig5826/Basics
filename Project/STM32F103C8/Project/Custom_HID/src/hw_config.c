@@ -527,10 +527,13 @@ void ADC_Configuration(void)
 void Get_SerialNum(void)
 {
   uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
-  
-  Device_Serial0 = *(uint32_t*)ID1;
-  Device_Serial1 = *(uint32_t*)ID2;
-  Device_Serial2 = *(uint32_t*)ID3;
+  static uint32_t serial_num[8] = {'H',0,'I',0,'D',0,' ',0};
+  static uint32_t version[4] = {'1','.','0','0'};
+  static uint32_t verLen = 0; 
+
+  Device_Serial0 = *(uint32_t*)&serial_num;
+  Device_Serial1 = *(uint32_t*)&version;
+  Device_Serial2 = *(uint32_t*)&verLen;
   
   Device_Serial0 += Device_Serial2;
   

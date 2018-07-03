@@ -312,12 +312,15 @@ void EXTI9_5_IRQHandler(void)
   {  
     if ((PrevXferComplete) && (bDeviceState == CONFIGURED))
     {
+      #if 0
       Send_Buffer[0] = 0x05; 
       Send_Buffer[1] = 0x00;
       
       /* Write the descriptor through the endpoint */
       USB_SIL_Write(EP1_IN, (uint8_t*) Send_Buffer, 2);  
       SetEPTxValid(ENDP1);
+      #endif
+      
       PrevXferComplete = 0;
     }
     /* Clear the EXTI line  pending bit */
@@ -339,10 +342,7 @@ void EXTI15_10_IRQHandler(void)
     if ((PrevXferComplete) && (bDeviceState == CONFIGURED))
     {
       Send_Buffer[0] = 0x06;
-
       Send_Buffer[1] = 0x01;
-      Send_Buffer[1] = 0x00;
-
       
       /* Write the descriptor through the endpoint */    
       USB_SIL_Write(EP1_IN, (uint8_t*) Send_Buffer, 2);  
