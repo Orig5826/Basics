@@ -113,7 +113,7 @@ uint8_t reg_uart_recvbyte(void)
 int fputc(int ch, FILE *f)  
 {
 	reg_uart_sendbyte(ch);
-    return ch;
+	return ch;
 }
 int fgetc(FILE *f)
 {

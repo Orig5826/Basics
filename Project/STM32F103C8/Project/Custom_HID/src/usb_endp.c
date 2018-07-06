@@ -68,6 +68,12 @@ void EP1_OUT_Callback(void)
   memcpy((void *)Send_Buffer,Receive_Buffer,BufLen);
   Send_Length = BufLen;
   SetEPRxStatus(ENDP1, EP_RX_VALID);
+  
+  /* Write the descriptor through the endpoint */
+  USB_SIL_Write(EP1_IN, (uint8_t*)Send_Buffer, Send_Length);
+  SetEPTxValid(ENDP1);
+  UartSendString((uint8_t*)"Read & Write\r\n",0);
+  UartSendHex((uint8_t*)Send_Buffer,Send_Length);
 }
 
 /*******************************************************************************
