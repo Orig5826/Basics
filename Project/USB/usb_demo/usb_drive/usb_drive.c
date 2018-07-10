@@ -409,5 +409,5 @@ void usb_hid_test(void)
 	{
 		a[i] = i;
 	}
-	printf("Hello world!\n");
+	printf("usb_hid_test!\n");
 }

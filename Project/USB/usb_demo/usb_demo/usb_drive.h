@@ -18,6 +18,7 @@ typedef struct _HID_Config
 //
 // \breaf HID指定设备连接
 // 参数若为NULL，则使用默认参数
+// 默认：PID=0x084B, VID=0x4853
 //
 __declspec(dllexport) BOOL USB_HID_Connect(HID_Config * hid_cfg);
 __declspec(dllexport) void USB_HID_Close(void);
