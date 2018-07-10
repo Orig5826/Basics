@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    stm32f37x_conf.h 
+  * @file    usb_istr.h
   * @author  MCD Application Team
   * @version V4.1.0
   * @date    26-May-2017
-  * @brief   Library configuration file.
+  * @brief   This file includes the peripherals header files in the user application.
   ******************************************************************************
   * @attention
   *
@@ -35,59 +35,70 @@
   ******************************************************************************
   */
 
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F37X_CONF_H
-#define __STM32F37X_CONF_H
+#ifndef __USB_ISTR_H
+#define __USB_ISTR_H
 
 /* Includes ------------------------------------------------------------------*/
-/* Comment the line below to disable peripheral header file inclusion */
-#include "stm32f37x_adc.h"
-#include "stm32f37x_can.h"
-#include "stm32f37x_cec.h"
-#include "stm32f37x_crc.h"
-#include "stm32f37x_comp.h"
-#include "stm32f37x_dac.h"
-#include "stm32f37x_dbgmcu.h"
-#include "stm32f37x_dma.h"
-#include "stm32f37x_exti.h"
-#include "stm32f37x_flash.h"
-#include "stm32f37x_gpio.h"
-#include "stm32f37x_syscfg.h"
-#include "stm32f37x_i2c.h"
-#include "stm32f37x_iwdg.h"
-#include "stm32f37x_pwr.h"
-#include "stm32f37x_rcc.h"
-#include "stm32f37x_rtc.h"
-#include "stm32f37x_sdadc.h"
-#include "stm32f37x_spi.h"
-#include "stm32f37x_tim.h"
-#include "stm32f37x_usart.h"
-#include "stm32f37x_wwdg.h"
-#include "stm32f37x_misc.h"  /* High level functions for NVIC and SysTick (add-on to CMSIS functions) */
+#include "usb_conf.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-/* Uncomment the line below to expanse the "assert_param" macro in the 
-   Standard Peripheral Library drivers code */
-/* #define USE_FULL_ASSERT    1 */
-
 /* Exported macro ------------------------------------------------------------*/
-#ifdef  USE_FULL_ASSERT
-
-/**
-  * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed function which reports 
-  *         the name of the source file and the source line number of the call 
-  *         that failed. If expr is true, it returns no value.
-  * @retval None
-  */
-  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
 /* Exported functions ------------------------------------------------------- */
-  void assert_failed(uint8_t* file, uint32_t line);
-#else
-  #define assert_param(expr) ((void)0)
-#endif /* USE_FULL_ASSERT */
 
-#endif /* __STM32F37X_CONF_H */
+ void USB_Istr(void);
+
+/* function prototypes Automatically built defining related macros */
+
+void EP1_IN_Callback(void);
+void EP2_IN_Callback(void);
+void EP3_IN_Callback(void);
+void EP4_IN_Callback(void);
+void EP5_IN_Callback(void);
+void EP6_IN_Callback(void);
+void EP7_IN_Callback(void);
+
+void EP1_OUT_Callback(void);
+void EP2_OUT_Callback(void);
+void EP3_OUT_Callback(void);
+void EP4_OUT_Callback(void);
+void EP5_OUT_Callback(void);
+void EP6_OUT_Callback(void);
+void EP7_OUT_Callback(void);
+
+#ifdef CTR_CALLBACK
+void CTR_Callback(void);
+#endif
+
+#ifdef DOVR_CALLBACK
+void DOVR_Callback(void);
+#endif
+
+#ifdef ERR_CALLBACK
+void ERR_Callback(void);
+#endif
+
+#ifdef WKUP_CALLBACK
+void WKUP_Callback(void);
+#endif
+
+#ifdef SUSP_CALLBACK
+void SUSP_Callback(void);
+#endif
+
+#ifdef RESET_CALLBACK
+void RESET_Callback(void);
+#endif
+
+#ifdef SOF_CALLBACK
+void SOF_Callback(void);
+#endif
+
+#ifdef ESOF_CALLBACK
+void ESOF_Callback(void);
+#endif
+#endif /*__USB_ISTR_H*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

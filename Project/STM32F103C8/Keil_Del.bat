@@ -6,7 +6,7 @@ echo %name%
 REM 删除Project下的某些文件
 cd .\Project
 
-for /R %%i in (Demo_Example Custom_HID) do (
+for /R %%i in (Demo_Example Custom_HID Virtual_COM_Port) do (
 	echo cd %%i%
 	cd %%i%
 	
