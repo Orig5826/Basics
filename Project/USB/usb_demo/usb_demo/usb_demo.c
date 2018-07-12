@@ -62,7 +62,8 @@ static unsigned int str2hex(char * str)
 
 	for (i = 0; i < len; i++)
 	{
-		temp = (str[i] > 0x39) ? (str[i] - 0x41) : (str[i] - 0x30);
+		// 注意上面都切换未小写了，因此此处应该减去0x61
+		temp = (str[i] > 0x39) ? (str[i] - 0x61 + 0x0a) : (str[i] - 0x30);
 		ret |= temp << (4 * (len - 1 - i));
 	}
 	return ret;
