@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libusb_demo", "libusb_demo\libusb_demo.vcxproj", "{2C7A97F3-B63D-4D03-A596-37000D990426}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Debug|x64.ActiveCfg = Debug|x64
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Debug|x64.Build.0 = Debug|x64
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Debug|x86.ActiveCfg = Debug|Win32
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Debug|x86.Build.0 = Debug|Win32
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Release|x64.ActiveCfg = Release|x64
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Release|x64.Build.0 = Release|x64
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Release|x86.ActiveCfg = Release|Win32
+		{2C7A97F3-B63D-4D03-A596-37000D990426}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CCA7A3A2-5A7D-4D3E-A444-09896C9EF7C8}
+	EndGlobalSection
+EndGlobal
