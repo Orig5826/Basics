@@ -44,10 +44,60 @@ static void display_buffer_hex(unsigned char *buffer, unsigned size)
 }
 
 
+int usb_find(libusb_device_handle ** handle,uint16_t vendor_id,uint16_t product_id)
+{
+	libusb_device **devs;
+	libusb_context *ctx = NULL;
 
-static uint16_t vendor_id;
-static uint16_t product_id;
-int main(void)
+	int r = libusb_init(&ctx);
+	if (r < 0)
+	{
+		printf("Init Error\n");
+		return -1;
+	}
+
+	int cnt = libusb_get_device_list(ctx, &devs);
+	if (cnt < 0)
+	{
+		printf("Get Device Error\n");
+		return -1;
+	}
+	//libusb_device_handle * handle = NULL;
+
+	for (int i = 0; i < cnt; i++)
+	{
+		struct libusb_device_descriptor desc;
+		r = libusb_get_device_descriptor(devs[i], &desc);
+		if (r < 0)
+		{
+			printf("Get Device Descriptor Error");
+			return -1;
+		}
+
+		printf("Find.%02d : VID=%04x,PID=%04x\n",i + 1, desc.idVendor, desc.idProduct);
+		if (desc.idVendor == vendor_id && desc.idProduct == product_id)
+		{
+			printf("Find the target device\n");
+//* 两种设备的打开方式都可以
+#if 0
+			*handle = libusb_open_device_with_vid_pid(ctx, vendor_id, product_id);
+			if (*handle == NULL)
+#else
+			r = libusb_open(devs[i], handle);
+			if (r != 0)
+#endif
+			{
+				printf("But open device(VID=%04x,PID=%04x) failed!\n",vendor_id,product_id);
+				return -1;
+			}
+
+			return 0;
+		}
+	}
+	return -1;
+}
+
+int test_hid(void)
 {
 	int i = 0, r;
 	libusb_device_handle * handle;
@@ -56,27 +106,46 @@ int main(void)
 	char string[128];
 	int size,num;
 	uint8_t endpoint_in = 0, endpoint_out = 0;	// default IN and OUT endpoints
+	static uint16_t vendor_id;
+	static uint16_t product_id;
 
+
+//#  通过PID和VID来选择设备
+#if 1
+	// 我的hsc32k1 例程
+	vendor_id = 0x4853;
+	product_id = 0x084B;
+	endpoint_out = 0x02;
+	endpoint_in = 0x81;
+#else
+	// 我的stm32 例程
+	vendor_id = 0x0483;
+	product_id = 0x5750;
+	endpoint_out = 0x01;
+	endpoint_in = 0x81;
+#endif
+
+
+//* usb_find函数是单独封装用来寻找指定设备的
+#if 0
 	//libusb模块初始化
 	r = libusb_init(NULL);
 	if (r < 0)
 	{
 		return r;
 	}
-
-	// 通过PID和VID来选择设备
-	vendor_id = 0x4853;
-	product_id = 0x084B;
 	handle = libusb_open_device_with_vid_pid(NULL, vendor_id, product_id);
 	if (handle == NULL) {
 		printf("open VID=%04x,PID=%04x failed!\n", vendor_id, product_id);
 		return -1;
 	}
-
-	// 这个暂不知道是用来做什么的
-	// dev = libusb_get_device(handle);
-
-
+#else
+	r = usb_find(&handle, vendor_id, product_id);
+	if (r < 0)
+	{
+		return r;
+	}
+#endif
 	// 获取厂商信息，产品信息和序列号
 	printf("\nReading string descriptors:\n");
 	for (i = 1; i <= 3; i++) {
@@ -84,6 +153,7 @@ int main(void)
 			printf("   String (0x%02X): \"%s\"\n", i, string);
 		}
 	}
+
 
 
 	// 对设备进行读写操作
@@ -143,7 +213,6 @@ int main(void)
 
 		//Sleep(1000);
 #else
-		endpoint_out = 0x02;
 		//printf("\nTesting interrupt write using endpoint %02X...\n", endpoint_out);
 		r = libusb_interrupt_transfer(handle, endpoint_out, report_buffer, size, &size, 5000);
 		if (r >= 0) {
@@ -154,7 +223,6 @@ int main(void)
 			printf("   %s\n", libusb_strerror((enum libusb_error)r));
 		}
 
-		endpoint_in = 0x81;
 		memset(report_buffer, 0x00, size);
 		//printf("\nTesting interrupt read using endpoint %02X...\n", endpoint_in);
 		r = libusb_interrupt_transfer(handle, endpoint_in, report_buffer, size, &size, 5000);
@@ -175,6 +243,112 @@ int main(void)
 	}
 
 	free(report_buffer);
+	libusb_close(handle);
 	libusb_exit(NULL);
+	return 0;
+}
+
+// 该函数内容因某些原因并没有调试通过
+// 暂时保留，不再修改
+// 2018.7.13
+int test_scsi(void)
+{
+	libusb_device_handle * handle;
+	// default IN and OUT endpoints
+	uint8_t endpoint_in = 0, endpoint_out = 0;
+	//char string[128];
+	//uint8_t *report_buffer;
+	//int size, num;
+	int i = 0, r;
+	static uint16_t vendor_id;
+	static uint16_t product_id;
+
+	// libusb模块初始化
+	// 现在发现的问题
+	// 工程中的示例代码枚举成MSD设备，但是
+	// 使用libusb不能正常通过PID和VID打开
+	// 这是为什么
+	// -----------------------------------------
+	// 经过百度查询资料
+	// libusb在windows下仅仅支持用户态
+	// 因此仅仅支持HID设备，其他诸如scsi设备不行
+	// --- 确定是这个问题吗？
+	vendor_id = 0x2309;
+	product_id = 0x0606;
+#if 0
+	vendor_id = 0x0483;
+	product_id = 0x5750;
+#endif
+	r = usb_find(&handle,vendor_id, product_id);
+	if (r < 0)
+	{
+		return -1;
+	}
+
+#if 0
+	// SCSI 设备或者信息失败？为什么
+	// 获取厂商信息，产品信息和序列号
+	printf("\nReading string descriptors:\n");
+	for (i = 3; i <= 3; i++) {
+		if (libusb_get_string_descriptor_ascii(handle, i, (unsigned char*)string, sizeof(string)) > 0) {
+			printf("   String (0x%02X): \"%s\"\n", i, string);
+		}
+	}
+#endif
+	r = libusb_set_auto_detach_kernel_driver(handle, 1);
+	if (r != LIBUSB_SUCCESS) {
+		printf("set_auto_detach_kernel_driver    Failed.\n");
+	}
+	printf("\nClaiming interface %d...\n", 0);
+	r = libusb_claim_interface(handle, 1);
+	if (r != LIBUSB_SUCCESS) {
+		printf("   Failed.\n");
+		switch (r)
+		{
+		case LIBUSB_ERROR_NOT_FOUND:
+			printf("the requested interface does not exist\n");
+			break;
+		case LIBUSB_ERROR_BUSY:
+			printf("another program or driver has claimed the interface\n");
+			break;
+		case LIBUSB_ERROR_NO_DEVICE:
+			printf("the device has been disconnected\n");
+			break;
+		default:
+			printf("code on other failure");
+			break;
+		}
+	}
+
+	//free(report_buffer);
+	libusb_close(handle);
+	libusb_exit(NULL);
+	printf("libusb_exit!\n");
+	return 0;
+}
+
+
+int main(int argc,char * argv[])
+{
+	if (argc == 1)
+	{
+		return test_hid();
+	}
+	else
+	{
+		if (argc != 2)
+		{
+			return -1;
+		}
+		if (0 == strcmp(argv[1],"0"))
+		{
+			return test_hid();
+		}
+		else if (0 == strcmp(argv[1], "1"))
+		{
+			return test_scsi();
+		}
+	}
+
 	return 0;
 }
