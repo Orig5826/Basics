@@ -319,7 +319,7 @@ static const uint8_t cdb_length[256] = {
 	00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,  //  C
 	00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,  //  D
 	00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,  //  E
-	00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,  //  F
+	00,00,00,00,00,00,00,00,00,00,00,00,00,06,06,06,  //  F
 };
 
 static int send_mass_storage_command(libusb_device_handle *handle, uint8_t endpoint, uint8_t lun,
@@ -351,8 +351,10 @@ static int send_mass_storage_command(libusb_device_handle *handle, uint8_t endpo
 	cbw.dCBWSignature[1] = 'S';
 	cbw.dCBWSignature[2] = 'B';
 	cbw.dCBWSignature[3] = 'C';
+
 	*ret_tag = tag;
 	cbw.dCBWTag = tag++;
+
 	cbw.dCBWDataTransferLength = data_length;
 	cbw.bmCBWFlags = direction;
 	cbw.bCBWLUN = lun;
@@ -392,6 +394,7 @@ static int get_mass_storage_status(libusb_device_handle *handle, uint8_t endpoin
 		}
 		i++;
 	} while ((r == LIBUSB_ERROR_PIPE) && (i<RETRY_MAX));
+
 	if (r != LIBUSB_SUCCESS) {
 		printf("   get_mass_storage_status: %s\n", libusb_strerror((enum libusb_error)r));
 		return -1;
@@ -525,6 +528,7 @@ static int test_mass_storage(libusb_device_handle *handle, uint8_t endpoint_in, 
 		get_sense(handle, endpoint_in, endpoint_out);
 	}
 
+#if 0
 	// coverity[tainted_data]
 	data = (unsigned char*) calloc(1, block_size);
 	if (data == NULL) {
@@ -548,6 +552,73 @@ static int test_mass_storage(libusb_device_handle *handle, uint8_t endpoint_in, 
 		display_buffer_hex(data, size);
 	}
 	free(data);
+#endif
+
+	// SCSI_DEMO : GET CHALLENGE
+	printf("Get challenge %u bytes:\n", 10);
+	memset(cdb, 0, sizeof(cdb));
+	cdb[0] = 0xfe;	// UserCommond
+	cdb[1] = 0x00;	//
+	cdb[2] = 0x84;	//
+	cdb[3] = 0x00;	//
+	cdb[4] = 0x00;	//
+	cdb[5] = 0x08;	//
+
+	memset(buffer,0x00,sizeof(buffer));
+	send_mass_storage_command(handle, endpoint_out, lun, cdb, LIBUSB_ENDPOINT_IN, 10, &expected_tag);
+	libusb_bulk_transfer(handle, endpoint_in, buffer, 10, &size, 5000);
+	printf("   READ: received %d bytes\n", size);
+	if (get_mass_storage_status(handle, endpoint_in, expected_tag) == -2) {
+		get_sense(handle, endpoint_in, endpoint_out);
+	} else {
+		display_buffer_hex(buffer, size);
+	}
+
+	// SCSI_DEMO : BulkOut & BulkIn
+	
+#define BUF_SIZE	16
+	printf("Bulk Out %u bytes:\n", BUF_SIZE);
+	memset(cdb, 0, sizeof(cdb));
+	cdb[0] = 0xfd;	// UserCommond
+	cdb[1] = 0x00;	//
+	cdb[2] = 0xd0;	//
+	cdb[3] = 0x00;	//
+	cdb[4] = 0x00;	//
+	cdb[5] = 0x10;	//
+	for(i = 0; i < BUF_SIZE; i++)
+	{
+		buffer[i] = (i << 4) + i;
+	}
+	send_mass_storage_command(handle, endpoint_out, lun, cdb, LIBUSB_ENDPOINT_IN, BUF_SIZE, &expected_tag);
+	libusb_bulk_transfer(handle, endpoint_out, buffer, BUF_SIZE, &size, 5000);
+	printf("   READ: received %d bytes\n", size);
+	if (get_mass_storage_status(handle, endpoint_in, expected_tag) == -2) {
+		get_sense(handle, endpoint_in, endpoint_out);
+	} else {
+		display_buffer_hex(buffer, size);
+	}
+#undef BUF_SIZE
+#define BUF_SIZE	16
+	printf("Bulk In %u bytes:\n", BUF_SIZE);
+	memset(cdb, 0, sizeof(cdb));
+	cdb[0] = 0xfe;	// UserCommond
+	cdb[1] = 0x00;	//
+	cdb[2] = 0xd0;	//
+	cdb[3] = 0x00;	//
+	cdb[4] = 0x00;	//
+	cdb[5] = 0x12;	//
+	for(i = 0; i < BUF_SIZE; i++)
+	{
+		buffer[i] = (i << 4) + i;
+	}
+	send_mass_storage_command(handle, endpoint_out, lun, cdb, LIBUSB_ENDPOINT_IN, BUF_SIZE, &expected_tag);
+	libusb_bulk_transfer(handle, endpoint_in, buffer, BUF_SIZE, &size, 5000);
+	printf("   READ: received %d bytes\n", size);
+	if (get_mass_storage_status(handle, endpoint_in, expected_tag) == -2) {
+		get_sense(handle, endpoint_in, endpoint_out);
+	} else {
+		display_buffer_hex(buffer, size);
+	}
 
 	return 0;
 }
@@ -624,8 +695,8 @@ int test_scsi(void)
 		}
 	}
 
-	endpoint_in = 0x81;
-	endpoint_out = 0x02;
+	endpoint_in = 0x82;	// ×î¸ßbitÎª1£¬DeviceToHost
+	endpoint_out = 0x01;
 	test_mass_storage(handle,endpoint_in,endpoint_out);
 
 	//free(report_buffer);
