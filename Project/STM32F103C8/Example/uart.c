@@ -64,7 +64,7 @@ void UartSendString(const uint8_t *str, uint32_t strlen)
 	}
 }
 
-void UART_SendHex(const uint8_t *str, uint32_t strlen)
+void UartSendHex(const uint8_t *str, uint32_t strlen)
 {
 	uint32_t i = 0;
 	uint8_t temp = 0;

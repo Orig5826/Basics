@@ -11,6 +11,8 @@
 #include "uart.h"
 
 // 需要在主函数中调用...函数
+// 若配置为1，则延时时间为1us
+// 那么本I2C模拟程序，可以达到100KHz左右的通讯速率
 #define _Nop(x) (SysTick_DelayUs(x))
 
 //模拟I2C时钟控制位
@@ -90,10 +92,13 @@ void I2C_Example(void)
 	{
 		I2C_Send(SLAVE_ADDR,sBuf,BUF_SIZE);
 		I2C_Recv(SLAVE_ADDR,rBuf,BUF_SIZE);
-		UART_SendHex(sBuf,BUF_SIZE);
-		UART_SendHex(rBuf,BUF_SIZE);
-		
-		SysTick_DelayUs(500000);
+		#if 0
+		UartSendString("[S]. ",0);
+		UartSendHex(sBuf,BUF_SIZE);
+		UartSendString("[R]. ",0);
+		UartSendHex(rBuf,BUF_SIZE);
+		#endif
+		//SysTick_DelayUs(500000);
 	}
 }
 
@@ -126,20 +131,14 @@ void Start_I2c(void)
 {
 	I2C_SDA_OUT
 	I2C_SDA(1); //发送起始条件的数据信号
-
-	_Nop(1);
 	I2C_SCL(1);
-
+	
 	//起始条件建立时间大于4.7us，延时
 	_Nop(5);
-
-	I2C_SDA(0); //发起起始信号
-
-	//起始条件锁定时间大于4us
+	I2C_SDA(0); //发起START信号
 	_Nop(5);
-
+	
 	I2C_SCL(0); //钳住I2C总线，准备发送或接收数据
-	_Nop(2);
 }
 
 /**
@@ -151,17 +150,15 @@ void Stop_I2c(void)
 {
 	I2C_SDA_OUT
 	I2C_SDA(0); //发送结束条件的数据信号
-
-	//结束条件建立时间大于4u
-	_Nop(1);
-
 	I2C_SCL(1);
-
+	
 	//结束条件建立时间大于4u
 	_Nop(5);
+	I2C_SDA(1); //发起STOP信号
+	_Nop(5);
 
-	I2C_SDA(1); //发送I2C总线结束信号
-	_Nop(10);	//间隔太短，感觉不稳定，因此修改为10
+	I2C_SCL(0);
+	I2C_SDA(0);
 }
 
 /**
@@ -192,11 +189,11 @@ void SendByte(unsigned char c)
 			I2C_SDA(0);
 		}
 
+		_Nop(1);
 		I2C_SCL(1); //置时钟线为高，通知被遥控开始接收数据位
-
-		//保证时钟高电平周期大于4us
-		_Nop(5);
+		_Nop(4);	//保证时钟高电平周期大于4us
 		I2C_SCL(0);
+		_Nop(1);
 	}
 }
 
@@ -208,18 +205,14 @@ void SendByte(unsigned char c)
 unsigned char WaitAck()
 {
 	unsigned char ack = 0;
-	_Nop(2);
-	I2C_SDA(1);
-	_Nop(2);
 
 	//-------------------------------
 	//	配置SDA为输入，等待接受ACK
 	//-------------------------------
 	I2C_SDA_IN
 	I2C_SCL(1);
-
-	_Nop(3);
-
+	_Nop(5);
+	
 	if (1 == I2C_GET_SDA()) //判断是否接收到应答信号
 	{
 		ack = 0;
@@ -230,7 +223,7 @@ unsigned char WaitAck()
 	}
 
 	I2C_SCL(0);
-	_Nop(2);
+	_Nop(5);
 
 	return ack;
 }
@@ -242,34 +235,31 @@ unsigned char WaitAck()
   */
 unsigned char RcvByte(void)
 {
-	unsigned char retc;
+	unsigned char retc = 0;
 	unsigned char BitCnt;
 
-	retc = 0;
+	// 置时钟线为低，准备接收数据位
+	I2C_SCL(0);
+	
+	// 配置为输入
 	I2C_SDA_IN
 
 	for (BitCnt = 0; BitCnt < 8; BitCnt++)
 	{
-		_Nop(1);
-		I2C_SCL(0); //置时钟线为低，准备接收数据位
-
-		//时钟低电平周期大于4.7us
-		_Nop(5);
-		I2C_SCL(1);
-		_Nop(2);
+		//读数据位，接收的数据放入retc中
 		retc = retc << 1;
-
-		if (1 == I2C_GET_SDA()) //读数据位，接收的数据放入retc中
+		if (1 == I2C_GET_SDA())
 		{
-			retc = retc + 1;
+			retc = retc | 0x01;
 		}
-
-		_Nop(2);
+		
+		_Nop(1);
+		I2C_SCL(1); //置时钟线为高，准备接收数据
+		_Nop(4);	//保证时钟高电平周期大于4us
+		I2C_SCL(0);
+		_Nop(1);
 	}
-
-	I2C_SCL(0);
-	_Nop(2);
-
+	
 	return (retc);
 }
 
@@ -279,19 +269,14 @@ unsigned char RcvByte(void)
   */
 void Ack_I2c(void)
 {
-	//配置为输出
+	I2C_SDA(0); //拉低，输出
 	I2C_SDA_OUT
-	I2C_SDA(0); //注意：应答是拉低
 
-	_Nop(5);
 
+	_Nop(2);
 	I2C_SCL(1);
-
-	//时钟低电平周期大于4us
-	_Nop(5);
-
-	//清时钟线，钳住I2C总线以便于继续接收
-	I2C_SCL(0);
+	_Nop(5);	//时钟高电平周期大于4us
+	I2C_SCL(0);	//清时钟线
 	_Nop(2);
 }
 
@@ -301,17 +286,14 @@ void Ack_I2c(void)
   */
 void NoAck_I2c(void)
 {
-	//配置为输出
+	I2C_SDA(1);	//拉高，输出
 	I2C_SDA_OUT
-	I2C_SDA(1);
 
-	_Nop(3);
+
+	_Nop(2);
 	I2C_SCL(1);
-
-	//时钟低电平周期大于4us
-	_Nop(5);
-
-	I2C_SCL(0); //清时钟线，钳住I2C总线以便于继续接收
+	_Nop(5);	//时钟高电平周期大于4us
+	I2C_SCL(0); //清时钟线
 	_Nop(2);
 }
 

@@ -10,7 +10,7 @@
 //---------------------------
 void UartInit(void);
 void UartSendString(const uint8_t * str,uint32_t strlen);
-void UART_SendHex(const uint8_t * str,uint32_t strlen);
+void UartSendHex(const uint8_t * str,uint32_t strlen);
 
 
 #endif
