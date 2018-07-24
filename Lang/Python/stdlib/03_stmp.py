@@ -3,17 +3,14 @@ from email.mime.text import MIMEText
 from email.header import Header
 
 # 不知道为什么QQ，用什么服务授权码
-sender = 'xxx@xxx.com'  # 发件人邮箱账号
-my_pass = '**********'  	# 发件人邮箱授权码
-receiver = "xxx@xxx.com"  # 接收人邮箱
-
+sender = '########@##.com'  # 发件人邮箱账号
+my_pass = '**************'  	# 发件人邮箱授权码
+receiver = "#########@###.com"  # 接收人邮箱
 
 def mail():
     ret = True
     try:
-        content = """<p>邮件发送</p>
-<p><a href="http://www.baidu.com">百度</a></p>
-<br>邮件能发送成功吗?</br>"""  # 邮件内容
+        content = """<p>邮件发送</p><p><a href="http://www.baidu.com">百度</a></p><br>邮件能发送成功吗?</br>"""  # 邮件内容
         msg = MIMEText(content, 'html', 'utf-8')
         msg['From'] = sender  # Header("名字", 'utf-8')  # 发件人邮箱账号
         msg['To'] = receiver  # Header("名字", 'utf-8')
