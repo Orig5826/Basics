@@ -18,4 +18,4 @@ def divide(x, y):
 if __name__ == "__main__":
 	import sys
 	divide(int(sys.argv[1]),int(sys.argv[2]))
-	#divide(5,0)
+	# divide(5,0)

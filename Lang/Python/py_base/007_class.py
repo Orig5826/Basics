@@ -7,14 +7,14 @@ class Complex:
 	r = 0.0
 	i = 0.0
 	#str = []		#1.0 str 观察现象哦~
-					# 小结：放在这里，在追加的时候，不同的类也会叠加
+					# 小结：放在这里，在追加的时候，不同的对象也会叠加
 	
 	# 相当于C++ 的构造函数
 	def __init__(self,real,imag):
 		#self.r = real
 		#self.i = imag
 		self.str = []	#2.0 str 观察现象哦~
-						#小结：放在这里，不同的类，各自追加自己的，不叠加
+						#小结：放在这里，不同的对象，各自追加自己的，不叠加
 		pass
 		print("Hehe")
 	def change(self,real,imag):

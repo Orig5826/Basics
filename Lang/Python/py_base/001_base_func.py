@@ -2,9 +2,9 @@
 # 本脚本不用于执行，进作为学习备份
 # --------------------------------
 # range
-range(5) => 0,1,2,3,4
-range(5,9) => 5,6,7,8
-range(10,50,20) => 10,30
+# range(5) => 0,1,2,3,4
+# range(5,9) => 5,6,7,8
+# range(10,50,20) => 10,30
 #-------------
 # 常用于数组中
 a = ['Mary', 'had', 'a', 'little', 'lamb']
@@ -55,16 +55,18 @@ sum = lambda x,y: x+y
 print(sum(1,5))
 
 # 
-# 命令行下,1.和2.是有区别的，你能猜出来结果吗
+# 1.和2.是有区别的，你能猜出来结果吗
 pairs = [(2,"aa"),(1,"cc"),(5,"bb")]
+print(pairs)
 # 1.
 pairs.sort(key=lambda pair:pair[0])
+print(pairs)
 # 2.
 pairs.sort(key=lambda pair:pair[1])
-
+print(pairs)
 
 # ------------------------------------------------
 # map的使用 map(函数，参数n..)
 # [E]命令行下
-map(lambda x:x*x , range(10))
-list(_)
+ret = map(lambda x:x*x , range(10))
+print(list(ret))
