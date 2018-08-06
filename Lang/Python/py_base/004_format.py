@@ -58,6 +58,10 @@
 # print("the {T} of {F} is over!".format(T = "Test4",F = "Format4"))		#format用法4，【绝对】
 # 
 # ...format 还有很多用法，暂不一一列举，等用到的时候再查看。
+# 简单示例
+name = 'ruler'
+length = 12.5
+print('the length of {0} is {1:0.2f}'.format(name,length))
 
 
 

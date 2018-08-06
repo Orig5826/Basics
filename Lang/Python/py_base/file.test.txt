@@ -1,5 +1,5 @@
-Hello worldï¼
-è¿™ä¸ªæµ‹è¯•ç”¨çš„æ–‡ä»¶
+Hello world£¡
+Õâ¸ö²âÊÔÓÃµÄÎÄ¼ş
 
 
 I am Bruce !
@@ -8,4 +8,4 @@ English 90
 Chinese 100
 Math    95
 Write File Test is End!
-('the answer', 42)
+('the answer', 42)('the answer', 42)
