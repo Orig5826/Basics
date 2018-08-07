@@ -48,3 +48,14 @@ ll3 = str2list(ss)
 bb2 = str2bytes(ss)
 print('[str2list]     {}'.format(ll3))
 print('[str2bytes]    {}'.format(bb2))
+
+
+
+# ------------------------------------
+# python2.7
+# 和py3处理方式不同，仅做记录
+# ------------------------------------
+def py27_bytes2hex(bb):
+    return bb.encode('hex')
+def py27_hex2bytes(ss):
+    return ss.decode('hex')
