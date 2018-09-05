@@ -36,7 +36,7 @@ def usbdrv_find(VID=0x2309, PID=0x0606):
         print("没有发现设备")
         return None
     print("已经发现设备")
-    # print(dev)
+    print(dev)
     return dev
 
 
@@ -147,6 +147,6 @@ usbdrv_start(dev)
 # Write & Read
 data = [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]
 usbdrv_write(dev, data)
-res = usbdrv_read(dev, 16)
+res = usbdrv_read(dev, 8)
 
 usbdrv_end(dev)
