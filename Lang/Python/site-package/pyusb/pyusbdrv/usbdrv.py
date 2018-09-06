@@ -9,6 +9,8 @@ import usb
 import binascii
 import random
 
+global usbdrv_debug_level
+usbdrv_debug_level = 1
 
 # ----------------------------------------------------------------
 # @fun 将list转换为hexstr
@@ -47,8 +49,12 @@ def __usbdrv_get_point(dev):
     # 获取接口
     interface = config[0, 0]
     # 获取输出端点和输入端点
-    outpoint = interface[1]
-    inpoint = interface[0]
+    # 常见的情况就是2个端点，IN和OUT，暂定为如此
+    for i in range(0,2):
+        if 0x80 == interface[i].bEndpointAddress & 0x80:
+            inpoint = interface[i]
+        else:
+            outpoint = interface[i]
     # 注意返回的turple必须保证
     # 这样后续的接口就不用修改了
     # 0.out 1.in
@@ -96,7 +102,8 @@ def __usbdrv_send_cbw(dev,Length,Direction,CBLength=0x01,CB=[0xff]):
             Direction, 0x00, CBLength,0x00,0x00, 0x00, 0x00, 0x00,\
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     cbw[15:(15 + CBLength)] = CB[0:CBLength]
-    # print("len = %d,cbw = %s" % (len(cbw),list2hexstr(cbw)))
+    if usbdrv_debug_level >= 2:
+        print("len = %d,cbw = %s" % (len(cbw),list2hexstr(cbw)))
     dev.write(outpoint, cbw)
     return tag
 
@@ -109,7 +116,8 @@ def __usbdrv_recv_csw(dev,tag):
     '''
     inpoint = __usbdrv_get_point(dev)[1]
     csw = list(dev.read(inpoint, 13))
-    # print("len = %d,csw = %s" % (len(csw),list2hexstr(csw)))
+    if usbdrv_debug_level >= 2:
+        print("len = %d,csw = %s" % (len(csw),list2hexstr(csw)))
     if csw[4:8] != tag:
         return False
     if csw[0:4] != [0x55,0x53,0x42,0x53]:
@@ -126,6 +134,8 @@ def __usbdrv_send_data(dev,data):
     '''
     outpoint = __usbdrv_get_point(dev)[0]
     dev.write(outpoint, data)
+    if usbdrv_debug_level >= 1:
+        print("-> " + list2hexstr(data))
 
 
 def __usbdrv_recv_data(dev,length):
@@ -133,7 +143,10 @@ def __usbdrv_recv_data(dev,length):
         6.1 数据的接收
     '''
     inpoint = __usbdrv_get_point(dev)[1]
-    return list(dev.read(inpoint, length))
+    data = list(dev.read(inpoint, length))
+    if usbdrv_debug_level >= 1:
+        print("<- " + list2hexstr(data))
+    return data
 
 # -------------------------------------------------------------
 #                   USB SCSI API
@@ -172,7 +185,6 @@ def usbdrv_write(data):
     if False == tag:
         return False
     __usbdrv_send_data(__g_Dev,data)
-    print("-> " + list2hexstr(data))
     return __usbdrv_recv_csw(__g_Dev,tag)
 
 def usbdrv_read(length):
@@ -184,9 +196,37 @@ def usbdrv_read(length):
     if False == tag:
         return False
     data = __usbdrv_recv_data(__g_Dev,length)
-    print("<- " + list2hexstr(data))
     return __usbdrv_recv_csw(__g_Dev,tag)
 
+def usbdrv_write_hs(apdu,data):
+    '''
+        写数据_hs
+        > 针对SCSI设备做的封装函数
+    '''
+    if len(apdu) > 15:
+        return False
+    cb = [0xfd]
+    cb.extend(apdu)
+    tag = __usbdrv_send_cbw(__g_Dev,len(data),0x00,len(cb),cb)
+    if False == tag:
+        return False
+    __usbdrv_send_data(__g_Dev,data)
+    return __usbdrv_recv_csw(__g_Dev,tag)
+
+def usbdrv_read_hs(apdu,length):
+    '''
+        读数据_hs
+        > 针对SCSI设备做的封装函数
+    '''
+    if len(apdu) > 15:
+        return False
+    cb = [0xfe]
+    cb.extend(apdu)
+    tag = __usbdrv_send_cbw(__g_Dev,length,0x80,len(cb),cb)
+    if False == tag:
+        return False
+    data = __usbdrv_recv_data(__g_Dev,length)
+    return __usbdrv_recv_csw(__g_Dev,tag)
 
 # ---------------- USBDRV TEST ----------------
 def usbdrv_test():
