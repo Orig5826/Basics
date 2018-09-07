@@ -14,6 +14,8 @@
 - [Python](./Lang/Python)
 	- [dll](./Lang/Python/dll)
 		> python调用dll示例
+	- [ML](./Lang/Python/ML)
+		> Machine Learn相关python脚本
 	- [py_base](./Lang/Python/py_base)
 		> python基础知识
 	- [stdlib](./Lang/Python/stdlib)
@@ -33,7 +35,14 @@
 			> 串口操作
 		- pyscard
 			> 智能卡操作
-
+		- pyOpenSSL
+			> 安全算法
+		- pyQt5
+			> 基于python的Qt界面实现
+		- pyusb
+			> 主要用于在Linux下的usb通讯(似乎是基于libusb的)
+- [Shell](./Lang/Shell)
+	> Shell脚本使用示例
 ## Protocol
 - [usb](./Protocol)
 	> USB协议规范学习
@@ -44,15 +53,21 @@
 - [doxygen](./Tools/doxygen)
 - [vs](./Tools/vs)
 - [svn](./Tools/svn)
+- [gdb](./Tools/gdb)
 
 ## Project
 - [Calculator](./Project/Calculator)
 	> 控制台下的简易计算器
 - [HexEditor](./Project/HexEditor)
 	> 将二进制文件显示为十六进制(assic)
+- [Linux](./Project/Linux)
+	> Linux下的工程示例，最初建立该目录时为了学习Makefile
 - [SerialPortTools](./Project/SerialPortTools)
 	>uart_win.c 是windows下的命令行串口打印工具
 - [stm32f103c8t6](./Project/STM32F103C8)
 	> 例程：包括库的使用和寄存器调用
 - [USB](./Project/USB)
-	> 基于vs2017+WDK10.0的USB驱动
+	- [Windows](./Project/USB/Windows)
+		> 基于vs2017+WDK10.0的USB驱动
+	- [Linux](./Project/USB/Linux)
+		> Linux下基于libusb的USB通讯实现
