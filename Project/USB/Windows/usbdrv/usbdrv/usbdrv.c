@@ -5,7 +5,10 @@
 #include <setupapi.h>
 #include "usbdrv.h"
 
-
+// 注意，该代码再非UNICODE下正常使用
+// 我对编码相关的错误，暂时处理由困难
+// 因此先不用UNICODE，先保证通讯正常
+#undef UNICODE
 
 #pragma comment(lib,"setupapi.lib")
 
@@ -27,13 +30,14 @@ DWORD _stdcall USBIO_IsVidPidEqual(PCHAR pDevicePath, PCHAR pVidPid)
 
 	HKEY hKey;
 	LONG returnStatus;
-	DWORD dwType = REG_SZ;
+	DWORD dwType = REG_DWORD;
 	DWORD dwSize = 255;
+	DWORD Count = 0;
 	GUID guid = s_guid;	//GUID_DEVINTERFACE_MCHPUSB;
 
-	wsprintf((PWCHAR)lpSubKey,
+#if 1
+	wsprintf(lpSubKey,
 		TEXT("SYSTEM\\CurrentControlSet\\Services\\USBSTOR\\Enum"),NULL);
-#if 0
 	returnStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		lpSubKey,
 		0L,
@@ -41,22 +45,61 @@ DWORD _stdcall USBIO_IsVidPidEqual(PCHAR pDevicePath, PCHAR pVidPid)
 		&hKey);
 	if (returnStatus == ERROR_SUCCESS)
 	{
-		printf("注册表打开成功\n");
 		returnStatus = RegQueryValueEx(hKey,
 			"Count",
+			NULL,
+			&dwType,
+			(LPBYTE)&Count,
+			&dwSize);
+		if (returnStatus == ERROR_SUCCESS)
+		{
+			printf("设备个数Count = %d\n", Count);
+		}
+
+		dwType = REG_SZ;
+		dwSize = 255;
+		returnStatus = RegQueryValueEx(hKey,
+			"0",
 			NULL,
 			&dwType,
 			(LPBYTE)&lszValue,
 			&dwSize);
 		if (returnStatus == ERROR_SUCCESS)
 		{
-			printf("注册表打开Count = %d\n", lszValue);
+			printf("设备信息Value = %s\n", lszValue);
+		}
+		else
+		{
+			printf("设备信息Value = ???\n");
+		}
+
+		for (uint32_t i = 0; i < dwSize; i++)
+		{
+			lszValue[i] = tolower(lszValue[i]);
+			if (lszValue[i] == '\\')
+			{
+				lszValue[i] = '#';
+			}
+		}
+
+		printf("Size = %d\n", dwSize);
+		printf("设备信息Value = %s\n", lszValue + 4);
+		printf("pDevicePathValue = %s\n", pDevicePath + 8);
+		if (0 == memcmp(pDevicePath + 8, lszValue + 4,15))
+		{
+			printf("对比成功!");
+			dwResult = 1;
+		}
+		else
+		{
+			dwResult = 0;
 		}
 	}
 	else
 	{
 		printf("注册表打开失败\n");
 	}
+
 	RegCloseKey(hKey);
 #else
 	/* Modify DevicePath to use registry format */
@@ -67,12 +110,12 @@ DWORD _stdcall USBIO_IsVidPidEqual(PCHAR pDevicePath, PCHAR pVidPid)
 	//\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR\Enum
 	//
 	/* Form SubKey */
-	wsprintf((PWCHAR)lpSubKey,
+	wsprintf(lpSubKey,
 		TEXT("SYSTEM\\CURRENTCONTROLSET\\CONTROL\\DEVICECLASSES\\{%4.2x-%2.2x-%2.2x-%.2x%.2x-%.2x%.2x%.2x%.2x%.2x%.2x}\\%s"),
 		guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1], guid.Data4[2],
 		guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7], pDevicePath);
 
-	printf("%ls\n", lpSubKey);
+	printf("%s\n", lpSubKey);
 
 	/* Open Key */
 	returnStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -170,15 +213,18 @@ USBDRV_API uint32_t UsbDrv_OpenDevice(uint16_t pid,uint16_t vid)
 			return USBDRV_NO_INFO;
 		}
 
-		sprintf(pVid_Pid, "vid_%04x&pid_%04x", vid, pid);
-		if (USBIO_IsVidPidEqual(intf_detail->DevicePath, pVid_Pid) == NULL)
+		sprintf((char *)pVid_Pid,(const char *)"vid_%04x&pid_%04x", vid, pid);
+		if (USBIO_IsVidPidEqual(intf_detail->DevicePath,(PCHAR)pVid_Pid) == 0)
 		{
 			SetupDiDestroyDeviceInfoList(info);
 			free(intf_detail);
-			return USBDRV_VIDPID_NOT_FOUND;
+			continue;
 		}
 
 		strcpy(dwDevicePath, intf_detail->DevicePath);
+
+		printf("DevPath = %s\n", dwDevicePath);
+
 		hDevHandle = CreateFile(dwDevicePath,
 			GENERIC_READ | GENERIC_WRITE,
 			FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -190,6 +236,30 @@ USBDRV_API uint32_t UsbDrv_OpenDevice(uint16_t pid,uint16_t vid)
 		if (hDevHandle != INVALID_HANDLE_VALUE)
 		{
 			printf("--> 设备打开成功\n");
+
+			BOOL bResult;
+			DWORD nBytesWritten;
+			OVERLAPPED gOverlapped;
+			uint8_t cbw[31] = { 0x55,0x53,0x42,0x43,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x01,\
+				0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+			bResult = WriteFile(hDevHandle, cbw, 31, &nBytesWritten, &gOverlapped);
+			if (!bResult)
+			{
+				printf("写入CBW失败,ErrCode = 0x%08x\n", GetLastError());
+			}
+			uint8_t data[8] = { 0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88 };
+			bResult = WriteFile(hDevHandle, data, 8, &nBytesWritten, &gOverlapped);
+			if (!bResult)
+			{
+				printf("写入DATA失败,ErrCode = 0x%08x\n", GetLastError());
+			}
+			bResult = ReadFile(hDevHandle, data, 13, &nBytesWritten, &gOverlapped);
+			if (!bResult)
+			{
+				printf("读取CSW失败,ErrCode = 0x%08x\n", GetLastError());
+			}
+
+			break;
 		}
 		else
 		{
@@ -198,5 +268,7 @@ USBDRV_API uint32_t UsbDrv_OpenDevice(uint16_t pid,uint16_t vid)
 	}
 
 	SetupDiDestroyDeviceInfoList(info);
+	CloseHandle(hDevHandle);
+
 	return USBDRV_SUCCESS;
 }

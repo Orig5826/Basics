@@ -35,6 +35,15 @@ def default_sm4_hs():
 	# usbdrv.usbdrv_show()
 	usbdrv.usbdrv_debug_level = 0
 
+	# 创建一个新文件吧
+	file_plain = "plain.bin"
+	plain = [0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,\
+			0xfe,0xdc,0xba,0x98,0x76,0x54,0x32,0x10]
+	with open(file_plain,'wb') as f:
+		for i in range(0,(0xC000 * 4),16):
+			file = f.write(bytearray(plain))
+	f.close()
+
 	# 打开明文文件
 	file_plain = "plain.bin"
 	with open(file_plain,'rb') as f:

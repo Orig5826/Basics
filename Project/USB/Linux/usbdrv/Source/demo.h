@@ -4,4 +4,7 @@
 
 #include "usbdrv.h"
 
+
+void hs_demo(void);
+
 #endif

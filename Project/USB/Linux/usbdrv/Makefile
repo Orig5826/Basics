@@ -21,6 +21,7 @@ export CC AR CFLAGS HEADER LIB
 
 #
 obj := Source/main.o
+obj += Source/hs_demo.o
 # 
 obj += Library/usbdrv.a
 
@@ -44,4 +45,4 @@ Library/usbdrv.a:
 clean:
 	cd Source; rm *.o ; cd ..
 	cd Library; make clean; cd ..
-	rm *.out
+	rm *.out *.bin

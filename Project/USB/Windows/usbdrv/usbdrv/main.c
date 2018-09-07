@@ -13,10 +13,11 @@
 #define GUID_MSD_STR	"{ABB9810B - ED61 - 4A29 - A3DC - AA719073FCBF}"
 
 
-#if 0
+#if 1
 int main()
 {
-	UsbDrv_OpenDevice(0x1000, 0x0209);
+	UsbDrv_OpenDevice(0x2309, 0x0606);
+
 }
 #else
 int main(int argc, char * argv[])
