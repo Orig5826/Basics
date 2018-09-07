@@ -196,7 +196,9 @@ def usbdrv_read(length):
     if False == tag:
         return False
     data = __usbdrv_recv_data(__g_Dev,length)
-    return __usbdrv_recv_csw(__g_Dev,tag)
+    if True != __usbdrv_recv_csw(__g_Dev,tag):
+        return False
+    return data
 
 def usbdrv_write_hs(apdu,data):
     '''
@@ -226,7 +228,9 @@ def usbdrv_read_hs(apdu,length):
     if False == tag:
         return False
     data = __usbdrv_recv_data(__g_Dev,length)
-    return __usbdrv_recv_csw(__g_Dev,tag)
+    if True != __usbdrv_recv_csw(__g_Dev,tag):
+        return False
+    return data
 
 # ---------------- USBDRV TEST ----------------
 def usbdrv_test():
