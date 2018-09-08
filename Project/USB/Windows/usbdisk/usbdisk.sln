@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usbdisk", "usbdisk\usbdisk.vcxproj", "{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|ARM.ActiveCfg = Debug|ARM
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|ARM.Build.0 = Debug|ARM
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|ARM64.Build.0 = Debug|ARM64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|x64.ActiveCfg = Debug|x64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|x64.Build.0 = Debug|x64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|x86.ActiveCfg = Debug|Win32
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Debug|x86.Build.0 = Debug|Win32
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|ARM.ActiveCfg = Release|ARM
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|ARM.Build.0 = Release|ARM
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|ARM64.ActiveCfg = Release|ARM64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|ARM64.Build.0 = Release|ARM64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|x64.ActiveCfg = Release|x64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|x64.Build.0 = Release|x64
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|x86.ActiveCfg = Release|Win32
+		{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA20057D-0D43-4CBF-8D60-8F99B3123D68}
+	EndGlobalSection
+EndGlobal
