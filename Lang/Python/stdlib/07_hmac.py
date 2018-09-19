@@ -16,15 +16,48 @@ import hmac
 # [hmac_sha512]   7ee6a681baf67bf5464d4dd73018d7cea7c0ca16924d66362092da514bc242c1fb933afd7704184c606c87bf4087a32d7c046830d15bd58fc0bc56d0e89169cb
 # ---------------------------------------------------------------
 
-def hmac_sha(mod):
-	message = b"12345678"
-	key = b"\x11\x22\x33\x44\x55\x66\x77\x88"
+# 示例1
+# 数据
+message1 = b"12345678"
+# 密钥
+key1 = b"\x11\x22\x33\x44\x55\x66\x77\x88"
+
+# 示例2
+message2 = b"abcdabcdabcdabcd" + b"abcdabcdabcdabcd" + b"abcdabcdabcdabcd" + b"abcdabcdabcdabcd"
+key2 =	b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88" +\
+		b"\x11\x22\x33\x44\x55\x66\x77\x88\x11\x22\x33\x44\x55\x66\x77\x88"
+
+
+def hmac_sha(mod,message,key):
 	h = hmac.new(key, message, digestmod=mod)
 	print("[hmac_{0:6s}]： {1}".format(mod,h.hexdigest()) )
 
-hmac_sha("md5")
-hmac_sha("sha1")
-hmac_sha("sha224")
-hmac_sha("sha256")
-hmac_sha("sha384")
-hmac_sha("sha512")
+# --------------------------------------------------------------------------
+print("Message[{1}]:\n{0}".format(message1.hex(),len(message1)) )
+print("key[{1}]:\n{0}".format(key1.hex(),len(key1)) )
+
+hmac_sha("md5",message1,key1)
+hmac_sha("sha1",message1,key1)
+hmac_sha("sha224",message1,key1)
+hmac_sha("sha256",message1,key1)
+hmac_sha("sha384",message1,key1)
+hmac_sha("sha512",message1,key1)
+print("")
+
+# --------------------------------------------------------------------------
+print("Message[{1}]:\n{0}".format(message2.hex(),len(message2)) )
+print("key[{1}]:\n{0}".format(key2.hex(),len(key2)) )
+
+hmac_sha("md5",message2,key2)
+hmac_sha("sha1",message2,key2)
+hmac_sha("sha224",message2,key2)
+hmac_sha("sha256",message2,key2)
+hmac_sha("sha384",message2,key2)
+hmac_sha("sha512",message2,key2)
+print("")
