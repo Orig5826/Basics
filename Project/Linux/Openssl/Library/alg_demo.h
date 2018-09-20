@@ -5,8 +5,9 @@
 #include <string.h>
 #include <stdint-gcc.h>
 
+
 // public
-void display(uint8_t * data,uint32_t len);
+void display(const uint8_t * data,uint32_t len);
 
 // alg demo
 void sha1_demo(void);
@@ -15,6 +16,8 @@ void sha512_demo(void);
 // aes demo
 void aes_demo(void);
 void aes_cbc_demo(void);
-
+// ecc
+void ecdh_demo(void);
+void ecdsa_demo(void);
 
 #endif

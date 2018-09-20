@@ -13,7 +13,7 @@
  *     @arg data
  *     @arg len
  */
-void display(uint8_t * data,uint32_t len)
+void display(const uint8_t * data,uint32_t len)
 {
     uint32_t i = 0;
     printf("->\n");

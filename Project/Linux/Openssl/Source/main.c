@@ -7,9 +7,11 @@ int main()
     sha1_demo();
     sha256_demo();
     sha512_demo();
-    #endif
-
     aes_demo();
     aes_cbc_demo();
+    #endif
+
+    ecdh_demo();
+    ecdsa_demo();
     return 0;
 }

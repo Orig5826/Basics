@@ -87,7 +87,12 @@ void aes_cbc_demo(void)
         0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,
         0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff,
     };
+    const uint8_t c_iv[16] = {
+        0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,
+        0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,
+    };
     const uint32_t key_bits = 256;
+    uint8_t iv[16];
 #undef DATA_SIZE
 #define DATA_SIZE       64
     uint8_t data[DATA_SIZE];
@@ -119,14 +124,16 @@ void aes_cbc_demo(void)
         * @breaf encrypt
         * @param
     */
-    AES_ecb_encrypt(data,cipher,&aes_key,AES_ENCRYPT);
+    memcpy(iv,c_iv,16);
+    AES_cbc_encrypt(data,cipher,DATA_SIZE,&aes_key,iv,AES_ENCRYPT);
 
 
     // [notes] You have to set the key again
     // set the decrypt key
     AES_set_decrypt_key(key,key_bits,&aes_key);
     // dectypt  [notes] same as AES_encrypt
-    AES_ecb_encrypt(cipher,result,&aes_key,AES_DECRYPT);
+    memcpy(iv,c_iv,16);
+    AES_cbc_encrypt(cipher,result,DATA_SIZE,&aes_key,iv,AES_DECRYPT);
 
     printf("cipher:\n");
     display(cipher,DATA_SIZE);
