@@ -10,7 +10,7 @@ INCDIR	:= $(shell pwd)
 CPPFLAGS	:= -I$(INCDIR)/Source -I$(INCDIR)/Library
 # --C编译器的falg
 # -Wall警告信息开      -O2优化程度2	-fno-buitin不用标准的，用自己的..
-CFLAGS		:=  -Wall -O0
+CFLAGS		:=  -Wall -O0 -g
 # LIB
 CLIBFLAGS	:= -lcrypto
 
