@@ -16,7 +16,7 @@
 void display(const uint8_t * data,uint32_t len)
 {
     uint32_t i = 0;
-    printf("->\n");
+    printf(" ->\n");
     for(i = 0; i < len; i++)
     {
         if(i != 0 && i % COUNT_EVERY_ROW == 0)

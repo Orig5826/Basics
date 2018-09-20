@@ -9,9 +9,12 @@ int main()
     sha512_demo();
     aes_demo();
     aes_cbc_demo();
-    #endif
-
     ecdh_demo();
     ecdsa_demo();
+    #endif
+
+    des_demo();
+    des_cbc_demo();
+
     return 0;
 }

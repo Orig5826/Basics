@@ -1,8 +1,10 @@
-/*
- * @breaf ecc demo
- *     
+/**
+ * @brief ecc 算法Demo示例
+ * 
+ * @file ecc_demo.c
+ * @author wenjf
+ * @date 2018-09-20
  */
-
 #include "alg_demo.h"
 #include <openssl/ecdsa.h>
 #include <openssl/sha.h>

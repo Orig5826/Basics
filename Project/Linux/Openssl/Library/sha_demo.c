@@ -1,6 +1,9 @@
-/*
- * @breaf sha demo
- *     
+/**
+ * @brief 算法Demo示例
+ * 
+ * @file sha_demo.c
+ * @author wenjf
+ * @date 2018-09-20
  */
 #include "alg_demo.h"
 #include <openssl/sha.h>
