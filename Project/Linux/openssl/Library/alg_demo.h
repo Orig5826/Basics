@@ -1,6 +1,6 @@
 /**
  * @brief 算法示例统一接口头文件
- * 
+ *      Openssl 版本：v1.1.1
  * @file alg_demo.h
  * @author wenjf
  * @date 2018-09-20
@@ -32,5 +32,7 @@ void ecdsa_demo(void);
 // des
 void des_demo(void);
 void des_cbc_demo(void);
+// rsa
+void rsa_demo(void);
 
 #endif

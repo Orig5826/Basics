@@ -11,10 +11,11 @@ int main()
     aes_cbc_demo();
     ecdh_demo();
     ecdsa_demo();
-    #endif
-
     des_demo();
     des_cbc_demo();
+    #endif
+
+    rsa_demo();
 
     return 0;
 }
