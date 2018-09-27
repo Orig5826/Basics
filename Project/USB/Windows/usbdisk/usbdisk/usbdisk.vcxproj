@@ -36,6 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="usbdisk.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="usbdisk.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EBC3B0CD-87D8-4EB4-9D0D-2A91987C6857}</ProjectGuid>
