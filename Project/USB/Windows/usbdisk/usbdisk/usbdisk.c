@@ -50,10 +50,17 @@ static void  FormatErrorCode(void)
 * SymLink 长度必须为36-4-4 = 28字节
 * 其中VID占8字节，PID占16字节，Version（n.nn）占4字节
 */
-static HANDLE usb_find(char * SymLink)
+static HANDLE usb_find(char * SymLink,int Len)
 {
 	HANDLE hDevHandle = NULL;
 	char DevPath[10];
+
+	// 必须保证长度正确
+	if (Len > 28)
+	{
+		printf("The Length of SymLink Is Overflow!\n");
+		return NULL;
+	}
 
 	for (char c = 'C'; c < 'Z'; c++)
 	{
@@ -83,7 +90,7 @@ static HANDLE usb_find(char * SymLink)
 		}
 		if (0 == memcmp(InquiryData, "\x00\x80\x02\x02\x1f\x00\x00\x00", 8))
 		{
-			if (0 == memcmp(InquiryData + 8, SymLink, 28))
+			if (0 == memcmp(InquiryData + 8, SymLink, Len))
 			{
 				printf("找到设备: [%s]\n", SymLink);
 				return hDevHandle;
@@ -248,7 +255,9 @@ void usb_display(PUCHAR buffer, DWORD size)
 
 bool usb_open(void)
 {
-	s_Handle = usb_find(SYMBOLIC_LINK);
+	int Len;
+	Len = strlen(SYMBOLIC_LINK);
+	s_Handle = usb_find(SYMBOLIC_LINK,Len);
 	if (s_Handle == NULL)
 	{
 		printf("设备打开失败\n");

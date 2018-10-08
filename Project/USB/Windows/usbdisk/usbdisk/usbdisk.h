@@ -7,7 +7,8 @@
 typedef BOOL bool;
 
 
-#define SYMBOLIC_LINK	"HSEC    USBCOS          1.00"
+//#define SYMBOLIC_LINK	"HSEC    USBCOS          1.00"
+#define SYMBOLIC_LINK	"HSEC    USBCOS"
 
 // 打开设备 
 bool usb_open(void);
