@@ -1,0 +1,38 @@
+Microsoft (R) COFF/PE Dumper Version 14.14.26433.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file usbdisk.dll
+
+File Type: DLL
+
+  Section contains the following exports for usbdisk.dll
+
+    00000000 characteristics
+    FFFFFFFF time date stamp
+        0.00 version
+           1 ordinal base
+           8 number of functions
+           8 number of names
+
+    ordinal hint RVA      name
+
+          1    0 0001118B _usb_close@0 = @ILT+390(_usb_close@0)
+          2    1 00011028 _usb_display@8 = @ILT+35(_usb_display@8)
+          3    2 000110DC _usb_open@0 = @ILT+215(_usb_open@0)
+          4    3 00011325 _usb_read@8 = @ILT+800(_usb_read@8)
+          5    4 00011163 _usb_read_hs@16 = @ILT+350(_usb_read_hs@16)
+          6    5 00011334 _usb_set_debug_level@4 = @ILT+815(_usb_set_debug_level@4)
+          7    6 00011258 _usb_write@8 = @ILT+595(_usb_write@8)
+          8    7 000112C6 _usb_write_hs@16 = @ILT+705(_usb_write_hs@16)
+
+  Summary
+
+        1000 .00cfg
+        1000 .data
+        1000 .idata
+        3000 .rdata
+        1000 .reloc
+        1000 .rsrc
+        7000 .text
+       10000 .textbss
