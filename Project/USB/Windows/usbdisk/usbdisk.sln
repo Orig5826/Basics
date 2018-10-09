@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usbdisk", "usbdisk\usbdisk.vcxproj", "{46333225-9B53-4C6F-B8E2-540FCBBB8195}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usbdisk_demo", "usbdisk_demo\usbdisk_demo.vcxproj", "{C60A9DA2-CEC4-4C01-9E4D-4F8786513FBF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{46333225-9B53-4C6F-B8E2-540FCBBB8195} = {46333225-9B53-4C6F-B8E2-540FCBBB8195}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

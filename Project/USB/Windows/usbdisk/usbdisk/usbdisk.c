@@ -78,10 +78,14 @@ static HANDLE usb_find(char * SymLink,int Len)
 		{
 			printf("设备打开失败\n");
 			FormatErrorCode();
+
+			printf("可能原因：\n"
+				"	1.需要管理员权限\n"
+				"	2.设备名称是否正确\n");
 			goto Exit;
 		}
 
-		UCHAR InquiryData[36];
+		UCHAR InquiryData[37] = {0};
 		DWORD InquiryDataLen = 32;
 		UCHAR CB[0x10] = { 0x12,0x00,0x00,0x00,0x24 };
 		usb_scsi_cmd(hDevHandle, SCSI_IOCTL_DATA_IN, NULL, 36, CB, 0x06, InquiryData, &InquiryDataLen);
@@ -93,7 +97,7 @@ static HANDLE usb_find(char * SymLink,int Len)
 		{
 			if (0 == memcmp(InquiryData + 8, SymLink, Len))
 			{
-				printf("找到设备: [%s]\n", SymLink);
+				printf("找到设备: [%s]\n", InquiryData + 8);
 				return hDevHandle;
 			}
 		}
@@ -171,14 +175,14 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 	}
 	else
 	{
-		if (usbdisk_debug_level == 0)
+		if (usbdisk_debug_level >= 3)
 		{
 			printf("[CMD]:0x%02x\n", CB[0]);
 		}
 		switch (Direction)
 		{
 		case SCSI_IOCTL_DATA_IN:
-			if (usbdisk_debug_level == 0)
+			if (usbdisk_debug_level >= 3)
 			{
 				printf("\t\t[IN]:\n");
 				usb_display(sptwb.ucDataBuf, sptwb.spt.DataTransferLength);
@@ -187,7 +191,7 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 			*resLen = sptwb.spt.DataTransferLength;
 			break;
 		case SCSI_IOCTL_DATA_OUT:
-			if (usbdisk_debug_level == 0)
+			if (usbdisk_debug_level >= 3)
 			{
 				printf("\t\t[OUT]:\n");
 				usb_display(sptwb.ucDataBuf, sptwb.spt.DataTransferLength);
@@ -206,7 +210,7 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 
 
 // ---------------------------------------------------------
-DLL_API void usb_display(PUCHAR buffer, DWORD size)
+DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 {
 	DWORD i, j, k;
 	printf("\t");
@@ -254,41 +258,52 @@ DLL_API void usb_display(PUCHAR buffer, DWORD size)
 	}
 }
 
-DLL_API bool usb_open(void)
+DLL_API bool CALL usb_open(void)
 {
 	int Len;
 	Len = strlen(SYMBOLIC_LINK);
 	s_Handle = usb_find(SYMBOLIC_LINK,Len);
 	if (s_Handle == NULL)
 	{
-		printf("设备打开失败\n");
 		return FALSE;
+	}
+	else
+	{
+		printf("---------------- 打开USB设备 ----------------\n");
 	}
 	return TRUE;
 }
 
-DLL_API void usb_close(void)
+DLL_API void CALL usb_close(void)
 {
-	CloseHandle(s_Handle);
+	if (FALSE == CloseHandle(s_Handle))
+	{
+		printf("设备关闭失败\n");
+		FormatErrorCode();
+	}
+	else
+	{
+		printf("---------------- 关闭USB设备 ----------------\n");
+	}
 }
 
-DLL_API void usb_set_debug_level(uint8_t debug_level)
+DLL_API void CALL usb_set_debug_level(uint8_t debug_level)
 {
 	usbdisk_debug_level = debug_level;
 }
 
-DLL_API bool usb_write(uint8_t * sBuf, uint32_t sLen)
+DLL_API bool CALL usb_write(uint8_t * sBuf, uint32_t sLen)
 {
 	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
 	UCHAR CB[31] = {0xff};
-	if (usbdisk_debug_level >= 1)
+	if (usbdisk_debug_level >= 1 && usbdisk_debug_level <= 2)
 	{
-		printf("[OUT]:\n");
+		printf("[Write]:\n");
 		usb_display(sBuf, sLen);
 	}
 	return usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, 1, NULL, &rLen);
 }
-DLL_API bool usb_read(uint8_t * rBuf, uint32_t * rLen)
+DLL_API bool CALL usb_read(uint8_t * rBuf, uint32_t * rLen)
 {
 	BOOL ret = FALSE;
 	UCHAR CB[31] = { 0xff };
@@ -296,16 +311,16 @@ DLL_API bool usb_read(uint8_t * rBuf, uint32_t * rLen)
 	ret = usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_IN, NULL, *rLen, CB, 1, rBuf, (PDWORD)rLen);
 	if (ret != FALSE)
 	{
-		if (usbdisk_debug_level >= 1)
+		if (usbdisk_debug_level >= 1 && usbdisk_debug_level <= 2)
 		{
-			printf("[IN]:\n");
+			printf("[Read]:\n");
 			usb_display(rBuf,*rLen);
 		}
 	}
 	return ret;
 }
 
-DLL_API bool usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen)
+DLL_API bool CALL usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen)
 {
 	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
 	UCHAR CB[31] = { 0xfd };
@@ -315,14 +330,14 @@ DLL_API bool usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint
 	}
 	memcpy(CB + 1, apdu, apdu_len);
 
-	if (usbdisk_debug_level >= 1)
+	if (usbdisk_debug_level >= 1 && usbdisk_debug_level <= 2)
 	{
-		printf("[OUT]:\n");
+		printf("[Write_HS]:\n");
 		usb_display(sBuf, sLen);
 	}
 	return usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, apdu_len + 1, NULL, &rLen);
 }
-DLL_API bool usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen)
+DLL_API bool CALL usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen)
 {
 	BOOL ret = FALSE;
 	UCHAR CB[31] = { 0xfe };
@@ -335,9 +350,9 @@ DLL_API bool usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint3
 	ret = usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_IN, NULL, *rLen, CB, apdu_len + 1, rBuf, (PDWORD)rLen);
 	if (ret != FALSE)
 	{
-		if (usbdisk_debug_level >= 1)
+		if (usbdisk_debug_level >= 1 && usbdisk_debug_level <= 2)
 		{
-			printf("[IN]:\n");
+			printf("[Read_HS]:\n");
 			usb_display(rBuf, *rLen);
 		}
 	}

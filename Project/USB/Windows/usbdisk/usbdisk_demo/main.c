@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+/*
+	注意：该头文件不再单独复制出来，直接使用了
+	usbdisk的头文件
+*/
 #include "usbdisk.h"
 #pragma comment(lib,"usbdisk.lib")
 
@@ -30,6 +33,7 @@ void __cdecl main()
 	usb_write_hs(apdu, 5, sBuf, 32);
 	usb_read_hs(apdu, 5, rBuf, &rLen);
 
-	system("pause");
 	usb_close();
+	// 等待按键退出...
+	system("pause");
 }
