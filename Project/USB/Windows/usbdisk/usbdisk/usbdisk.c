@@ -1,4 +1,5 @@
 
+#define DLL_EXPORTS
 #include "usbdisk.h"
 
 #include <windows.h>
@@ -205,7 +206,7 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 
 
 // ---------------------------------------------------------
-void usb_display(PUCHAR buffer, DWORD size)
+DLL_API void usb_display(PUCHAR buffer, DWORD size)
 {
 	DWORD i, j, k;
 	printf("\t");
@@ -253,7 +254,7 @@ void usb_display(PUCHAR buffer, DWORD size)
 	}
 }
 
-bool usb_open(void)
+DLL_API bool usb_open(void)
 {
 	int Len;
 	Len = strlen(SYMBOLIC_LINK);
@@ -266,17 +267,17 @@ bool usb_open(void)
 	return TRUE;
 }
 
-void usb_close(void)
+DLL_API void usb_close(void)
 {
 	CloseHandle(s_Handle);
 }
 
-void usb_set_debug_level(uint8_t debug_level)
+DLL_API void usb_set_debug_level(uint8_t debug_level)
 {
 	usbdisk_debug_level = debug_level;
 }
 
-bool usb_write(uint8_t * sBuf, uint32_t sLen)
+DLL_API bool usb_write(uint8_t * sBuf, uint32_t sLen)
 {
 	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
 	UCHAR CB[31] = {0xff};
@@ -287,7 +288,7 @@ bool usb_write(uint8_t * sBuf, uint32_t sLen)
 	}
 	return usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, 1, NULL, &rLen);
 }
-bool usb_read(uint8_t * rBuf, uint32_t * rLen)
+DLL_API bool usb_read(uint8_t * rBuf, uint32_t * rLen)
 {
 	BOOL ret = FALSE;
 	UCHAR CB[31] = { 0xff };
@@ -304,7 +305,7 @@ bool usb_read(uint8_t * rBuf, uint32_t * rLen)
 	return ret;
 }
 
-bool usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen)
+DLL_API bool usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen)
 {
 	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
 	UCHAR CB[31] = { 0xfd };
@@ -321,7 +322,7 @@ bool usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLe
 	}
 	return usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, apdu_len + 1, NULL, &rLen);
 }
-bool usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen)
+DLL_API bool usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen)
 {
 	BOOL ret = FALSE;
 	UCHAR CB[31] = { 0xfe };
@@ -342,3 +343,29 @@ bool usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rL
 	}
 	return ret;
 }
+
+#if 0
+BOOL APIENTRY DllMain(
+	HANDLE hModule,             // DLL模块的句柄
+	DWORD ul_reason_for_call,   // 调用本函数的原因
+	LPVOID lpReserved           // 保留
+)
+{
+	switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+		//进程正在加载本DLL
+		break;
+	case DLL_THREAD_ATTACH:
+		//一个线程被创建
+		break;
+	case DLL_THREAD_DETACH:
+		//一个线程正常退出
+		break;
+	case DLL_PROCESS_DETACH:
+		//进程正在卸载本DLL
+		break;
+	}
+	return TRUE;            //返回TRUE,表示成功执行本函数
+}
+#endif

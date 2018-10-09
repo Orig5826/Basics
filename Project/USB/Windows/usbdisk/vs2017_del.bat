@@ -15,7 +15,7 @@ cd  .\%name%
 	cd ..
 
 REM 其他工程目录也需要删除
-set name="usb_drive"
+set name=%name%"_demo"
 cd  .\%name%
 	RD /Q /S  .\Debug  .\x64  .\x86  .\ARM
 	del /Q /S *.user

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "usbdisk.h"
+#pragma comment(lib,"usbdisk.lib")
 
 
 void __cdecl main()
@@ -14,7 +15,11 @@ void __cdecl main()
 	uint8_t rBuf[32];
 	uint32_t rLen = 32;
 
-	usb_open();
+	if (FALSE == usb_open())
+	{
+		printf("设备打开失败");
+		exit(-1);
+	}
 	//usb_set_debug_level(2);
 	//
 	usb_write(sBuf, 32);
