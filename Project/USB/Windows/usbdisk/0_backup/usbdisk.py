@@ -1,7 +1,7 @@
 from ctypes import *
 from time import sleep
 
-BUFFER_SIZE_MAX = 1024 + 8
+BUFFER_SIZE_MAX = 0x400 + 0x40 + 8
 # --------------------------------------------
 # ctypes array
 # --------------------------------------------
