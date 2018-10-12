@@ -13,18 +13,31 @@
 
 void default_test();
 
-void __cdecl main()
+int __cdecl main(int argc,char * argv[])
 {
-	// default_test()
-	// apdu_test();
-	// APDU_Test();
+	if (argc == 2)
+	{
+		if (0 == strcmp(argv[1], "0"))
+		{
+			GenerateKey();
+		}
+	}
+	else if (argc == 1)
+	{
+		// default_test()
+		// apdu_test();
+		// APDU_Test();
 
-	// 加解密测试
-	Encrypt("usbdisk.h", "cipher");
-	Decrypt("cipher", "result.txt");
-
+		Encrypt_Test();
+	}
+	else
+	{
+		printf("命令行参数出错！\n");
+	}
 	// 等待按键退出...
 	system("pause");
+
+	return 0;
 }
 
 // ---------------------------------------------------------------
