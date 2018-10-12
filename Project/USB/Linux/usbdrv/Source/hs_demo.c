@@ -192,7 +192,7 @@ void PlainCompare()
 
 void hs_demo(void)
 {
-	if (False == usb_open(0x2309, 0x0606))
+	if (False == usb_open(USB_VID, USB_PID))
 	{
 		return;
 	}

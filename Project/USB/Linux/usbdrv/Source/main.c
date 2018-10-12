@@ -9,7 +9,7 @@ void default_demo()
 							0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 	uint8_t rBuf[LENGTH];
 	uint32_t rLen = LENGTH;
-	if (False == usb_open(0x2309, 0x0606))
+	if (False == usb_open(USB_VID, USB_PID))
 	{
 		return;
 	}
@@ -29,7 +29,7 @@ void default_demo_hs()
 	uint8_t apdu[5] = {0x00,0x84,0x00,0x00,0x08};
 	uint8_t rBuf[10];
 	uint32_t rLen;
-	if (False == usb_open(0x2309, 0x0606))
+	if (False == usb_open(USB_VID, USB_PID))
 	{
 		return;
 	}
@@ -46,6 +46,21 @@ void default_demo_hs()
 
 int main(int argc, char const *argv[])
 {
-	hs_demo();
+	// hs_demo();
+	if(argc == 2)
+	{
+		if(0 == strcmp(argv[1],"0"))
+		{
+			GenerateKey();
+		}
+	}
+	else if(argc == 1)
+	{
+		Encrypt_Test();
+	}
+	else
+	{
+
+	}
 	return 0;
 }

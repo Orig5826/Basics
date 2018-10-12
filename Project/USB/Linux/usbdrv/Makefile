@@ -22,6 +22,8 @@ export CC AR CFLAGS HEADER LIB
 #
 obj := Source/main.o
 obj += Source/hs_demo.o
+obj += Source/apdu.o
+obj += Source/encrypt.o
 # 
 obj += Library/usbdrv.a
 
@@ -45,4 +47,6 @@ Library/usbdrv.a:
 clean:
 	cd Source; rm *.o ; cd ..
 	cd Library; make clean; cd ..
-	rm *.out *.bin
+	rm -f *.out *.bin
+# 可能生成的文件
+	rm -f plain cipher
