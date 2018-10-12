@@ -35,5 +35,7 @@ void des_demo(void);
 void des_cbc_demo(void);
 // rsa
 void rsa_demo(void);
+// hmac
+void hmac_sha256_demo(void);
 
 #endif

@@ -11,12 +11,13 @@ int main()
     aes_cbc_demo();
     ecdh_demo();
     ecdsa_demo();
+    ecc_generate();
     des_demo();
     des_cbc_demo();
     rsa_demo();
     #endif
-
-    ecc_generate();
+    
+    hmac_sha256_demo();
 
     return 0;
 }
