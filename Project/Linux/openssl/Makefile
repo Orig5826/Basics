@@ -39,4 +39,4 @@ Library/libc.a:
 clean:
 	cd Library; make clean; cd ..
 	cd Source ; rm *.o ; cd ..
-	rm *.out
+	rm -f *.out

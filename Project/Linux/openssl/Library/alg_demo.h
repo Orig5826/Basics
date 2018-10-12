@@ -29,6 +29,7 @@ void aes_cbc_demo(void);
 // ecc
 void ecdh_demo(void);
 void ecdsa_demo(void);
+void ecc_generate(void);
 // des
 void des_demo(void);
 void des_cbc_demo(void);

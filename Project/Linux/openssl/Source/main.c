@@ -13,9 +13,10 @@ int main()
     ecdsa_demo();
     des_demo();
     des_cbc_demo();
+    rsa_demo();
     #endif
 
-    rsa_demo();
+    ecc_generate();
 
     return 0;
 }
