@@ -10,13 +10,13 @@
 #include <string.h>
 
 // 针对一些特殊情况，没有办法直接返回2字节长度字段的问题
-#define I2C_RECV_MODE2
+// #define I2C_RECV_MODE2
 
 //--------------------------------------------------
 //	I2C 接口配置
 //--------------------------------------------------
 #define I2Cx						I2C1
-#define SLAVE_ADDR					0x55
+#define SLAVE_ADDR					(0x10)
 //读写地址
 #define I2C_WRITE_ADDR				(SLAVE_ADDR << 1)
 #define I2C_READ_ADDR				(SLAVE_ADDR << 1 | 0x01)
@@ -176,12 +176,24 @@ void I2C_Read(u8* rBuf , u16 *rLen)
 	I2C_AcknowledgeConfig(I2Cx, ENABLE);
 }
 
+static void Delay(void)
+{
+	volatile uint32_t n = 0x00080000;
+	uint32_t i = 0;
+	for(i = 0; i < n; i ++)
+	{
+		;
+	}
+}
+
 void I2C_Hard_Example(void)
 {
 	uint8_t apdu[] = {0x00,0x05,0x00,0x84,0x00,0x00,0x08,0x8C};
 	uint16_t apdu_len = 8;
 	uint8_t res[32];
 	uint16_t resLen = 0;
+	
+	Delay();
 	
 	I2C_Init_Config();
 	I2C_Write(apdu,apdu_len);
