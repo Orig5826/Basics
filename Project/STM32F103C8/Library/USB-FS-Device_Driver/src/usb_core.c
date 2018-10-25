@@ -721,8 +721,6 @@ void Data_Setup0(void)
   uint32_t Related_Endpoint, Reserved;
   uint32_t wOffset, Status;
 
-
-
   CopyRoutine = NULL;
   wOffset = 0;
 
@@ -926,6 +924,10 @@ uint8_t Setup0_Process(void)
   }
 
   pInformation->ControlState = SETTING_UP;
+  
+//Debug
+	UartSendHex((uint8_t *)pInformation,12);
+
   if (pInformation->USBwLength == 0)
   {
     /* Setup with no data stage */
