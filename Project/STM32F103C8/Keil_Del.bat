@@ -16,6 +16,8 @@ for /R %%i in (Demo_Example Custom_HID Virtual_COM_Port) do (
 	del /S /Q *.uvguix.*
 	del /S /Q *.uvoptx
 	del /S /Q *.scvd
+	
+	del /S /Q JLink*
 )
 cd ..
 
