@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Library;..\..\Library\CoreSupport;..\..\Library\DeviceSupport\STM32F10x;..\..\Library\Drivers\inc;..\..\Library\USB-FS-Device_Driver\inc;.\inc</IncludePath>
+              <IncludePath>..\..\Library;..\..\Library\CoreSupport;..\..\Library\DeviceSupport\STM32F10x;..\..\Library\Drivers\inc;..\..\Library\USB-FS-Device_Driver\inc;.\inc;.\app</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Library\Drivers\src\stm32f10x_dma.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Library\Drivers\src\stm32f10x_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -526,6 +531,21 @@
               <FileName>usb_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\usb_pwr.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>app</GroupName>
+          <Files>
+            <File>
+              <FileName>i2c_hard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\app\i2c_hard.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_ccid_i2c_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\app\usb_ccid_i2c_demo.c</FilePath>
             </File>
           </Files>
         </Group>

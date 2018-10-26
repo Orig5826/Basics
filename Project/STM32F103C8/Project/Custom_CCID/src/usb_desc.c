@@ -100,9 +100,9 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     0x00,         /* bAlternateSetting: Alternate setting */
     0x02,         /* bNumEndpoints */
 /* CCID */
-    0x0B,         /* bInterfaceClass: HID */
-    0x00,         /* bInterfaceSubClass : 1=BOOT, 0=no boot */
-    0x00,         /* nInterfaceProtocol : 0=none, 1=keyboard, 2=mouse */
+    0x0B,         /* bInterfaceClass: CCID */
+    0x00,         /* bInterfaceSubClass :  */
+    0x00,         /* nInterfaceProtocol :  */
     0,            /* iInterface: Index of string descriptor */
 
 /* Class Descriptor */
@@ -135,7 +135,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     USB_ENDPOINT_DESCRIPTOR_TYPE, /* bDescriptorType: */
 
     0x81,          /* bEndpointAddress: Endpoint Address (IN) */
-    0x03,          /* bmAttributes: Interrupt endpoint */
+    0x02,          /* bmAttributes: Bulk endpoint */
     0x40,          /* wMaxPacketSize: 64 Bytes max */
     0x00,
     0x20,          /* bInterval: Polling Interval (32 ms) */
@@ -146,7 +146,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 			/*	Endpoint descriptor type */
     0x01,	/* bEndpointAddress: */
 			/*	Endpoint Address (OUT) */
-    0x03,	/* bmAttributes: Interrupt endpoint */
+    0x02,	/* bmAttributes: Bulk endpoint */
     0x40,	/* wMaxPacketSize: 64 Bytes max  */
     0x00,
     0x20,	/* bInterval: Polling Interval (20 ms) */
@@ -187,24 +187,23 @@ const uint8_t CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
     CUSTOMHID_SIZ_STRING_VENDOR, /* Size of Vendor string */
     USB_STRING_DESCRIPTOR_TYPE,  /* bDescriptorType*/
     /* Manufacturer: "STMicroelectronics" */
-    'S', 0, 'T', 0, 'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'e', 0,
-    'l', 0, 'e', 0, 'c', 0, 't', 0, 'r', 0, 'o', 0, 'n', 0, 'i', 0,
-    'c', 0, 's', 0
+    'H', 0, 'o', 0, 'n', 0, 'g', 0, 's', 0, 'i', 0, 
+	'-', 0, 'I', 0, 'C', 0
   };
 
 const uint8_t CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
   {
     CUSTOMHID_SIZ_STRING_PRODUCT,          /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, ' ', 0, 'S', 0,
-    'N', 0, 'P', 0, ' ', 0, 'T', 0, 'O', 0, 'O', 0, 'L', 0,
+    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, '_', 0, 'S', 0,
+    'N', 0, 'P', 0, '_', 0, 'T', 0, 'o', 0, 'o', 0, 'l', 0,
     ' ', 0
   };
 uint8_t CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
   {
     CUSTOMHID_SIZ_STRING_SERIAL,           /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
-    'v', 0, '1', 0, '.', 0,'0', 0,'0', 0
+    '1', 0, '.', 0, '0', 0, '0', 0,
   };
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

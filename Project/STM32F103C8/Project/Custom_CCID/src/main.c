@@ -40,6 +40,7 @@
 #include "hw_config.h"
 #include "usb_lib.h"
 #include "usb_pwr.h"
+#include "i2c_hard.h"
 
 #include <string.h>
 
@@ -161,6 +162,8 @@ void UartSendHex(const uint8_t *str, uint32_t strlen)
 *******************************************************************************/
 int main(void)
 {
+  I2C_Init_Config();
+
   UartInit();
   UartSendString((uint8_t*)"Uart OK!\r\n",0);
   
@@ -171,7 +174,7 @@ int main(void)
   
   USB_Init();
   UartSendString((uint8_t*)"USB_Init\r\n",0);
-  
+	
   while (1)
   {
 

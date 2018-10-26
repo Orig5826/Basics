@@ -219,6 +219,9 @@ void CustomHID_SetConfiguration(void)
     // ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 #endif /* STM32L1XX_XD */
   }
+  
+  //Debug
+  UartSendString("CustomCCID_SetConfiguration\n",0);
 }
 /*******************************************************************************
 * Function Name  : CustomHID_SetConfiguration.

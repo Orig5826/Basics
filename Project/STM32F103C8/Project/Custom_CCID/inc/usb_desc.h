@@ -59,7 +59,7 @@
 #define CUSTOMHID_SIZ_CONFIG_DESC               (0x20 + 0x36)	//41
 #define CUSTOMHID_SIZ_REPORT_DESC               28  //  163
 #define CUSTOMHID_SIZ_STRING_LANGID             4
-#define CUSTOMHID_SIZ_STRING_VENDOR             38
+#define CUSTOMHID_SIZ_STRING_VENDOR             20	// 38
 #define CUSTOMHID_SIZ_STRING_PRODUCT            32
 #define CUSTOMHID_SIZ_STRING_SERIAL             26
 

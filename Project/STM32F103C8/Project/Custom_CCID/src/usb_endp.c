@@ -52,6 +52,7 @@ extern __IO uint8_t Send_Buffer[64];
 extern __IO uint8_t Send_Length;
 extern __IO uint8_t PrevXferComplete;
 /* Private function prototypes -----------------------------------------------*/
+void CCID_Command(void);
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************
 * Function Name  : EP1_OUT_Callback.
@@ -62,18 +63,24 @@ extern __IO uint8_t PrevXferComplete;
 *******************************************************************************/
 void EP1_OUT_Callback(void)
 {
+#if 0
   uint32_t BufLen = 0; 
   BufLen = USB_SIL_Read(EP1_OUT, Receive_Buffer);
-  
+  UartSendString((uint8_t*)"Read\r\n",0);
+  UartSendHex((uint8_t*)Receive_Buffer,BufLen);
+	
   memcpy((void *)Send_Buffer,Receive_Buffer,BufLen);
   Send_Length = BufLen;
   SetEPRxStatus(ENDP1, EP_RX_VALID);
+
   
   /* Write the descriptor through the endpoint */
   USB_SIL_Write(EP1_IN, (uint8_t*)Send_Buffer, Send_Length);
   SetEPTxValid(ENDP1);
-  UartSendString((uint8_t*)"Read & Write\r\n",0);
+  UartSendString((uint8_t*)"Write\r\n",0);
   UartSendHex((uint8_t*)Send_Buffer,Send_Length);
+#endif
+	CCID_Command();
 }
 
 /*******************************************************************************
