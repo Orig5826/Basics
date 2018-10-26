@@ -925,8 +925,8 @@ uint8_t Setup0_Process(void)
 
   pInformation->ControlState = SETTING_UP;
   
-//Debug
-	UartSendHex((uint8_t *)pInformation,8);
+  //Debug
+  //UartSendHex((uint8_t *)pInformation,8);
 
   if (pInformation->USBwLength == 0)
   {

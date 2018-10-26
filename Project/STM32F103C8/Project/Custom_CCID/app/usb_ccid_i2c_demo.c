@@ -39,25 +39,6 @@ void usb_ep2_recv(uint8_t * rBuf,uint32_t rLen)
 	UartSendHex((uint8_t*)rBuf,rLen);
 }
 
-void memmv(uint8_t * des,const uint8_t * src,uint32_t len)
-{
-	int i = 0;
-	if(des > src)
-	{
-		for(i = (int32_t)len - 1; i >= 0; i--)
-		{
-			*(des + i) = *(src + i);
-		}
-	}
-	else
-	{
-		for(i = 0; i < len; i++)
-		{
-			*(des + i) = *(src + i);
-		}
-	}
-}
-
 /** \def
  * @brief I2C 从机地址
  * 
@@ -470,7 +451,10 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 
 	/*
 		I2C 通讯添加的内容
+		这里偏移5字节，是因为snp工具的非标准指令封装发送
 	*/
+	memmove(rBuf,rBuf + 5,rLen - 5);
+	rLen -= 5;
 	{
 		uint8_t temp = 0;
 		uint32_t i = 0;
@@ -484,21 +468,17 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 		{
 			temp ^= rBuf[i];
 		}
-		UartSendHex(rBuf,rLen);
 		rBuf[rLen] = temp;
 		rLen += 1;
 		
 		I2C_Write(rBuf,rLen);
 	}
-	
+	Delay(10000);
 	{
 		uint8_t temp = 0;
 		uint32_t i = 0;
 		
 		I2C_Read(sBuf,(uint16_t *)sLen);
-		//Debug
-		UartSendHex((uint8_t*)sLen,4);
-		UartSendHex((uint8_t*)sBuf,*sLen);
 		*sLen -= 1;
 		for(i = 0; i < *sLen; i++)
 		{
@@ -514,10 +494,7 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 		}
 		
 		*sLen -= 2;
-		memmv(sBuf,sBuf + 2,*sLen);
-		//Debug
-		UartSendHex((uint8_t*)sLen,4);
-		UartSendHex((uint8_t*)sBuf,*sLen + 1);
+		memmove(sBuf,sBuf + 2,*sLen);
 	}
 }
 
