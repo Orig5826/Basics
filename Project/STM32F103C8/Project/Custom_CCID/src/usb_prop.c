@@ -216,7 +216,7 @@ void CustomHID_SetConfiguration(void)
 #elif defined(STM32F303xC) || defined(STM32F303xE)
     ADC_StartConversion(ADC1);
 #else
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    // ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 #endif /* STM32L1XX_XD */
   }
 }
