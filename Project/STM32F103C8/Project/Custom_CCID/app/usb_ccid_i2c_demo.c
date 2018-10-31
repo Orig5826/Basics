@@ -20,7 +20,7 @@
 #include <string.h>
 #include "i2c_hard.h"
 
-// #define USB_CCID_I2C_DEMO
+#define USB_CCID_I2C_DEMO
 volatile uint8_t ccid_i2c_dataok_flag = 0;
 __IO uint8_t PrevXferComplete;
 /**
@@ -400,7 +400,9 @@ u8 isCase(emCase Case,const APDU * pAPDU)
  */
 void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 {
+#ifndef USB_CCID_I2C_DEMO
 	u32 i = 0;
+#endif
 	APDU pAPDU;
 
 	SetAPDU(&pAPDU, rBuf, rLen);
@@ -484,7 +486,7 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 			
 			I2C_Write(rBuf,rLen);
 		}
-		Delay(800000);
+		// Delay(20000);
 		{
 			uint8_t temp = 0;
 			uint32_t i = 0;
@@ -549,6 +551,8 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 	break;
 	case 0x03:
 	{
+		// 这条指令，是我用来调试CCID数据分包是否会
+		// 导致出现通讯不稳定的情况而设置的
 		memcpy(sBuf,pAPDU.pData,pAPDU.Lc);
 		
 		sBuf[pAPDU.Lc + 0] = 0x90;
