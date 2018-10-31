@@ -41,15 +41,16 @@
 #include "usb_lib.h"
 #include "usb_pwr.h"
 #include "i2c_hard.h"
-
 #include <string.h>
+
+/* CCID 相关命令 */
+void CCID_Command(void);
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Extern variables ----------------------------------------------------------*/
-__IO uint8_t PrevXferComplete = 1;
 __IO uint32_t TimingDelay = 0;
 /* Private function prototypes -----------------------------------------------*/
 void Delay(__IO uint32_t nCount);
@@ -177,7 +178,7 @@ int main(void)
 	
   while (1)
   {
-
+	CCID_Command();
   }
 }
 

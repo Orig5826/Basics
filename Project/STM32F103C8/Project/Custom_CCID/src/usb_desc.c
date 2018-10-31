@@ -110,7 +110,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	0x21,					//bDescriptorType	: CCID
 	0x00, 0x01,				//bcdCCID			: v1.1
 	0x00,					//bMaxSlotIndex		: [00,...,0F]
-	0x01,					//bVoltageSupport	: 01->5V  02->3V  04->1.8V
+	0x02,					//bVoltageSupport	: 01->5V  02->3V  04->1.8V
 	0x01, 0x00, 0x00, 0x00, //dwProtocols		: 01->T=0    02->T=1    03->T0&T1
 	0xfc, 0x0d, 0x00, 0x00, //dwDefaultClock	: 3.58MHz
 	0xfc, 0x0d, 0x00, 0x00, //dwMaximumClock	: 3.58MHz

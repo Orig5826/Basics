@@ -20,23 +20,35 @@
 #include <string.h>
 #include "i2c_hard.h"
 
+// #define USB_CCID_I2C_DEMO
+volatile uint8_t ccid_i2c_dataok_flag = 0;
+__IO uint8_t PrevXferComplete;
+/**
+ * @brief 定义一个全局变量，用来暂时存储接收的CCID命令
+ * 
+ */
+#define CCID_BUFF_SIZE (0x800 + 10)			//!< 将RAM空间暂定大小为2K
+static u8 s_ucCCIDBuffer[CCID_BUFF_SIZE];
+static u8 sBuff_CCID[CCID_BUFF_SIZE];		//<! 若返回数据过长，则可能出现
+
 
 void usb_ep1_send(uint8_t * sBuf,uint32_t sLen)
 {
 	USB_SIL_Write(EP1_IN, (uint8_t*)sBuf, sLen);
 	SetEPTxValid(ENDP1);
 	
-	UartSendString((uint8_t*)"-> ",0);
+	UartSendString((uint8_t*)"<- ",0);
 	UartSendHex((uint8_t*)sBuf,sLen);
 }
 
-void usb_ep2_recv(uint8_t * rBuf,uint32_t rLen)
+// stm32 使用的仍然是ep1
+void usb_ep2_recv(uint8_t * rBuf,uint32_t * rLen)
 {
-	rLen = USB_SIL_Read(EP1_OUT, rBuf);
+	*rLen = USB_SIL_Read(EP1_OUT, rBuf);
 	SetEPRxStatus(ENDP1, EP_RX_VALID);
 
-	UartSendString((uint8_t*)"<- ",0);
-	UartSendHex((uint8_t*)rBuf,rLen);
+	UartSendString((uint8_t*)"-> ",0);
+	UartSendHex((uint8_t*)rBuf,*rLen);
 }
 
 /** \def
@@ -244,12 +256,6 @@ typedef struct
 	u32 uiDataRate;
 } DataRateAndClockFreq_Msg;
 
-/**
- * @brief 定义一个全局变量，用来暂时存储接收的CCID命令
- * 
- */
-#define CCID_BUFF_SIZE (0x800 + 10)			//!< 将RAM空间暂定大小为2K
-static u8 s_ucCCIDBuffer[CCID_BUFF_SIZE];
 
 /**
  * @brief APDU 结构体
@@ -394,7 +400,6 @@ u8 isCase(emCase Case,const APDU * pAPDU)
  */
 void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 {
-#if 0
 	u32 i = 0;
 	APDU pAPDU;
 
@@ -403,6 +408,108 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 	*sLen = 2;
 	switch (pAPDU.INS)
 	{
+#ifdef USB_CCID_I2C_DEMO
+	case 0xC2:
+	{
+		/*
+		I2C 通讯添加的内容
+		这里偏移5字节，是因为snp工具的非标准指令封装发送
+		*/
+		memmove(rBuf,rBuf + 5,rLen - 5);
+		rLen -= 5;
+	} //break;
+	default:
+	{
+#if 0
+		// ** 计算校验值，不包括长度字段 **
+		{
+			uint8_t temp = 0;
+			uint32_t i = 0;
+			
+			for(i = 0; i < rLen; i++)
+			{
+				temp ^= rBuf[i];
+			}
+
+			memmove(rBuf + 2,rBuf,rLen);
+			rBuf[0] = (rLen >> 8) & 0xff;
+			rBuf[1] = (rLen     ) & 0xff;
+			rLen += 2;
+			
+			rBuf[rLen] = temp;
+			rLen += 1;
+			
+			I2C_Write(rBuf,rLen);
+		}
+		Delay(10000);
+		{
+			uint8_t temp = 0;
+			uint32_t i = 0;
+			
+			I2C_Read(sBuf,(uint16_t *)sLen);
+			*sLen -= 1;
+			for(i = 0; i < *sLen - 2; i++)
+			{
+				temp ^= sBuf[2 + i];
+			}
+			
+			if(temp != sBuf[*sLen])
+			{
+				sBuf[0] = 0x00;
+				sBuf[1] = 0x00;
+				*sLen = 2;
+				return;
+			}
+			
+			*sLen -= 2;
+			memmove(sBuf,sBuf + 2,*sLen);
+		}
+#else
+		// ** 计算校验值，需要包括长度字段 **
+		{
+			uint8_t temp = 0;
+			uint32_t i = 0;
+
+			memmove(rBuf + 2,rBuf,rLen);
+			rBuf[0] = (rLen >> 8) & 0xff;
+			rBuf[1] = (rLen     ) & 0xff;
+			rLen += 2;
+			
+			for(i = 0; i < rLen; i++)
+			{
+				temp ^= rBuf[i];
+			}
+			rBuf[rLen] = temp;
+			rLen += 1;
+			
+			I2C_Write(rBuf,rLen);
+		}
+		Delay(800000);
+		{
+			uint8_t temp = 0;
+			uint32_t i = 0;
+			
+			I2C_Read(sBuf,(uint16_t *)sLen);
+			*sLen -= 1;
+			for(i = 0; i < *sLen; i++)
+			{
+				temp ^= sBuf[i];
+			}
+			
+			if(temp != sBuf[*sLen])
+			{
+				sBuf[0] = 0x00;
+				sBuf[1] = 0x00;
+				*sLen = 2;
+				return;
+			}
+			
+			*sLen -= 2;
+			memmove(sBuf,sBuf + 2,*sLen);
+		}
+#endif
+	}break;
+#else
 	case 0x84:
 	{
 		if(!isCase(CASE2,&pAPDU))
@@ -440,66 +547,26 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 		*sLen += pAPDU.Le;
 	}
 	break;
+	case 0x03:
+	{
+		memcpy(sBuf,pAPDU.pData,pAPDU.Lc);
+		
+		sBuf[pAPDU.Lc + 0] = 0x90;
+		sBuf[pAPDU.Lc + 1] = 0x00;
+		*sLen += pAPDU.Lc;
+		
+		// UartSendHex((uint8_t *)sLen,4);
+	}break;
 	default:
 	{
 		sBuf[0] = 0x6D;
 		sBuf[1] = 0x00;
 	}
 	break;
-	}
 #endif
-
-	/*
-		I2C 通讯添加的内容
-		这里偏移5字节，是因为snp工具的非标准指令封装发送
-	*/
-	memmove(rBuf,rBuf + 5,rLen - 5);
-	rLen -= 5;
-	{
-		uint8_t temp = 0;
-		uint32_t i = 0;
-		
-		memmove(rBuf + 2,rBuf,rLen);
-		rBuf[0] = (rLen >> 8) & 0xff;
-		rBuf[1] = (rLen     ) & 0xff;
-		rLen += 2;
-		
-		for(i = 0; i < rLen; i++)
-		{
-			temp ^= rBuf[i];
-		}
-		rBuf[rLen] = temp;
-		rLen += 1;
-		
-		I2C_Write(rBuf,rLen);
-	}
-	Delay(10000);
-	{
-		uint8_t temp = 0;
-		uint32_t i = 0;
-		
-		I2C_Read(sBuf,(uint16_t *)sLen);
-		*sLen -= 1;
-		for(i = 0; i < *sLen; i++)
-		{
-			temp ^= sBuf[i];
-		}
-		
-		if(temp != sBuf[*sLen])
-		{
-			sBuf[0] = 0x00;
-			sBuf[1] = 0x00;
-			*sLen = 2;
-			return;
-		}
-		
-		*sLen -= 2;
-		memmove(sBuf,sBuf + 2,*sLen);
 	}
 }
 
-
-static u8 sBuff_CCID[CCID_BUFF_SIZE];		//<! 若返回数据过长，则可能出现问题
 /**
  * @brief CCID标准命令
  * 
@@ -508,23 +575,56 @@ void CCID_Command(void)
 {
 	u32 rLen;
 	u32 len;
+	u32 ccid_length = 0;
 	
 	struct _CCID_Common_Msg *pCCID_Cmd;
 	memset(s_ucCCIDBuffer, 0x00, CCID_BUFF_SIZE);
 
-	//暂时先按照一包长度接收。
-	usb_ep2_recv(s_ucCCIDBuffer,0x40);
+	/*
+		将CCID放在的main函数的循环当中，不放在EP1_OUT中断当中，因为每次来了中断，
+	其实仅仅有64字节数据，若数据包长查过64，则后续的数据应该等下次来了中断再进行执行。
+	而我之前将CCID_Command直接放在了EP1_OUT_Callback函数当中，这样后续的数据肯定没法紧挨着接收且放在
+	合适的缓存位置。现在采用了中断中添加变量标志，然后所有的数据都放在了while(1)循环中判断。
+	这样可以防止数据丢失。当然了，死循环等待法也有弊端，但相对于当前的应用来说，这种方式较为稳定。
+	因此采取这种方式。
+	*/
+	while(ccid_i2c_dataok_flag != 1);
+	ccid_i2c_dataok_flag = 0;
+	usb_ep2_recv(s_ucCCIDBuffer,&len);
+	ccid_length += len;
+	
 	pCCID_Cmd = (struct _CCID_Common_Msg *)s_ucCCIDBuffer;
 	rLen = ((pCCID_Cmd->ucLength[0]) + (pCCID_Cmd->ucLength[1] << 8) + (pCCID_Cmd->ucLength[2] << 16) + (pCCID_Cmd->ucLength[3] << 24)) + 10; //期待要收到的数据长度
+	while(ccid_length != rLen)
+	{
+		while(ccid_i2c_dataok_flag != 1);
+		ccid_i2c_dataok_flag = 0;
+		usb_ep2_recv(s_ucCCIDBuffer + ccid_length,&len);
+		ccid_length += len;
+	}
+#if 0
 	//若实际需要接收的数据长度大于1包，则需要接收后续的包
+	if(rLen > 0x40)
+	{
+		uint8_t *pBuf = s_ucCCIDBuffer + 0x40;
+		len = rLen - 0x40;
+		while(len > 0x40)
+		{
+			usb_ep2_recv(pBuf,0x40);
+			pBuf += 0x40;
+			len -= 0x40;
+		}
+		usb_ep2_recv(pBuf,len);
+	}
 	len = 0x40;
 	while(len < rLen + 0x10)
 	{
 		len += 0x40;
 		usb_ep2_recv(s_ucCCIDBuffer + len,0x40);
 	}
-
-	UartSendHex((u8 *)s_ucCCIDBuffer,0x40);
+#endif
+	// Debug
+	// UartSendHex((u8 *)s_ucCCIDBuffer,0x40);
 
 	//5,6 bSlot和bSeq需要和BulkOut发来相应数据保持一致
 	sBuff_CCID[5] = pCCID_Cmd->ucSlot;
@@ -607,5 +707,38 @@ void CCID_Command(void)
 	break;
 	}
 
-	usb_ep1_send((u8 *)sBuff_CCID, 10 + len);
+	{
+		/*
+			当需要返回BLOCK_SIZE整数倍包长的时候，需要另外多发一个字节数。
+			这种返回方式是为了配合snp工具
+		*/
+		uint32_t length = 0;
+		uint8_t *pBuf = sBuff_CCID;
+		length = 10 + len;
+
+#define BLOCK_SIZE		64
+		while(length >= BLOCK_SIZE)
+		{
+			usb_ep1_send((u8 *)pBuf,BLOCK_SIZE);
+			while(PrevXferComplete != 1);
+			PrevXferComplete = 0;
+
+			length -= BLOCK_SIZE;
+			pBuf += BLOCK_SIZE;
+		}
+		
+		if(length != 0)
+		{
+			usb_ep1_send((u8 *)pBuf,length);
+			while(PrevXferComplete != 1);
+			PrevXferComplete = 0;
+		}
+		else
+		{
+			uint8_t temp = 0x00;
+			usb_ep1_send((u8 *)&temp,1);
+			while(PrevXferComplete != 1);
+			PrevXferComplete = 0;
+		}
+	}
 }

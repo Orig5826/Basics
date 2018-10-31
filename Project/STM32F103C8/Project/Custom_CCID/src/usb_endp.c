@@ -51,8 +51,10 @@ uint8_t Receive_Buffer[64];
 extern __IO uint8_t Send_Buffer[64];
 extern __IO uint8_t Send_Length;
 extern __IO uint8_t PrevXferComplete;
+
+extern volatile uint8_t ccid_i2c_dataok_flag;
 /* Private function prototypes -----------------------------------------------*/
-void CCID_Command(void);
+
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************
 * Function Name  : EP1_OUT_Callback.
@@ -80,7 +82,7 @@ void EP1_OUT_Callback(void)
   UartSendString((uint8_t*)"Write\r\n",0);
   UartSendHex((uint8_t*)Send_Buffer,Send_Length);
 #endif
-	CCID_Command();
+	ccid_i2c_dataok_flag = 1;
 }
 
 /*******************************************************************************
