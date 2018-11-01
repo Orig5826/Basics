@@ -411,6 +411,16 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 	switch (pAPDU.INS)
 	{
 #ifdef USB_CCID_I2C_DEMO
+	case 0xA4:
+	case 0xCA:
+	case 0xCB:
+	{
+		/*
+			为了方便PC识别CCID设备
+		*/
+		sBuf[0] = 0x6D;
+		sBuf[1] = 0x00;
+	}break;
 	case 0xC2:
 	{
 		/*
@@ -486,7 +496,7 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 			
 			I2C_Write(rBuf,rLen);
 		}
-		// Delay(20000);
+		Delay(500000);
 		{
 			uint8_t temp = 0;
 			uint32_t i = 0;

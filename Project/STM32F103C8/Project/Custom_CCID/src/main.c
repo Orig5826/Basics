@@ -167,15 +167,14 @@ int main(void)
 
   UartInit();
   UartSendString((uint8_t*)"Uart OK!\r\n",0);
-  
+
   Set_System();
   USB_Interrupts_Config();
-
-  Set_USBClock();
-  
-  USB_Init();
-  UartSendString((uint8_t*)"USB_Init\r\n",0);
+	Set_USBClock();
 	
+	Delay(200000);
+	USB_Init();
+	UartSendString((uint8_t*)"USB_Init\r\n",0);
   while (1)
   {
 	CCID_Command();
