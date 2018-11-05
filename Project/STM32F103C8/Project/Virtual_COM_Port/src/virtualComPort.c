@@ -44,6 +44,11 @@
 /* Private define ------------------------------------------------------------*/
 #define USART_RX_DATA_SIZE   512
 
+
+
+extern uint32_t USART_Rx_ptr_in;
+extern uint32_t USART_Rx_ptr_out;
+extern uint32_t USART_Rx_length;
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 USART_InitTypeDef USART_InitStructure;
@@ -60,7 +65,7 @@ void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct)
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* Enable GPIO clock */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
 
   /* Enable UART clock */
   if (COM == COM1)
@@ -425,7 +430,7 @@ void USART_Config_Default(void)
         - Hardware flow control disabled
         - Receive and transmit enabled
   */
-  USART_InitStructure.USART_BaudRate = 9600;
+  USART_InitStructure.USART_BaudRate = 115200; //9600;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
   USART_InitStructure.USART_Parity = USART_Parity_Odd;
@@ -712,11 +717,11 @@ void USART_To_USB_Send_Data(void)
   
   if (linecoding.datatype == 7)
   {
-    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1) & 0x7F;
+    USART_Rx_Buffer[0][USART_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1) & 0x7F;
   }
   else if (linecoding.datatype == 8)
   {
-    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1);
+    USART_Rx_Buffer[0][USART_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1);
   }
   
   USART_Rx_ptr_in++;

@@ -223,6 +223,7 @@ void EVAL_COM1_IRQHandler(void)
     /* Send the received data to the PC Host*/
     USART_To_USB_Send_Data();
   }
+}
 #else
   if (USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)
   {
@@ -323,4 +324,3 @@ void TIM2_IRQHandler(void)
 }*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
