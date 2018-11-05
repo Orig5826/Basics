@@ -49,6 +49,48 @@
 USART_InitTypeDef USART_InitStructure;
 extern DMA_InitTypeDef  DMA_InitStructure;
 
+typedef enum 
+{
+  COM1 = 0,
+  COM2 = 1
+} COM_TypeDef;
+
+void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+
+  /* Enable GPIO clock */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+
+  /* Enable UART clock */
+  if (COM == COM1)
+  {
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE); 
+  }
+  else
+  {
+    //RCC_APB1PeriphClockCmd(COM_USART_CLK[COM], ENABLE);
+	return;
+  }
+
+  /* Configure USART Tx as alternate function push-pull */
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+  /* Configure USART Rx as input floating */
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+  /* USART configuration */
+  USART_Init(USART1, USART_InitStruct);
+    
+  /* Enable USART */
+  USART_Cmd(USART1, ENABLE);
+}
+
 #ifdef VCP_RX_BY_DMA
 /* Use a double buffer for DMA/USB switch */
 uint8_t  USART_Rx_Buffer[2][USART_RX_DATA_SIZE/2]; 

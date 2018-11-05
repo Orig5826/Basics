@@ -56,6 +56,8 @@
 #include "stm32f10x_conf.h"
 #include "stm32f10x.h"
 
+
+/* Exported macro ------------------------------------------------------------*/
 // 注意,这几个ID是随便弄的，后续修改
 #define   UNIQUE_DEVICE_ID_BASE  (0x1FFFF7E8)
 #define         ID1          (UNIQUE_DEVICE_ID_BASE) //(0x1FF80050)
@@ -98,7 +100,11 @@
 #define VCP_RX_DMA_IRQHandler   DMA1_Channel5_IRQHandler 
 #define VCP_RX_DMA_FLAG_GL      DMA1_FLAG_GL5 
 #define VCP_RX_DMA_FLAG_TC      DMA1_FLAG_TC5 
-/* Exported macro ------------------------------------------------------------*/
+
+
+
+#define EVAL_COM1		USART1
+#define EVAL_COM1_IRQn	USART1_IRQn
 /* Exported functions ------------------------------------------------------- */
 
 
