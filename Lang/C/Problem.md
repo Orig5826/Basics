@@ -75,3 +75,43 @@ unsigned char config[5] =
 	0x55,0xaa
 };
 ```
+
+## **浮点数的对比问题**
+- [百度百科 : IEEE二进制浮点数算术标准(IEEE 754)](https://zhidao.baidu.com/question/409730820.html)
+	> 符点数是采用二进制科学计数法来进行存储的，因此，绝大多数的浮点数在计算机中是不能精确表示的。
+```
+#include <stdio.h>
+#include <math.h>
+
+void main()
+{
+	double a = 0.1 + 0.2;
+	double b = 0.3;
+	printf("----- 测试平台VS2017 x86 -----\n");
+	printf("\ta = %f, b = %f\n", a, b);
+	if (a == b)
+	{
+		printf("对比结果: a == b\n");
+	}
+	else
+	{
+		printf("对比结果: a != b\n");
+	}
+#define PRECISION		"17"	//"2"
+	printf("> 提高精度来显示，查看a和b值的区别:\n");
+	printf("\ta = %."PRECISION"f, b = %."PRECISION"f\n", a, b);
+
+	/*
+		浮点数比较方法
+	*/
+	if (fabs(a - b) < 0.000001)	//设置了比较的精度，类似于约等于
+	{
+		printf("对比结果: a - b == 0\n");
+		printf("> 通过这种方式，认为浮点数a和b相等\n");
+	}
+	else
+	{
+		printf("对比结果: a - b != 0\n");
+	}
+}
+```
