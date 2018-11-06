@@ -57,3 +57,29 @@ for i in data:
 - dir
 	> 若没有参数，则显示当前局部作用域的名称列表
 	> dir(numpy)，显示
+- divmod
+	> 得到商和余数
+- enumerate(iterable, start=0)
+	> 返回enumerate对象，tuple(count,values)为基本元素。count默认从0开始
+- eval
+	> 本质上是将str字符串表示，转换为变量或相应的表达式
+```
+x = 5
+y0 = 1
+calc = 'x**2 - y0'
+ret = eval(calc)
+print(ret)
+
+a0 = 4
+a1 = 5
+for d in range(2):
+    cl = 'a' + str(d) + ' - d'
+    ret = eval(cl)
+    print(ret)
+
+ll = '[[1,2],[3,4]]'
+ret = eval(ll)
+print(ret)
+```
+- exec
+	> ?
