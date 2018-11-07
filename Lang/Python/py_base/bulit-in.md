@@ -1,4 +1,6 @@
 # Built-in
+` 明显可以看出用法或者含义的，以及已经熟悉掌握的，就不再详细描述了 `
+
 
 ### 基于python3.7
 - abs(-0.1)
@@ -83,3 +85,74 @@ print(ret)
 ```
 - exec
 	> ?
+- filter
+	> ?
+- float
+	> 返回由数字或者字符串构成的浮点数
+- format
+	> 例如 format(12,'b')
+- frozenset
+	> ？
+- getattr(object,'name')
+	> 相当于object.name
+- global
+	> 返回表示当前全局符号表的字典
+- hasattr
+- id
+	> 返回对象的地址
+```
+a = [0, 1]
+b = a
+c = a.copy()
+for i in "abc":
+    cmd = 'id(' + i + ')'
+    ret = eval(cmd)
+    print("{0} = 0x{1:x}".format(cmd, ret))
+
+```
+- int
+	> 其中一个用法为int(x,base=10)
+- isinstance
+	> isinstance() 会认为子类是一种父类类型，考虑继承关系。而type不考虑继承关系
+	- isinstance(10, (int, float)) 返回True
+	- isinstance('str',str) 返回True
+- issubclass
+- iter
+	> ？
+- len
+- list
+- locale
+- map
+	> ?
+- max
+- memoryview
+	> ?
+- min
+- next
+	> ?
+- oct
+	> 八进制
+- open
+- ord
+	> 和chr是相反的操作
+```
+data = '0A好'
+for i in data:
+    ret = ord(i)
+    ret = format(ret, 'x')
+    print(ret, end=' ')
+```
+- pow
+	> pow(x,y,z) --> pow(x,y) % z 
+- print
+- property
+	> ?
+- range
+- repr
+	> ?
+- reversed
+```
+a = [1, 2, 3]
+ret = reversed(a)
+print(list(ret))
+```
