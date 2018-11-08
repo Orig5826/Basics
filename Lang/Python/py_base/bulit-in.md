@@ -156,3 +156,32 @@ a = [1, 2, 3]
 ret = reversed(a)
 print(list(ret))
 ```
+- round
+	> 四舍五入
+	- round(20.15,1) 结果为 20.1 ?可以查看py文档详细了解原因
+	- round(121.15,-1) 结果为 120.0
+- set
+- setattr
+- slice
+	> 切片
+```
+# s = slice(10)
+# s = slice(10,20)
+s = slice(0,30,5)
+data = range(30)
+r = data[s]
+print(tuple(r))
+```
+- sorted
+- @staticmethod
+	> ?
+- str
+- sum
+- super
+	> ?
+- tuple
+- type
+- vars
+	> 返回带有__dict__属性的模块、类、实例或任何其他对象的__dict__属性。
+- zip
+	> ?
