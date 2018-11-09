@@ -11,6 +11,5 @@ for item in ll:
     lbox1.insert(0, item)
 
 
-
 lbox1.pack()
 wind.mainloop()
