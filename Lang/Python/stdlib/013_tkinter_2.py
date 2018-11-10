@@ -1,5 +1,12 @@
 
+from tkinter import *
+from tkinter.filedialog import askopenfilename
 import csv
+
+# ----- 全局变量 ------
+# 文件名称
+global cmd
+# 命令的核心操作
 
 
 def Saleae_Logic_I2C_csv_parse(csv_fname):
@@ -27,10 +34,25 @@ def Saleae_Logic_I2C_csv_parse(csv_fname):
             print(data[2:], end=' ')
 
 
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 2:
-        print('命令行参数：argv[1]=数据文本文件(*.csv)')
-        sys.exit(-1)
-    fname = sys.argv[1]
-    Saleae_Logic_I2C_csv_parse(fname)
+def open_file():
+    file_path = askopenfilename(filetypes=[("文本文件", ".csv"), ("全部", ".*")])
+    path.set(file_path)
+
+
+def translate():
+    file_name = path.get()
+    Saleae_Logic_I2C_csv_parse(file_name)
+
+
+root = Tk()
+path = StringVar()
+cmd = StringVar()
+
+Entry(root, textvariable=path).grid(row=0, column=0, columnspan=3, ipadx=30)
+Button(root, text="选择文件", command=open_file).grid(row=0, column=4)
+
+Label(root, text='').grid(row=1, column=0, columnspan=3, ipadx=30)
+Button(root, text="开始转换", command=translate).grid(row=1, column=4)
+
+
+root.mainloop()
