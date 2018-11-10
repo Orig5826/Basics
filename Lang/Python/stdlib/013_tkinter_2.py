@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 import csv
 import time
-
+import os
 
 def Saleae_Logic_I2C_csv_parse(csv_fname):
     '''
@@ -72,7 +72,10 @@ cmd = tk.StringVar()
 
 # 添加控件
 root.title('Saleae辅助工具 v1.0')
-root.iconbitmap("./res/apaki.ico")
+# 如果打包程序，这个不太方便
+ico = "./res/apaki.ico"
+if os.path.exists(ico):
+    root.iconbitmap(default=ico)
 root.resizable(False, False)  # 大小不可变
 cmd.set('请选择文件...')
 
