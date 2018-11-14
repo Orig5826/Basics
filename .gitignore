@@ -2,7 +2,7 @@
 *.vs
 
 # .vscode
-*.json
+.vscode/
 
 # MDK-ARM  2018.5.14 by jf
 DebugConfig/
