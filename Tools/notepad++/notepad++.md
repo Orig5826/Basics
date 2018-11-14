@@ -4,4 +4,4 @@
 
 ### 自定义运行命令
 - python
-	> cmd /C cd /d $(CURRENT_DIRECTORY) & python $(FULL_CURRENT_PATH) & cd $(CURRENT_DIRECTORY) & pause
+	> cmd /C cd /d "$(CURRENT_DIRECTORY)" & python "$(FULL_CURRENT_PATH)" & cd "$(CURRENT_DIRECTORY)" & pause

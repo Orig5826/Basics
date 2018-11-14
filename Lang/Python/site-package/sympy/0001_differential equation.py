@@ -1,14 +1,18 @@
 # ----------------------------
 # 1.0 学习一下sympy的使用
+# 2.0 针对rc延时电路做了简单的分析
+# 3.0 求解某函数式极限
 # ----------------------------
 
-import sympy
-from sympy import *
+# from sympy import *
+from sympy import symbols,Function,dsolve
+from sympy import pprint,limit,cos,pi
+
 ## print(dir(sympy))
-rc,t = symbols('rc t')
+r,c,t = symbols('r,c t')
 f = Function('f')
 
-s = rc * f(t).diff(t) + f(t)
+s = r*c * f(t).diff(t) + f(t)
 r = dsolve(s,f(t))
 pprint(r)
 
