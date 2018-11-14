@@ -65,3 +65,24 @@ switch(TYPE)
     }break;
 }
 ```
+
+## 结构体初始化的方式
+- 结构体初始化示例(常见的初始化方式就不再此处一一列举了)
+```
+typedef struct _data
+{
+	int flag;
+	int length;
+	double num;
+}Data;
+
+Data data[2] = {
+	{
+	.flag = 1,
+	.length = 2,
+	.num = 4
+	},
+	{0,0,0
+	}
+};
+```
