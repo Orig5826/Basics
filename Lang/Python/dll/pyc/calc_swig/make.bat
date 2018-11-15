@@ -8,32 +8,37 @@ if "%1"=="clean" (
 
     RD /Q /S build
     RD /Q /S __pycache__
-    del calc_module.pyd
-    del *.dll
+	REM vs2017
+	del *.exp *.lib
+    del *.dll *.pyd
  ) else (
 
 echo "1. swig 工具命令的使用"
 swig -python -py3 calc.i
 
+
+REM 之前失败，可能因为我安装python的时候，没有安装相关的调试库吧？
+REM 1.0 distutils通过setup方式调试成功
+REM 2.0 直接调用VS2017命令行工具，CL命令调试成功
+
 if "%1"=="setup" (
 
-REM setup的方式测试通过，可能因为我之前安装python的时候，没有安装相关的调试库吧？
 echo "2. setup Python->distutils命令的使用"
 setup.py build
 REM 生成的文件在build子目录下，自己找一下
 ) else (
 
-
-REM 这种方式还是不行，可能我对于cl命令的了解不够吧
 echo "2. VS cl命令编译"
 echo cl命令必须使用VS提供的专用命令行工具
 
-set src=calc_wrap.c
-set des=calc_module.pyd
-set PyInc=D:\\Lang\\Python\\Python37\\include
-set PyLib=D:\\Lang\\Python\\Python37\\libs\\python37.lib
+set src="calc_wrap.c"
+REM 之所以名称使用_(下划线)，是为了和swig生成的calc_module.py配合使用
+set des="_calc_module.pyd"
+set PyInc="D:\\Lang\\Python\\include"
+set PyLib="D:\\Lang\\Python\\libs\\python37.lib"
 
-cl /LD calc.c %src% /o %des% -I%PyInc% %PyLib% 
+REM vs2017
+cl /LD calc.c %src% /Fe%des% /I%PyInc% %PyLib% 
 
 )
 )
