@@ -15,15 +15,16 @@ if "%1"=="clean" (
 echo "1. swig 工具命令的使用"
 swig -python -py3 calc.i
 
-REM ???
-REM 各种测试，总是提示找不到PyInit_*接口... 不知道什么原因
-
 if "%1"=="setup" (
+
+REM setup的方式测试通过，可能因为我之前安装python的时候，没有安装相关的调试库吧？
 echo "2. setup Python->distutils命令的使用"
 setup.py build
-move .\\build\\lib.win-amd64-3.7\\_calc_module.cp37-win_amd64.pyd  .\\calc_module.pyd
+REM 生成的文件在build子目录下，自己找一下
 ) else (
 
+
+REM 这种方式还是不行，可能我对于cl命令的了解不够吧
 echo "2. VS cl命令编译"
 echo cl命令必须使用VS提供的专用命令行工具
 
