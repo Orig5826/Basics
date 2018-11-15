@@ -178,7 +178,13 @@ print(tuple(r))
 - str
 - sum
 - super
-	> ?
+	> 在单继承中，相当于是调用父类
+```
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+```
 - tuple
 - type
 - vars
