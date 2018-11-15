@@ -53,13 +53,19 @@ class Windows(QWidget):
         font = QFont('华文行楷', 12)
         confirmBt = QPushButton("确认", self)
         confirmBt.setFont(font)
-        confirmBt.setToolTip('按下按键，显示确认提示')
+        confirmBt.setToolTip('按下按键，暂时无效')
         confirmBt.move(300, 200)
 
         aboutBt = QPushButton("关于", self)
         aboutBt.setFont(font)
-        aboutBt.setToolTip('2018.11.15 by jianfeng')
+        aboutBt.setToolTip('显示程序相关信息')
         aboutBt.move(300, 150)
+        aboutBt.clicked.connect(self.aboutEvent)
+
+    def aboutEvent(self, event):
+        QMessageBox.about(self, '关于',
+                                '时间：2018.11.15\n作者：jianfeng\n'
+                                '版本：v1.0.00')
 
     def center(self):
         """
@@ -78,11 +84,11 @@ class Windows(QWidget):
         """
             通过窗口右上角进行关闭时
         """
-        reply = QMessageBox.question(self, '请确认',
+        reply = QMessageBox.question(self, '退出程序',
                                      '请确认是否退出？',
                                      QMessageBox.Yes | QMessageBox.No,
-                                     # 最后这个参数表示，是默认情况(若不加，则是Yes)
-                                     QMessageBox.No)
+                                     # 最后这个参数表示是初始焦点位置(若无该参数，则默认是Yes)
+                                     QMessageBox.Yes)
         if reply == QMessageBox.Yes:
             event.accept()
         else:
