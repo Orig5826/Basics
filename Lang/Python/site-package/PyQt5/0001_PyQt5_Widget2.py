@@ -1,7 +1,7 @@
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QFrame, QGridLayout,
-                             QSlider)
+                             QSlider, QHBoxLayout, QVBoxLayout, QSplitter)
 from PyQt5.QtGui import QIcon, QFont, QColor
 from PyQt5.QtCore import Qt
 
@@ -26,10 +26,11 @@ class Windows(QWidget):
         self.frame = QFrame(self)
         self.frame.setStyleSheet("QWidget { background-color: %s }" %
                                  self.color.name())
+        self.frame.setFrameShape(QFrame.StyledPanel)
         # ---------------------------------------------------------------
-        self.redSlider = QSlider(Qt.Vertical, self)
-        self.greenSlider = QSlider(self)  # 默认纵向
-        self.blueSlider = QSlider(self)
+        self.redSlider = QSlider(Qt.Horizontal, self)
+        self.greenSlider = QSlider(Qt.Horizontal, self)  # 默认纵向
+        self.blueSlider = QSlider(Qt.Horizontal, self)
         # 配置范围
         self.redSlider.setMaximum(255)
         self.greenSlider.setMaximum(255)
@@ -39,13 +40,17 @@ class Windows(QWidget):
         self.greenSlider.valueChanged[int].connect(self.changeValue)
         self.blueSlider.valueChanged[int].connect(self.changeValue)
 
-        grid = QGridLayout(self)
-        # 在布局处理的时候，似乎Slider非要把自己延长，不允许别的直接插入到延长的方向上？
-        grid.addWidget(self.frame, 1, 4)
-        grid.addWidget(self.redSlider, 1, 1)
-        grid.addWidget(self.greenSlider, 1, 2)
-        grid.addWidget(self.blueSlider, 1, 3)
-        self.setLayout(grid)
+        splitter = QSplitter(self)
+        splitter.addWidget(self.frame)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.redSlider)
+        vbox.addWidget(self.greenSlider)
+        vbox.addWidget(self.blueSlider)
+        hbox = QHBoxLayout()
+        hbox.addWidget(splitter)
+        hbox.addItem(vbox)
+        self.setLayout(hbox)
 
     def changeValue(self, value):
         sender = self.sender()
