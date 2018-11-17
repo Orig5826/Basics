@@ -21,9 +21,9 @@ if __name__ == '__main__':
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QToolTip, QPushButton,
-                             QMessageBox, QDesktopWidget)
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import QCoreApplication
+                             QMessageBox, QDesktopWidget, QFrame)
+from PyQt5.QtGui import QIcon, QFont, QColor
+from PyQt5.QtCore import QCoreApplication, qrand, qsrand, QTime
 
 
 class Windows(QWidget):
@@ -31,6 +31,8 @@ class Windows(QWidget):
         super().__init__()
 
         self.initUI()
+        time = QTime(0, 0, 0).secsTo(QTime.currentTime())
+        qsrand(time)
 
     def initUI(self):
         self.setWindowTitle('Apaki示例')
@@ -50,17 +52,26 @@ class Windows(QWidget):
         # 信号槽：退出
         exitBt.clicked.connect(QCoreApplication.instance().quit)
 
-        font = QFont('华文行楷', 12)
+        self.font = QFont('华文行楷', 12)
         confirmBt = QPushButton("确认", self)
-        confirmBt.setFont(font)
-        confirmBt.setToolTip('按下按键，暂时无效')
+        confirmBt.setFont(self.font)
+        confirmBt.setToolTip('按下随机，弹起黑色')
         confirmBt.move(300, 200)
 
+        confirmBt.setCheckable(True)
+        confirmBt.clicked[bool].connect(self.confirmBtEvent)
+
         aboutBt = QPushButton("关于", self)
-        aboutBt.setFont(font)
+        aboutBt.setFont(self.font)
         aboutBt.setToolTip('显示程序相关信息')
         aboutBt.move(300, 150)
         aboutBt.clicked.connect(self.aboutEvent)
+
+        self.color = QColor(0, 0, 0)
+        self.frame = QFrame(self)
+        self.frame.setGeometry(30, 30, 200, 200)
+        self.frame.setStyleSheet("QWidget { background-color: %s }" %
+                                 self.color.name())
 
     def aboutEvent(self, event):
         QMessageBox.about(self, '关于',
@@ -93,6 +104,20 @@ class Windows(QWidget):
             event.accept()
         else:
             event.ignore()
+
+    def confirmBtEvent(self, pressed):
+        # print('pressed', pressed)
+        if not pressed:
+            value = 0
+            self.color.setRgb(value, value, value)
+        else:
+            r = qrand() % 256
+            g = qrand() % 256
+            b = qrand() % 256
+            self.color.setRgb(r, g, b)
+
+        self.frame.setStyleSheet("QWidget { background-color: %s }" %
+                                 self.color.name())
 
 
 if __name__ == "__main__":
