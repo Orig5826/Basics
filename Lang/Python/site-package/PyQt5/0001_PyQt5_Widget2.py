@@ -28,6 +28,20 @@ class Windows(QWidget):
                                  self.color.name())
         self.frame.setFrameShape(QFrame.StyledPanel)
         # ---------------------------------------------------------------
+        # 虽然代码简介了，但是是不是理解不太方便呀?
+        # exec可以直接将字符串当作代码来运行
+        # cmd_name: redSlider,greenSlider,blueSlider
+        cmd_names = ['red', 'green', 'blue']
+        for cmd_name in cmd_names:
+            cmd = 'self.'+cmd_name+'Slider'+' = QSlider(Qt.Horizontal, self)'
+            exec(cmd)
+            cmd = 'self.'+cmd_name+'Slider.setMaximum(255)'
+            exec(cmd)
+            cmd = 'self.'+cmd_name + \
+                'Slider.valueChanged[int].connect(self.changeValue)'
+            exec(cmd)
+        
+        """
         self.redSlider = QSlider(Qt.Horizontal, self)
         self.greenSlider = QSlider(Qt.Horizontal, self)  # 默认纵向
         self.blueSlider = QSlider(Qt.Horizontal, self)
@@ -39,6 +53,7 @@ class Windows(QWidget):
         self.redSlider.valueChanged[int].connect(self.changeValue)
         self.greenSlider.valueChanged[int].connect(self.changeValue)
         self.blueSlider.valueChanged[int].connect(self.changeValue)
+        """
 
         splitter = QSplitter(self)
         splitter.addWidget(self.frame)
