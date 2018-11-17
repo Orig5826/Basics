@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QInputDialog,
                              QLineEdit, QGridLayout,
                              QColorDialog, QFrame, QFontDialog, QFileDialog,
-                             QTextEdit, QCheckBox)
+                             QTextEdit, QCheckBox, QComboBox, QLabel)
 from PyQt5.QtGui import QIcon, QFont, QColor
 from PyQt5.QtCore import QCoreApplication, Qt
 
@@ -50,6 +50,21 @@ class Windows(QWidget):
         checkbox = QCheckBox('切换标题', self)
         checkbox.stateChanged.connect(self.changeTitle)
 
+        # --------------------------------------------------
+        combo = QComboBox(self)
+        cars = ['雷克萨斯', '宝马', '梅赛德斯', '宾利', '保时捷', '玛莎拉蒂', '兰博基尼', '法拉利',
+                '凯迪拉克', '别克', '劳斯莱斯', '大众', '奥迪', '名爵', '铃木', '本田', '现代',
+                '丰田', '欧宝', '悍马', '吉普', '布加迪', '红旗', '五菱', '双环', '水星',
+                '福特', '通用', '吉利', '雪佛兰', '斯巴鲁', '捷豹', '道奇', '日产', '马自达',
+                '雪铁龙', '英菲尼迪', '全球鹰', '林肯']
+        cars.sort()
+        for car in cars:
+            combo.addItem(car)
+        combo.activated[str].connect(self.onActived)
+        self.label = QLabel(self)
+        self.label.setText(combo.itemText(0))
+        self.label.setFont(QFont('华文行楷', 14))
+
         # 布局
         grid = QGridLayout()
         self.setLayout(grid)
@@ -60,7 +75,9 @@ class Windows(QWidget):
         grid.addWidget(self.fontBtn, 2, 0)
         grid.addWidget(self.fileBtn, 3, 0)
         grid.addWidget(self.textEdit, 3, 1, 10, 1)
-        grid.addWidget(checkbox, 8, 0)
+        grid.addWidget(checkbox, 5, 0)
+        grid.addWidget(combo, 7, 0)
+        grid.addWidget(self.label, 10, 0)
 
     def showDialog(self):
         text, ok = QInputDialog.getText(self, '对话框', '请输入你的名字')
@@ -84,7 +101,8 @@ class Windows(QWidget):
 
     def showfileDialog(self):
         # 弹出文本框选择框
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '*.txt')
+        fname = QFileDialog.getOpenFileName(
+            self, '打开文件', filter='Markdown(*.md);;Text(*.txt);;All(*.*)')
         if fname[0]:
             f = open(fname[0], 'r', encoding='utf-8')
             with f:
@@ -96,6 +114,10 @@ class Windows(QWidget):
             self.setWindowTitle('复选框选中')
         else:
             self.setWindowTitle('Apaki示例')
+
+    def onActived(self, text):
+        self.label.setText(text)
+        self.label.adjustSize()
 
 
 if __name__ == "__main__":
