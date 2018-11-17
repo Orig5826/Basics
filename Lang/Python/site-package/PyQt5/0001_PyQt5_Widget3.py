@@ -1,9 +1,10 @@
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QFrame, QGridLayout,
-                             QProgressBar, QPushButton)
+                             QProgressBar, QPushButton, QCalendarWidget,
+                             QLabel)
 from PyQt5.QtGui import QIcon, QFont, QColor
-from PyQt5.QtCore import Qt, QBasicTimer
+from PyQt5.QtCore import Qt, QBasicTimer, QDate
 
 """
     进度条的应用
@@ -25,15 +26,25 @@ class Windows(QWidget):
         self.setGeometry(400, 300, 400, 300)
 
         self.pbar = QProgressBar(self)
-        self.btn = QPushButton("开始", self)
+        self.btn = QPushButton("开始下载", self)
         self.btn.clicked.connect(self.doAction)
 
         self.timer = QBasicTimer()
         self.step = 0
 
+        # -------------------------------------------------
+        cal = QCalendarWidget(self)
+        cal.clicked[QDate].connect(self.showData)
+
+        date = cal.selectedDate()
+        self.label = QLabel(self)
+        self.label.setText(date.toString())
+
         grid = QGridLayout(self)
-        grid.addWidget(self.pbar, 0, 0, 1, 3)
-        grid.addWidget(self.btn, 1, 1, 1, 1)
+        grid.addWidget(self.pbar, 0, 1)
+        grid.addWidget(self.btn, 0, 0)
+        grid.addWidget(self.label, 2, 0, 1, 2)
+        grid.addWidget(cal, 3, 0, 1, 2)
         self.setLayout(grid)
 
     def timerEvent(self, event):
@@ -50,10 +61,13 @@ class Windows(QWidget):
         if self.finished is not True:
             if self.timer.isActive():
                 self.timer.stop()
-                self.btn.setText('开始')
+                self.btn.setText('继续')
             else:
                 self.timer.start(100, self)
                 self.btn.setText('停止')
+
+    def showData(self, date):
+        self.label.setText(date.toString())
 
 
 if __name__ == "__main__":
