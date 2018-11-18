@@ -1,5 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+# matplotlib 绘图窗口中文显示问题
+# from pylab import mpl
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 步骤一（替换sans-serif字体）
+plt.rcParams['axes.unicode_minus'] = False   # 步骤二（解决坐标轴负数的负号显示问题）
+
+
 # -------------------------
 # 采样频率
 Fs = 50
@@ -64,15 +70,18 @@ def filter(freq, ft, flag=0, threshold=5):
             print("no filter")
 
 
+figure, ax = plt.subplots()
+figure.suptitle('频谱&滤波')
 # --------------------------
 # 1.0 显示原始图形
-plt.subplot(411)
-plt.axis([0, 10, -10, 10])
+plt.subplot(221)
+plt.axis([0, 5, -10, 10])
 plt.plot(t, x, 'b')
 
 
 # 1.1 频谱
-plt.subplot(412)
+plt.subplot(222)
+plt.axis([-5, 5, 0, 3])
 y1 = np.abs(y)/N  # 显示绝对值
 plt.plot(freq, y1, 'r')
 
@@ -82,14 +91,15 @@ filter(freq, y, 5, threshold=2)
 # 进行ifft反变换
 x2 = np.fft.ifft(y)
 
-# 1.1 频谱
-plt.subplot(413)
+# 1.2 频谱
+plt.subplot(224)
+plt.axis([-5, 5, 0, 3])
 y1 = np.abs(y)/N  # 显示绝对值
 plt.plot(freq, y1, 'r')
 
 # 2.1fft逆变换之后
-plt.subplot(414)
-plt.axis([0, 10, -10, 10])
+plt.subplot(223)
+plt.axis([0, 5, -10, 10])
 plt.plot(t, x2.real, 'b')  # 直接x2这里有warning，是不是应该x2.real
 # 因为x2为Complex
 
