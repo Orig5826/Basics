@@ -52,6 +52,38 @@ def basics_02():
     print(e % 2 == 0)
 
 
+def basics_03():
+    a = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
+    b = np.array([0, 1, 0, -1])
+    c = np.array([0, 1, 0, -1]).reshape(2, 2)
+    # 垂直堆叠
+    r = np.vstack([a, b])
+    print(r)
+    # 水平堆叠
+    r2 = np.hstack([a, c])
+    print(r2)
+
+    # 方式2（以垂直为例）
+    b = np.array([[0, 1, 0, -1]])  # concatenate要求dimension一致
+    r3 = np.concatenate((a, b), axis=0)
+    print(r3)
+
+    # 方式3（以水平为例）
+    r4 = np.r_[a, b]
+    print(r4)
+
+    print('-------------应用示例--------------')
+    x = np.array([1, 2, 3])
+    # repeat以元素为单位扩展
+    ret = np.repeat(x, 3)
+    print(ret)
+    # repeat以数组为单位扩展
+    ret2 = np.tile(x, 3)
+    print(ret2)
+    ret3 = np.r_[np.repeat(x, 3), np.tile(x, 3)]
+    print(ret3)
+
+
 def create_array_function():
     a = np.zeros((3, 3))
     print(a)
@@ -83,9 +115,12 @@ def dot_cross_product():
 def transpose():
     x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     print(x.T)
-    # @attention
+    # @attention 1d   .T无效
     y = np.array([1, 2, 3])
-    print(y)
+    print(y.T)
+    # 翻转行&列的方式
+    print(x[::-1])      # 翻转行
+    print(x[:, ::-1])    # 翻转列
 
 
 def broadcasting(mode=2):
@@ -128,6 +163,23 @@ def linalg_demo():
     # 资料链接
     # https://www.numpy.org.cn/article/basics/numpy_matrices_vectors.html
 
+
+def float_random_demo():
+    a = np.random.random((5, 5))
+    np.set_printoptions(precision=3)  # 显示精度3位小数
+    np.set_printoptions(threshold=3)  # 最多显示6项，其他项使用省略号
+    # np.set_printoptions(threshold=np.nan) # 显示所有项目
+    print(a)
+
+
+def uniformization():
+    value = np.random.randint(5, 10, size=16).reshape(4, 4)
+    print(value)
+    v_max, v_min = value.max(), value.min()
+    # 归一化处理
+    uniform_value = (value - v_min) / (v_max - v_min)
+    print(uniform_value)
+
+
 if __name__ == "__main__":
-    # create_array_function()
-    linalg_demo()
+    uniformization()
