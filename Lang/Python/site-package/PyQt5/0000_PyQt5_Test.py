@@ -1,6 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Ui_test import Ui_Apaki
+from Ui_apaki_crypto import Ui_Apaki
 
 # ----------------------------------------
 # test.ui时Designer配置好的
