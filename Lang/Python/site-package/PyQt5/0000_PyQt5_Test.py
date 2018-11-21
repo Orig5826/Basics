@@ -1,6 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Ui_test import Ui_Test
+from Ui_test import Ui_Apaki
 
 # ----------------------------------------
 # test.ui时Designer配置好的
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget(None)
-    Ui_Test().setupUi(widget)
+    Ui_Apaki().setupUi(widget)
     widget.show()
     sys.exit(app.exec_())
     pass
