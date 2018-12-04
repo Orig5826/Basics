@@ -15,9 +15,11 @@ def Saleae_Logic_I2C_csv_parse(csv_fname):
         reader = csv.reader(csvfile)
         Packet_ID = -1
         for row in reader:
+            print('<{},{}>'.format(Packet_ID,row[1]))
             if not row[1].isdigit():
+                if row[1] == '':
+                    Packet_ID += 1
                 continue
-
             if row[1] != str(Packet_ID):
                 # print('')
                 ss += "\n"
