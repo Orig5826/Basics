@@ -142,12 +142,25 @@ class CRC():
 		else:
 			print('自定义')
 			pass
-	def set_data(self,data):
+	def set_data(self,dd,dd_type='hex'):
+		if isinstance(dd,list):
+			data = bytes(dd).hex()
+		elif isinstance(dd,str) and dd_type == 'str':
+			data = ''.join([hex(ord(c)).replace('0x','') for c in dd])
+		elif isinstance(dd,str) and dd_type == 'hex':
+			data = dd
+		else:
+			data = ''
+			print('数据类型错误01')
 		# 先按照list处理
+		"""
 		for i in range(len(data)):
 			if i != 0:
 				self.data += '+'
 			self.data += format(data[i],'x')
+		"""
+		print('数据(hexstr) = {}'.format(data))
+		self.data = re.sub(r'(?<=\w)(?=(?:\w\w)+$)', '+', data)
 		# print(self.data)
 	def set_width(self,width):
 		self.width = width
@@ -215,10 +228,11 @@ class CRC():
 
 if __name__ == '__main__':
 	print(' ----- CRC 计算 ----- ')
-	data = [0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38]
-	print('数据(hexstr) = ',bytes(data).hex())
+	# data = [0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38]
+	# data = '131D1122334455667788'
+	data = '12345678'
 	crc = CRC()
-	crc.set_data(data)
+	crc.set_data(data,'str')
 	for i in range(16):
 		crc.set_mode(i)
 		crc_result = crc.get_crc_result()
