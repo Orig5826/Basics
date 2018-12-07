@@ -38,9 +38,11 @@ def get_schedule(block_finished_count, block_finished_size, file_size):
     per = 100.0 * block_finished_count * block_finished_size / file_size
     if per > 100:
         per = 100
-    print('[{0:3.0f}%]'.format(per), end='')
+    print('[{0:3.0f}%]'.format(per), end='', flush=True)
     if per < 100:
-        print('\b\b\b\b\b\b', end='')
+        print('\b\b\b\b\b\b', end='', flush=True)
+    # 此处必须清空flush，两种方式均可以。这样才能动态显示下载进度
+    # sys.stdout.flush()
 
 
 def get_image(html_addr, path='./', index=0):
