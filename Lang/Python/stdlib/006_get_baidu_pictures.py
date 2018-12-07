@@ -19,10 +19,9 @@ def get_keyword(url):
     # print(key_word)
 
     # 显示关键字
-    hexstr = key_word.replace('%', '')
-    word = bytes.fromhex(hexstr)
-    word_disp = word.decode('utf-8')
+    word_disp = urllib.parse.unquote_plus(key_word, encoding='utf-8')
     print('关键字："{}"'.format(word_disp))
+
     # 返回为 HTML转义后的
     return key_word
 
@@ -36,6 +35,8 @@ def get_html(url, code="utf8"):
 
 def get_schedule(block_finished_count, block_finished_size, file_size):
     per = 100.0 * block_finished_count * block_finished_size / file_size
+    if per < 0:
+        per = 0
     if per > 100:
         per = 100
     print('[{0:3.0f}%]'.format(per), end='', flush=True)
@@ -62,7 +63,7 @@ def get_image(html_addr, path='./', index=0):
             print(' -> download finished!')
             x += 1
         except:
-            print('-> [%d] url错误，跳过。重新下载下一个' % x)
+            print('-> url错误，跳过。重新下载下一个')
             pass
     return x
 
@@ -115,15 +116,17 @@ def image_download(url, index=0, page=1):
 
 if __name__ == '__main__':
     index = 0
+    page = 3
     if len(sys.argv) == 1:
         url = 'https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&sf=1&fmq=&pv=&ic=0&nc=1&z=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&ie=utf-8&fm=index&pos=history&word=%E6%98%9F%E7%90%83%E5%A3%81%E7%BA%B8'
     elif len(sys.argv) == 2:
         url = sys.argv[1]
-    elif len(sys.argv) == 3:
+    elif len(sys.argv) == 4:
         url = sys.argv[1]
         index = int(sys.argv[2], 10)
+        page = int(sys.argv[3], 10)
     else:
         print('Please add the download address!')
         sys.exit(-1)
 
-    image_download(url, index, page=3)
+    image_download(url, index, page)
