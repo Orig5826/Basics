@@ -2,7 +2,7 @@
 import html
 
 '''
-    HTML转义字符
+    HTML转义字符和普通字符串 相互切换
 '''
 r = html.escape('<123>(&.&)')
 print(r)
