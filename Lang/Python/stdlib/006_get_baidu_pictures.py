@@ -91,9 +91,9 @@ def image_download(url, index=0, page=1):
     path = './image/'
     if not os.path.exists(path):
         os.mkdir(path)
-    path_thumb = path + 'image_thumb/'
+    path_thumb = './image_thumb/'
     if not os.path.exists(path_thumb):
-        os.mkdir(path)
+        os.mkdir(path_thumb)
     # 获取关键字
     key_word = get_keyword(url)
 
