@@ -45,8 +45,8 @@ class Card():
     def Pressure(self,cnt = 255):
         '''
             压力测试
-			有一点需要注意的是，CCID设备有最大包长限制
-			这个可能有一些问题。
+            有一点需要注意的是，CCID设备有最大包长限制
+            这个可能有一些问题。
         '''
         for i in range(255,cnt + 1):
             apdu = [0x00, 0x03, 0x00, 0x00]
