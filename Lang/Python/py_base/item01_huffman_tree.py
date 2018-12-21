@@ -68,6 +68,25 @@ def get_weight(t=node(),level=0):
 			get_weight.total += weight
 	return get_weight.total
 	
+def get_huff_code(t=node(),code=[]):
+	if t == None:
+		return
+	if not hasattr(get_weight,'code'):
+		"""
+			通过这种方式实现，静态变量
+		"""
+		get_weight.code = {}
+	code.append('0')
+	get_huff_code(t.left,code)
+	code.pop()
+	code.append('1')
+	get_huff_code(t.right,code)
+	code.pop()
+	if t.left == None and t.right == None:
+		for key,value in t.value.items():
+			code_bin_str = ''.join(code)
+			get_weight.code[key] = code_bin_str
+	return get_weight.code
 	
 # 脚本入口
 if __name__ == '__main__':
@@ -84,5 +103,9 @@ if __name__ == '__main__':
 	node_disp(root)
 	print('----------------')
 	total_weight = get_weight(root)
-	print('----------------')
+	print('--> ',end='')
 	print('total_weight = ',total_weight)
+	
+	print('----------------')
+	code = get_huff_code(root)
+	print(sorted(code.items()))
