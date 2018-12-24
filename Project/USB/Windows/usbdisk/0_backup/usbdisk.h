@@ -27,12 +27,8 @@ __stdcall
 
 typedef BOOL bool;
 
-
-//#define SYMBOLIC_LINK	"HSEC    USBCOS          1.00"
-#define SYMBOLIC_LINK	"HSEC    USBCOS"
-
-	// 打开设备 
-DLL_API bool CALL usb_open(void);
+// 打开设备 
+DLL_API bool CALL usb_open(PUCHAR symbolic_link);
 // 关闭设备
 DLL_API void CALL usb_close(void);
 // 显示数据
