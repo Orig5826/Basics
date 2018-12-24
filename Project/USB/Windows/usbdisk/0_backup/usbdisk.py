@@ -1,6 +1,8 @@
 from ctypes import *
 from time import sleep
 
+Symbolic_link = 'HSEC    USBCOS'
+
 BUFFER_SIZE_MAX = 0x400 + 0x40 + 8
 # --------------------------------------------
 # ctypes array
@@ -23,7 +25,7 @@ def usb_open():
 	'''
 		打开USB设备
 	'''
-	return api.usb_open()
+	return api.usb_open(Symbolic_link)
 
 def usb_close():
 	'''
