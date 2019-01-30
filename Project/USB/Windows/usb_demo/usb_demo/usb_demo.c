@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "usb_demo.h"
 #include "usb_drive.h"
 
 #include <windows.h>
@@ -195,6 +194,7 @@ int __cdecl main()
 		// 获取序列号
 		GET_STR_DISP(GET_SERIALNUM);
 
+#define PACKAGE_COUNT 5
 		while (1)
 		{
 			for (i = 0; i < 64; i++)
@@ -202,8 +202,30 @@ int __cdecl main()
 				sBuf[i] = (unsigned char)(num + i) & 0xff;
 			}
 
+			for (int j = 0; j < PACKAGE_COUNT; j++)
+			{
+				// SetFeature
+				sLen = 0x40;
+				USB_HID_SetFeature(0, sBuf, sLen);
+			}
+			for (int j = 0; j < PACKAGE_COUNT; j++)
+			{
+				// GetFeatue
+				rLen = 0x40;
+				USB_HID_GetFeature(0, rBuf, &rLen);
+			}
+
+#if 0
+			// 写入数据
 			sLen = 0x40;
 			USB_HID_Write(0, sBuf, sLen);
+
+			SET_CMD_RED();
+			printf("[Write] \n");
+			SET_CMD_DEFAULT();
+			Display(sBuf, sLen);
+
+			// 读取数据
 			rLen = 0x40;
 			USB_HID_Read(0, rBuf, &rLen);
 
@@ -211,20 +233,11 @@ int __cdecl main()
 			printf("[Read] \n");
 			SET_CMD_DEFAULT();
 			Display(rBuf, rLen);
-
-			if (0 != memcmp(sBuf, rBuf, sLen))
-			{
-				SET_CMD_RED();
-				printf("[Write] \n");
-				SET_CMD_DEFAULT();
-				Display(sBuf, sLen);
-				printf("[ERROR] --- 读写不一致 ---\n\n");
-				break;
-			}
-
-			Sleep(1000);
+#endif
 			num++;
-			printf("------------------------\n");
+			// Sleep(1000);
+			//printf("------------------------\n");
+			printf(".");
 		}
 	}
 

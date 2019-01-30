@@ -401,6 +401,109 @@ clean0:
 	return bRet;
 }
 
+/*
+* SetFeature : 21 09 00 03 00 00 40 00
+*/
+BOOLEAN USB_HID_SetFeature(unsigned char ReportID, unsigned char * sBuf, unsigned int sLen)
+{
+	UCHAR * outputReport;
+	ULONG outputReportSize;
+	BOOL bSuccess;
+	//DWORD bytesWritten;
+
+	outputReportSize = sLen + 1;
+	outputReport = (UCHAR *)malloc(outputReportSize);
+	if (!outputReport)
+	{
+		printf("malloc failed\n");
+		return FALSE;
+	}
+
+	memcpy(outputReport + 1, sBuf, sLen);
+	outputReport[0] = ReportID;
+	//
+	// Wrute output data.
+	//
+	bSuccess = HidD_SetFeature(
+		s_hUsb_Hid_Device,			// HANDLE hFile,
+		(PVOID)outputReport,		// LPVOID lpBuffer,
+		outputReportSize			// DWORD nNumberOfBytesToRead,
+	);
+
+	if (!bSuccess)
+	{
+		printf("Failed SetFeature\n");
+	}
+	else
+	{
+#ifdef USB_DRIVER_DEBUG
+		printf("[OUT] ");
+		for (ULONG i = 0; i < bytesWritten - 1; i++)
+		{
+			printf("%02x ", outputReport[i + 1]);
+		}
+		printf("\n");
+#endif
+	}
+
+	free(outputReport);
+	return (BOOLEAN)bSuccess;
+}
+
+
+/*
+* GetFeature : A1 01 00 03 00 00 40 00
+*/
+BOOLEAN USB_HID_GetFeature(unsigned char ReportID, unsigned char * rBuf, unsigned int * rLen)
+{
+	ULONG bufferSize;
+	UCHAR * inBuf;
+	BOOL bSuccess;
+	DWORD bytesRead;
+
+	bufferSize = *rLen + 1;
+	inBuf = (UCHAR *)malloc(bufferSize);
+	if (!inBuf)
+	{
+		printf("malloc failed\n");
+		return FALSE;
+	}
+
+	ZeroMemory(inBuf, bufferSize);
+	inBuf[0] = ReportID;
+	//
+	// get input data.
+	//
+	bSuccess = HidD_GetFeature(
+		s_hUsb_Hid_Device,	// HANDLE hFile,
+		inBuf,				// LPVOID lpBuffer,
+		bufferSize			// DWORD nNumberOfBytesToRead,
+	);
+
+	bytesRead = bufferSize - 1;
+	if (!bSuccess)
+	{
+		printf("Failed GetFeature\n");
+	}
+	else
+	{
+#ifdef USB_DRIVER_DEBUG
+		printf("[In]: \n");
+		for (ULONG i = 0; i < bytesRead - 1; i++)
+		{
+			printf("%02x ", inBuf[i + 1]);
+		}
+		printf("\n");
+#endif
+		memcpy(rBuf, inBuf + 1, bytesRead - 1);
+		*rLen = bytesRead - 1;
+	}
+
+	free(inBuf);
+
+	return (BOOLEAN)bSuccess;
+}
+
 void usb_hid_test(void)
 {
 	//printf("usb_hid_test\n");

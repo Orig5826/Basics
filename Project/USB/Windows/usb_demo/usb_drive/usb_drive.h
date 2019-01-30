@@ -26,6 +26,8 @@ __declspec(dllexport) BOOLEAN USB_HID_Write(unsigned char ReportID, unsigned cha
 __declspec(dllexport) BOOLEAN USB_HID_Read(unsigned char ReportID, unsigned char * rBuf, unsigned int * rLen);
 __declspec(dllexport) BOOLEAN USB_HID_GetString(unsigned char * rBuf, unsigned int rLen, unsigned char infotype);
 __declspec(dllexport) void usb_hid_test(void);
+__declspec(dllexport) BOOLEAN USB_HID_SetFeature(unsigned char ReportID, unsigned char * sBuf, unsigned int sLen);
+__declspec(dllexport) BOOLEAN USB_HID_GetFeature(unsigned char ReportID, unsigned char * rBuf, unsigned int * rLen);
 
 
 #endif
