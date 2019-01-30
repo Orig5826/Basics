@@ -480,7 +480,7 @@ BOOLEAN USB_HID_GetFeature(unsigned char ReportID, unsigned char * rBuf, unsigne
 		bufferSize			// DWORD nNumberOfBytesToRead,
 	);
 
-	bytesRead = bufferSize - 1;
+	bytesRead = bufferSize;
 	if (!bSuccess)
 	{
 		printf("Failed GetFeature\n");

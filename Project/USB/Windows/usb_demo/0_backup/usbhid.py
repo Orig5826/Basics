@@ -33,11 +33,12 @@ GET_SERIALNUM	=	3	#序列号
 
 
 class usbhid():
-	def __init__(self):
+	def __init__(self,pid=None,vid=None):
 		# Load dll
 		self.api = windll.LoadLibrary("usb_drive.dll")
 		self.level = 0
-
+		if pid != None and vid != None:
+			self.open(pid,vid)
 	def __del__(self):
 		self.close()
 	
@@ -125,7 +126,7 @@ class usbhid():
 		'''
 			21 09 00 03 00 00 40 00 
 		'''
-		print('   [SetFeature]')
+		# print('   [SetFeature]')
 		Length = len(data)
 		if Length > 64:
 			return False
@@ -140,13 +141,14 @@ class usbhid():
 		'''
 			A1 01 00 03 00 00 40 00 
 		'''
-		print('   [GetFeature]')
+		# print('   [GetFeature]')
 		if rLen > 64:
 			return False
 		data = []
 		__data = c_u8(BUFFER_SIZE_MAX)
 		Length = c_uint32(rLen)
 		self.api.USB_HID_GetFeature(0, byref(__data),byref(Length))
+		# print(Length.value) #长度有误，请查看dll
 		for i in range(Length.value):
 			data.append(__data[i])
 		if self.level > 0:
@@ -170,4 +172,4 @@ def usbhid_test():
 	hid.getfeature(64)
 
 	
-usbhid_test()
+# usbhid_test()

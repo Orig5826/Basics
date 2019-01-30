@@ -194,7 +194,7 @@ int __cdecl main()
 		// 获取序列号
 		GET_STR_DISP(GET_SERIALNUM);
 
-#define PACKAGE_COUNT 5
+#define PACKAGE_COUNT 1
 		while (1)
 		{
 			for (i = 0; i < 64; i++)
@@ -207,15 +207,25 @@ int __cdecl main()
 				// SetFeature
 				sLen = 0x40;
 				USB_HID_SetFeature(0, sBuf, sLen);
+
+				SET_CMD_RED();
+				printf("[SetFeatue] \n");
+				SET_CMD_DEFAULT();
+				Display(sBuf, sLen);
 			}
 			for (int j = 0; j < PACKAGE_COUNT; j++)
 			{
 				// GetFeatue
 				rLen = 0x40;
 				USB_HID_GetFeature(0, rBuf, &rLen);
+
+				SET_CMD_PURPLE();
+				printf("[GetFeatue] \n");
+				SET_CMD_DEFAULT();
+				Display(rBuf, rLen);
 			}
 
-#if 0
+
 			// 写入数据
 			sLen = 0x40;
 			USB_HID_Write(0, sBuf, sLen);
@@ -233,11 +243,11 @@ int __cdecl main()
 			printf("[Read] \n");
 			SET_CMD_DEFAULT();
 			Display(rBuf, rLen);
-#endif
+
 			num++;
-			// Sleep(1000);
-			//printf("------------------------\n");
-			printf(".");
+			Sleep(1000);
+			printf("------------------------\n");
+	
 		}
 	}
 
