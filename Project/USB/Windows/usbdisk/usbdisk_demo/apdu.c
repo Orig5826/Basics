@@ -1,6 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 /*
 注意：该头文件不再单独复制出来，直接使用了
 usbdisk的头文件
@@ -144,7 +146,7 @@ void apdu_test()
 {
 	clock_t start, end;
 	uint8_t data[1024] = { 0 };
-	if (FALSE == usb_open())
+	if (FALSE == usb_open(SYMBOLIC_LINK))
 	{
 		printf("设备打开失败");
 		exit(-1);
@@ -306,7 +308,7 @@ BOOL Decrypt_SM4(uint8_t * inBuf, uint32_t inLen, uint8_t *outBuf, uint32_t *out
 // ----------------------------------------------------------------------------------
 void APDU_Initial(stAPDU * apdu)
 {
-	if (TRUE != usb_open())
+	if (TRUE != usb_open(SYMBOLIC_LINK))
 	{
 		exit(-1);
 	}

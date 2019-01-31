@@ -14,6 +14,12 @@
 #include <ntddstor.h>
 #include <ntddscsi.h>
 
+#pragma comment(lib, "setupapi.lib")
+
+GUID GUID_GLOBAL = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b };
+//udisk
+//GUID GUID_GLOBAL = {0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b};
+//cdrom
 
 /*
  * 文件作用域变量
@@ -47,6 +53,69 @@ static void  FormatErrorCode(void)
 }
 
 
+int GetDevicePath(int num, LPTSTR path)
+{
+	HDEVINFO hardwareDeviceInfo;
+	SP_INTERFACE_DEVICE_DATA deviceInfoData;
+	int result;
+	ULONG requiredLength;
+	ULONG predictedLength;
+	PSP_INTERFACE_DEVICE_DETAIL_DATA functionClassDeviceData;
+
+	hardwareDeviceInfo = SetupDiGetClassDevs(
+		&GUID_GLOBAL,
+		NULL, // Define no enumerator (global)
+		NULL, // Define no
+		(DIGCF_PRESENT | // Only Devices present
+		DIGCF_INTERFACEDEVICE)); // Function class devices.
+
+	deviceInfoData.cbSize = sizeof(SP_INTERFACE_DEVICE_DATA);
+
+	result = SetupDiEnumDeviceInterfaces(hardwareDeviceInfo,
+		0, // We don't care about specific PDOs
+		&GUID_GLOBAL,
+		num,
+		&deviceInfoData);
+
+	if (result)
+	{
+		SetupDiGetInterfaceDeviceDetail(
+			hardwareDeviceInfo,
+			&deviceInfoData,
+			NULL,                   // probing so no output buffer yet
+			0,                      // probing so output buffer length of zero
+			&requiredLength,
+			NULL);                  // not interested in the specific dev-node
+
+
+		predictedLength = requiredLength;
+
+		functionClassDeviceData = (PSP_INTERFACE_DEVICE_DETAIL_DATA)malloc(predictedLength);
+
+		functionClassDeviceData->cbSize = sizeof(SP_INTERFACE_DEVICE_DETAIL_DATA);
+
+		result = SetupDiGetInterfaceDeviceDetail(
+			hardwareDeviceInfo,
+			&deviceInfoData,
+			functionClassDeviceData,
+			predictedLength,
+			&requiredLength,
+			NULL);
+
+		if (result)
+		{
+			strcpy(path, functionClassDeviceData->DevicePath);
+		}
+
+		free(functionClassDeviceData);
+	}
+
+	SetupDiDestroyDeviceInfoList(hardwareDeviceInfo);
+
+	return result;
+}
+
+
 /*
 * SymLink 长度必须为36-4-4 = 28字节
 * 其中VID占8字节，PID占16字节，Version（n.nn）占4字节
@@ -54,7 +123,7 @@ static void  FormatErrorCode(void)
 static HANDLE usb_find(char * SymLink,int Len)
 {
 	HANDLE hDevHandle = NULL;
-	char DevPath[10];
+	char DevPath[256];
 
 	// 必须保证长度正确
 	if (Len > 28)
@@ -63,9 +132,22 @@ static HANDLE usb_find(char * SymLink,int Len)
 		return NULL;
 	}
 
+	// 通过Inquiry命令过滤设备
+#if 0
+	// 通过磁盘盘符，打开设备。
 	for (char c = 'C'; c < 'Z'; c++)
 	{
 		sprintf(DevPath, "\\\\.\\%c:", c);
+#else
+	int rv = 0;
+	for (int i = 0; i < 256; i++)
+	{
+		rv = GetDevicePath(i, DevPath);
+		if (!rv)
+		{
+			return 0;
+		}
+#endif
 		// 通过CreateFile打开相应的设备
 		hDevHandle = CreateFile(DevPath,
 			GENERIC_WRITE | GENERIC_READ,
@@ -76,7 +158,7 @@ static HANDLE usb_find(char * SymLink,int Len)
 			NULL);
 		if (hDevHandle == INVALID_HANDLE_VALUE)
 		{
-			printf("设备打开失败\n");
+			printf("设备[%s]打开失败\n",DevPath);
 			FormatErrorCode();
 
 			printf("可能原因：\n"
@@ -93,7 +175,9 @@ static HANDLE usb_find(char * SymLink,int Len)
 		{
 			printf("InquiryDataLen -> Error!\n");
 		}
-		if (0 == memcmp(InquiryData, "\x00\x80\x02\x02\x1f\x00\x00\x00", 8))
+
+		// 暂不对前8字节进行过滤，因有时存在盘符，有时又不需要盘符。
+		//if (0 == memcmp(InquiryData, "\x00\x80\x02\x02\x1f\x00\x00\x00", 8))
 		{
 			if (0 == memcmp(InquiryData + 8, SymLink, Len))
 			{
@@ -258,11 +342,11 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 	}
 }
 
-DLL_API bool CALL usb_open(void)
+DLL_API bool CALL usb_open(PUCHAR symbolic_link)
 {
 	int Len;
-	Len = strlen(SYMBOLIC_LINK);
-	s_Handle = usb_find(SYMBOLIC_LINK,Len);
+	Len = strlen(symbolic_link);
+	s_Handle = usb_find(symbolic_link,Len);
 	if (s_Handle == NULL)
 	{
 		return FALSE;

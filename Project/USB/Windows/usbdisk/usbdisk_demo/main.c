@@ -51,7 +51,7 @@ void default_test()
 	uint8_t rBuf[32];
 	uint32_t rLen = 32;
 
-	if (FALSE == usb_open())
+	if (FALSE == usb_open(SYMBOLIC_LINK))
 	{
 		printf("设备打开失败");
 		exit(-1);
