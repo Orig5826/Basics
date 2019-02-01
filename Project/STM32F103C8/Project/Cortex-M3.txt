@@ -1,0 +1,43 @@
+[SysTick] 24位倒计时定时器
+1.多数操作系统需要滴答中断，定时产生SysTick异常请求，作为系统的时基。
+2.便于不同处理器(M3内核)之间的程序移植
+3.作为闹铃测量时间(注：在调试期间halt时，SysTick也停止)
+
+[MSP & PSP]
+1.MSP -- Main Stack Pointer
+复位后默认的，用于操作系统内核和异常处理 ------特权级
+2.PSP -- Process Stack Pointer
+由用户的应用程序代码使用 ------ 特权级 or 用户级
+
+[CMSIS] -- The Cortex Microcontroller Software Interface Standard
+
+
+[bit band region & bit band alias]
+0x22000000 ~ 0x23FFFFFF    32M bit band alias (位带别名区)
+0x20000000 ~ 0x200FFFFF     1M bit band region (位带区)
+注：
+region 1bit -> alias 4Bytes 
+region 1Byte -> alias 32Bytes
+则映射关系如下：
+AliasAddr = AliasBaseAddr + (RegionByteCnt*32 + Region_bitIndex*4)
+其中RegionByteCnt = RegionAddr - RegionBaseAddr
+当然了，一般情况下，标准库是按照另一种方式分析的，公式如下
+AliasAddr = AliasBaseAddr + ((A-0x20000000)*8 + n)*4)
+先算出bit的index，然后直接*4，得到相应的偏移，这样其实更好理解。
+
+"位带操作的意义"：
+1.操作bit速度快(若通过32位操作：则需要3步，读->改(位掩码)->写)
+2.在多任务中，防止被中断(因为只有一步)
+
+[Exception Handlers](一看名称就能理解的异常不再列出)
+1.NMI 非屏蔽中断
+例如：掉电
+2.HardFault 硬件错误
+例如：直接使用未分配空间的指针、栈溢出等非法操作
+3.BusFault
+例如：？
+4.UsageFault
+例如：A.未定义的指令 B.非法对齐访问 C.指令执行的无效状态 D.异常返回的错误
+...除0错误等
+5.SVCall  ----- 主要用于系统服务调用
+6.PendSV ----- 为系统设备而设的"可悬挂请求"（pendable request）
