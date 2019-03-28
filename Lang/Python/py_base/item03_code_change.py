@@ -19,22 +19,19 @@ def code_change(infile_list, coding_src='gbk', coding_des='utf-8'):
         if not os.path.exists(des_file):
             shutil.copyfile(infile, des_file)
             # 采用二级制方式读写
-            pf = open (infile, 'rb+')
-            content = pf.read()
-
+            with open (infile, 'rb') as pf:
+                content = pf.read()
             # 将解码前和编码后的内容显示出来
-            # print(content)
+            print(content)
             content = content.decode(coding_src).encode(coding_des)
-            # print(content)
-
-            pf.seek(0)
-            pf.write(content)
-            pf.close()
-
+            print(content)
+            with open (infile, 'wb') as pf:
+                pf.write(content)
+            
             print('file [' + infile + '] backup & code_change finished!')
 
 
 if __name__ == "__main__":
     dirlist = dir_list()
-    code_change(dirlist,'gbk','utf8')
-    # code_change(dirlist,'utf8','gbk')
+    # code_change(dirlist,'gbk','utf8')
+    code_change(dirlist,'utf8','gbk')
