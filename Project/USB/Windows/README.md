@@ -13,3 +13,5 @@
     > 通过磁盘盘符，对USB Mass Storage设备进行SCSI命令的访问
 - usbdrv
     > 最初想通过PID和VID对SCSI设备进行访问，但调试失败!
+- smart_card
+	> pcsc相关接口调用。用于调试智能卡设备等
