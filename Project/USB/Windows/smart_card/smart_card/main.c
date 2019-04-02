@@ -51,6 +51,20 @@ void main()
 		printf("SCardConnect error\n");
 		return;
 	}
+
+	switch (m_dwActiveProtocol)
+	{
+	case SCARD_PROTOCOL_T0:
+	{
+		printf("T0 协议\n");
+	}break;
+	case SCARD_PROTOCOL_T1:
+	{
+		printf("T1 协议\n");
+	}break;
+	default:
+		break;
+	}
 	
 
 	{
@@ -58,13 +72,22 @@ void main()
 			0x00,0x03,0x00,0x00};
 		uint8_t recv_buf[2048];
 
-		DWORD send_len = 256; //255
-		DWORD recv_len = 2048;
-		DWORD data_len = 0;
+		/*
+			Windows 平台测试结果：
+			short_APDU_MAX= 255		// 这个理解
+			extend_APDU_Max = 294	// 这个不是最大值，最大值看规范
+			??? 
+			关键是后者这个数据没什么特殊性？和win平台有关吗？还是我的底层固件的问题？
+			? 确实是固件问题，主要是配置正确CCID设备类就可以了
+		*/
+		DWORD data_len = 1024;	
+		DWORD send_len;
+		DWORD recv_len = sizeof(recv_buf);
 
-		if (send_len >= 256)
+
+		if (data_len >= 256)
 		{
-			data_len = send_len - 7;
+			send_len = data_len + 7;
 			send_buf[4] = 0x00;
 			send_buf[5] = (data_len >> 8)& 0xff;
 			send_buf[6] = data_len & 0xff;
@@ -72,10 +95,11 @@ void main()
 		}
 		else
 		{
-			data_len = send_len - 5;
+			send_len = data_len + 5;
 			send_buf[4] = data_len & 0xff;
 			memset(send_buf + 5, 0x55, data_len);
 		}
+
 
 		printf("-> ");
 		display(send_buf, send_len);
