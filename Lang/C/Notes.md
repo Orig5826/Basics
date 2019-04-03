@@ -25,6 +25,18 @@ typedef long (WINAPI * pCloseDevice)(long hDev);
 		若此时调用 _J(gbk)，则实际上是"gbk"字符串
 		若这样调用 _J("gbk"),则实际上是"\"gbk\""。
 		现在你理解了吗？
+	- 经典用法，举例说明
+		> 可以直接将宏定义中的数字转化为字符串
+```
+#define VER_NAME				"MJA"
+#define VER_MAJOR				1
+#define VER_MINOR				1		//1->k20 2->k30
+#define VER_MICRO				03
+
+#define __STR(x)				#x
+#define _STR(x)					__STR(x)
+#define MJA_K1_VER				(VER_NAME"_"_STR(VER_MAJOR)"."_STR(VER_MINOR)"."_STR(VER_MICRO))
+```	
 	- 特殊(感觉很少用) #define  _B(x)  #@x
 		调用_B(1) 表示  '1'
 - ##
