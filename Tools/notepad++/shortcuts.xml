@@ -9,40 +9,45 @@
             <Action type="2" message="0" wParam="42024" lParam="0" sParam="" />
             <Action type="2" message="0" wParam="41006" lParam="0" sParam="" />
         </Macro>
-        <Macro name="hex(no space) -> C_hex" Ctrl="no" Alt="no" Shift="no" Key="0">
-            <Action type="0" message="2013" wParam="0" lParam="0" sParam="" />
+        <Macro name="hex(no space) -&gt; C_hex" Ctrl="no" Alt="no" Shift="no" Key="0">
+			<!-- 全选 -->
+			<!-- <Action type="0" message="2013" wParam="0" lParam="0" sParam="" /> -->
+
+			<!-- 替换窗口？ -->
             <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
+			<!-- 查找目标 -->
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="([0-9a-fA-F]{2})(?&lt;=[0-9a-fA-F]{2})?" />
+			<!-- 正则 -->
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
+			<!-- 替换为 -->
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="0x\1," />
-            <Action type="3" message="1702" wParam="0" lParam="640" sParam="" />
+			<!-- 选取范围内 -->
+            <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
+			<!-- 全部替换命令？ -->
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
-        <Macro name="C_hex(no space) -> hex" Ctrl="no" Alt="no" Shift="no" Key="0">
-            <Action type="0" message="2013" wParam="0" lParam="0" sParam="" />
+        <Macro name="C_hex(no space) -&gt; hex" Ctrl="no" Alt="no" Shift="no" Key="0">
             <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="0x([0-9a-fA-F]{2})," />
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="\1" />
-            <Action type="3" message="1702" wParam="0" lParam="640" sParam="" />
+            <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
-        <Macro name="C_hex(one line) -> 16Bytes(every line)" Ctrl="no" Alt="no" Shift="no" Key="0">
-            <Action type="0" message="2013" wParam="0" lParam="0" sParam="" />
+        <Macro name="C_hex(one line) -&gt; 16Bytes(every line)" Ctrl="no" Alt="no" Shift="no" Key="0">
             <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="((0x[0-9a-fA-F]{2},){16})" />
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="\1\r\n" />
-            <Action type="3" message="1702" wParam="0" lParam="770" sParam="" />
+           <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
-        <Macro name="multi lines -> one lines" Ctrl="no" Alt="no" Shift="no" Key="0">
-            <Action type="0" message="2013" wParam="0" lParam="0" sParam="" />
+        <Macro name="multi lines -&gt; one lines" Ctrl="no" Alt="no" Shift="no" Key="0">
             <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="\r\n" />
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="" />
-            <Action type="3" message="1702" wParam="0" lParam="770" sParam="" />
+            <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
     </Macros>
