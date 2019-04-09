@@ -1,7 +1,8 @@
 from ctypes import *
 from time import sleep
 
-Symbolic_link = 'HSEC    USBCOS'
+#Symbolic_link = 'HSEC    USBCOS'
+Symbolic_link = 'HSEC    UCOS'
 
 BUFFER_SIZE_MAX = 0x400 + 0x40 + 8
 # --------------------------------------------

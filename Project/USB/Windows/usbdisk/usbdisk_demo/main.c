@@ -34,6 +34,7 @@ int __cdecl main(int argc,char * argv[])
 	{
 		printf("命令行参数出错！\n");
 	}
+
 	// 等待按键退出...
 	system("pause");
 
