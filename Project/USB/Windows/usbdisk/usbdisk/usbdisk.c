@@ -210,7 +210,8 @@ Exit:
 }
 
 #define SPT_SENSE_LENGTH 32
-#define SPTWB_DATA_LENGTH 2048
+#define SPTWB_DATA_LENGTH 4096
+
 typedef struct _SCSI_PASS_THROUGH_WITH_BUFFERS {
 	SCSI_PASS_THROUGH spt;
 	ULONG             Filler;      // realign buffers to double word boundary
@@ -237,6 +238,12 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 	sptwb.spt.DataIn = Direction;
 	// Data
 	sptwb.spt.DataTransferLength = Data_Length;
+	if (Data_Length > SPTWB_DATA_LENGTH)
+	{
+		DBG_LOG("Buffer overflow!\n");
+		return FALSE;
+	}
+
 	if (pData != NULL && sptwb.spt.DataIn == SCSI_IOCTL_DATA_OUT)
 	{
 		for (DWORD i = 0; i < Data_Length; i++)
