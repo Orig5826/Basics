@@ -1,3 +1,4 @@
+import random
 import copy
 
 ''
@@ -27,3 +28,10 @@ a[0] = 'b'
 print(b)
 print(c)
 print(d)
+
+
+# 4.0 将顺序列表打乱顺序
+alist = list(range(10))
+print(alist)
+random.shuffle(alist)   # 打乱顺序
+print(alist)
