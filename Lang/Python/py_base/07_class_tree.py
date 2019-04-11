@@ -13,13 +13,22 @@ class tree():
 			[1,2,3]
 		"""
 		return str(self.value)
-	def __repr__(self):
-		"""
-			# 结合__str__使用，主要用于命令行下直接输入变量，
-			# 显示__str__下的内容，否则显示为地址
-			>> from test import tree
-			>> a = tree([1,2,3])
-			>> a
-			[1,2,3]
-		"""
-		return str(self)
+	
+	# 方式1
+	# def __repr__(self):
+		# """
+			# # 结合__str__使用，主要用于命令行下直接输入变量，
+			# # 显示__str__下的内容，否则显示为地址
+			# >> from test import tree
+			# >> a = tree([1,2,3])
+			# >> a
+			# [1,2,3]
+		# """
+		# return str(self)
+	
+	# 方式2
+	__repr__ = __str__
+
+
+t = tree('root')
+print(t)
