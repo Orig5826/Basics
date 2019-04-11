@@ -11,13 +11,16 @@ class Person():
         self.value_attack = attack
         self.value_defense = defense
 
+    def __str__(self):
+        return self.name
+
     def get_blood(self):
-        print(self.name + '\'s blood is ' + '{:.0f}'.format(self.blood))
-        return self.blood
+        # print(self.name + '\'s blood is ' + '{:.0f}'.format(self.blood))
+        return int(self.blood)
 
     def isalive(self):
         if self.blood == 0:
-            print(self.name + '\' is dead')
+            # print(self.name + '\' is dead')
             return False
         return True
 
@@ -25,9 +28,9 @@ class Person():
         if self.value_attack > person.value_defense:
             variation = self.value_attack - person.value_defense
         else:
-            variation = 1
+            variation = 5
 
-        person.blood -= variation * random.random()
+        person.blood -= variation * random.randint(5, 10)/10
         if person.blood < 0:
             person.blood = 0
 
@@ -36,8 +39,8 @@ class Person():
 
 class Game():
     def __init__(self):
-        self.Tom = Person('Tom', 100, 20)
-        self.Tony = Person('Tony', 60, 60)
+        self.Tom = Person('Tom', 35, 5)
+        self.Tony = Person('Tony', 30, 10)
 
         self.first = random.randint(0, 1)
 
@@ -45,6 +48,18 @@ class Game():
         if self.Tom.isalive() and self.Tony.isalive():
             return False
         return True
+
+    def who_win(self):
+        if self.Tom.isalive():
+            return str(self.Tom)
+        else:
+            return str(self.Tony)
+
+    def get_blood(self, name):
+        if name == str(self.Tom):
+            return self.Tom.get_blood()
+        if name == str(self.Tony):
+            return self.Tony.get_blood()
 
     def run(self):
         if self.first == 0:
@@ -54,11 +69,14 @@ class Game():
             self.Tom.attack(self.Tony)
             self.first = 0
 
-        time.sleep(0.1)
+        # time.sleep(0.1)
+        return self.first
 
 
+"""
 game = Game()
 while not game.isgame_over():
     game.run()
 
-print('--- End ---')
+print('--- End ---')`
+"""
