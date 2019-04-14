@@ -9,23 +9,27 @@ a = [x*x for x in range(5)]
 send和next的区别
 """
 
+
 def disp(a):
     print(a)
     for i in a:
-        print(i,end=' ')
+        print(i, end=' ')
     print('\n')
 
 # 创建generator方式二
 # 针对相对复杂一些的逻辑，将函数返回直接作为生成器
+
+
 def fib(max):
     n, a, b = 0, 0, 1
     while n < max:
         # print(b,end=' ')
-        #执行过程中，遇到yield就中断。直到next之后才继续执行
+        # 执行过程中，遇到yield就中断。直到next之后才继续执行
         yield b
         a, b = b, a + b
         n = n + 1
-    
+
+
 # 创建generator方式一
 a = (x*x for x in range(5))
 # print(next(a))
@@ -51,14 +55,14 @@ a = fib(6)
 # 在本质上是同一种行为
 while True:
     try:
-        print(next(a),end=' ')
+        print(next(a), end=' ')
     except StopIteration:
         # 遇到StopIteration就退出循环
         print('\n')
         break
 
 print(type(a))
-b = [1,2,3,4,5]
+b = [1, 2, 3, 4, 5]
 print(type(b))
 c = iter(b)
 print(type(c))
