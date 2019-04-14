@@ -103,6 +103,12 @@ class Tree(object):
                     queue.append(cur.left)
                     queue.append(cur.right)
 
+    """
+    # 2019.04.14 23:44:00
+    # 之所以屏蔽，这种函数多重包含的原因是
+    # 遍历的时候向使用生成器 yield 
+    # 但是似乎，函数嵌套了之后，yield会出现和预期不一致的现象？
+    # 
     def traversal(self, mode='breadth'):
         if self._root is None:
             print('空树')
@@ -117,25 +123,7 @@ class Tree(object):
                 raise ValueError('类"{}" -> 方法"{}" -> 参数"{}" 无效'.format(
                     self.__class__.__name__, self.traversal.__name__, mode))
 
-    def __traversal_breadth_first(self):
-        """
-            广度优先遍历
-        """
-        queue = deque()
-        queue.append(self._root)
-        while queue:
-            cur = queue.popleft()
-            if cur is None:
-                continue
-            print(str(cur) + ' -> ', end='')
-            queue.append(cur.left)
-            queue.append(cur.right)
-        print('')
-
     def __traversal_depth_first(self, mode='preorder'):
-        """
-            深度优先遍历
-        """
         if mode == 'preorder' or mode == 'depth':
             self.__traversal_preorder(self._root)
         elif mode == 'inorder':
@@ -146,8 +134,26 @@ class Tree(object):
             raise ValueError('类"{}" -> 方法"{}" -> 参数"{}" 无效'.format(
                 self.__class__.__name__, self.__traversal_depth_first.__name__, mode))
         print('')
+    """
 
-    def __traversal_preorder(self, root):
+    def traversal_breadth_first(self):
+        """
+            广度优先遍历
+        """
+        queue = deque()
+        queue.append(self._root)
+        while queue:
+            cur = queue.popleft()
+            if cur is None:
+                continue
+            # print(str(cur) + ' -> ', end='')
+            yield cur
+            queue.append(cur.left)
+            queue.append(cur.right)
+        print('')
+
+    # def __traversal_preorder(self, root):
+    def traversal_preorder(self):
         """
             深度优先遍历 -> 前序遍历
         """
@@ -159,26 +165,25 @@ class Tree(object):
         # self.__traversal_preorder(root.right)
 
         # 非递归实现
-        print('<前序遍历>')
+        # print('<前序遍历>')
         queue = deque()
         cur = self._root
         while queue or cur:
             if cur:
-                print(cur, end=' -> ')
-
+                # print(cur, end=' -> ')
+                yield cur
                 queue.append(cur)
                 cur = cur.left
             else:
                 cur = queue.pop()
                 cur = cur.right
 
-    def __traversal_inorder(self):
+    def traversal_inorder(self):
         """
             深度优先遍历 -> 中序遍历
         """
-
         # 非递归实现
-        print('<中序遍历>')
+        # print('<中序遍历>')
         queue = deque()
         cur = self._root
         while queue or cur:
@@ -187,71 +192,68 @@ class Tree(object):
                 cur = cur.left
             else:
                 cur = queue.pop()
-                print(cur, end=' -> ')
+                # print(cur, end=' -> ')
+                yield cur
                 cur = cur.right
 
-    def __traversal_postorder(self):
+    def traversal_postorder(self):
         """
             深度优先遍历 -> 后序遍历
         """
-        print('<后序遍历>')
+        # print('<后序遍历>')
+        # """
+        #     # 方法一
+        #     # 借助的思想：
+        #     # 前序遍历：根 -> 左 -> 右
+        #     # 后续遍历: 左 -> 右 -> 根 （相当于 前序遍历的先右后左 情况，的逆序）
+        #     # 因此：
+        #     # 1. 前序遍历，先右后左
+        #     # 2. 利用一个新栈，进行逆序
+        # """
+        # queue_temp = deque()
 
-        def postorder_function1():
-            """
-                # 方法一 （实际应用中，会使用一种方式就可以了）
-                # 借助的思想：
-                # 前序遍历：根 -> 左 -> 右
-                # 后续遍历: 左 -> 右 -> 根 （相当于 前序遍历的先右后左 情况，的逆序）
-                # 因此：
-                # 1. 前序遍历，先右后左
-                # 2. 利用一个新栈，进行逆序
-            """
-            queue_temp = deque()
+        # queue = deque()
+        # cur = self._root
+        # while queue or cur:
+        #     if cur:
+        #         queue_temp.append(cur)
 
-            queue = deque()
-            cur = self._root
-            while queue or cur:
-                if cur:
-                    queue_temp.append(cur)
+        #         queue.append(cur)
+        #         cur = cur.right
+        #     else:
+        #         cur = queue.pop()
+        #         cur = cur.left
 
-                    queue.append(cur)
-                    cur = cur.right
-                else:
-                    cur = queue.pop()
-                    cur = cur.left
+        # for i in range(len(queue_temp)):
+        #     print(queue_temp.pop(), end=' -> ')
 
-            for i in range(len(queue_temp)):
-                print(queue_temp.pop(), end=' -> ')
+        """
+            # 方法二
+            # 借助的思想：
+            # 加一个判断量，若当前节点的左右节点都已经被访问过了，那么也需要直接打印
+            # 为什么直接cur.right==pre也可以呢？其实是和我压栈的顺序相关的
+            # 右子树后出，因此上一次弹出的子树为右子树的时候，就可以证明左子树必定访问过了
+        """
+        queue = deque()
+        queue.append(self._root)
+        pre = None
+        while queue:
+            cur = queue[-1]     # 获取栈顶元素
+            # if (cur.left is None and cur.right is None) or\
+            #        (pre is not None and (cur.left == pre or cur.right == pre)):
+            if (cur.left is None and cur.right is None) or\
+                    (pre is not None and (cur.right == pre)):
 
-        def postorder_function2():
-            """
-                # 方法一 （实际应用中，会使用一种方式就可以了）
-                # 借助的思想：
-                # 加一个判断量，若当前节点的左右节点都已经被访问过了，那么也需要直接打印
-                # 为什么直接cur.right==pre也可以呢？其实是和我压栈的顺序相关的
-                # 右子树后出，因此上一次弹出的子树为右子树的时候，就可以证明左子树必定访问过了
-            """
-            queue = deque()
-            queue.append(self._root)
-            pre = None
-            while queue:
-                cur = queue[-1]     # 获取栈顶元素
-                # if (cur.left is None and cur.right is None) or\
-                #        (pre is not None and (cur.left == pre or cur.right == pre)):
-                if (cur.left is None and cur.right is None) or\
-                        (pre is not None and (cur.right == pre)):
+                # print(cur, end=' -> ')
+                yield cur
+                cur = queue.pop()
+                pre = cur
+            else:
+                if cur.right:
+                    queue.append(cur.right)
+                if cur.left:
+                    queue.append(cur.left)
 
-                    print(cur, end=' -> ')
-                    cur = queue.pop()
-                    pre = cur
-                else:
-                    if cur.right:
-                        queue.append(cur.right)
-                    if cur.left:
-                        queue.append(cur.left)
-
-        # postorder_function1()
-        postorder_function2()
 # ----------------------------------------------
 # n = Node('root')
 # print(n)
@@ -269,17 +271,23 @@ class Tree(object):
 # n.right = n4
 # print(n.right)
 # ----------------------------------------------
-t = Tree()
-t.traversal()
 
+t = Tree()
+
+# 必须执行一下，list(ret)才能真正实现map的功能？为什么？
+# 因为python3 之后，map返回的是一个迭代对象
 ret = map(t.add, range(1, 8))
-# 必须执行一下，list才能真正实现map的功能？为什么？
 list(ret)
 
-# t.traversal('breadth')
-# t.traversal('depth')
-# t.traversal('preorder')
-# t.traversal('inorder')
-t.traversal('postorder')
 
-print('--- 结束 ---')
+trav = t.traversal_breadth_first()
+print('广度优先遍历: ', list(trav))
+
+trav = t.traversal_preorder()
+print('前序遍历: ', list(trav))
+
+trav = t.traversal_inorder()
+print('中序遍历: ', list(trav))
+
+trav = t.traversal_postorder()
+print('后序遍历: ', list(trav))

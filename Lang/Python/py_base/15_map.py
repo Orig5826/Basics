@@ -45,24 +45,31 @@ print(list(result))
 
 """
     map 我不能理解的地方，似乎map调用add的时候必须在list之后？
-
     不同操作观察现象：
     1. 若print(result)， 则add函数中的print不会显示？
         # >> 1，2，3，4，5 (我以为)
         <map object at 0x00000246C5F69A20> （实际上）
     2. 若调用print(list(result))，则显示
         >> 1 2 3 4 5 [1, 2, 3, 4, 5]
+
+
+    感谢百度贴吧吧友 @一周休七日
+    http://tieba.baidu.com/p/6101077005?pid=125112097808#125112097808
+    # 解释如下：
+    # map跟python2以的不一样，以前是返回list，现在是返回迭代对象
 """
 
 
 def add(x):
-    print(x + 1, end=' ')
+    print(x + 1, end='#')
     return x + 1
+
 
 print('--------------- 1.0 --------------------')
 result = map(add, [0, 1, 2, 3, 4])
 print('--------------- 2.0 --------------------')
-result.next
+next(result)
+next(result)
 # print(result)
 # print(list(result))
 print('--------------- 3.0 -------------------')
