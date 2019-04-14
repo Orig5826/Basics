@@ -231,7 +231,8 @@ class Tree(object):
             # 方法二
             # 借助的思想：
             # 加一个判断量，若当前节点的左右节点都已经被访问过了，那么也需要直接打印
-            # 为什么直接cur.right==pre也可以呢？其实是和我压栈的顺序相关的
+            # 为什么直接cur.right==pre也可以呢？ ----- 这种说法错误，若某节点仅存在左子树的时候，就不行了
+            # 其实是和我压栈的顺序相关的 
             # 右子树后出，因此上一次弹出的子树为右子树的时候，就可以证明左子树必定访问过了
         """
         queue = deque()
@@ -240,9 +241,9 @@ class Tree(object):
         while queue:
             cur = queue[-1]     # 获取栈顶元素
             # if (cur.left is None and cur.right is None) or\
-            #        (pre is not None and (cur.left == pre or cur.right == pre)):
+            #         (pre is not None and (cur.right == pre)):     # 此法考虑不够全面
             if (cur.left is None and cur.right is None) or\
-                    (pre is not None and (cur.right == pre)):
+                    (pre is not None and (cur.left == pre or cur.right == pre)):
 
                 # print(cur, end=' -> ')
                 yield cur
@@ -276,7 +277,7 @@ t = Tree()
 
 # 必须执行一下，list(ret)才能真正实现map的功能？为什么？
 # 因为python3 之后，map返回的是一个迭代对象
-ret = map(t.add, range(1, 8))
+ret = map(t.add, range(1, 11))
 list(ret)
 
 
