@@ -91,20 +91,30 @@ class Tree(object):
                 cur = queue.popleft()
                 if cur.left is None:
                     cur.left = node
+                    node.parent = cur
                     return
                 elif cur.right is None:
                     cur.right = node
+                    node.parent = cur
                     return
                 else:
                     # 若左右都不为空，则给判断列表加入子树，继续进行子树判断
                     queue.append(cur.left)
                     queue.append(cur.right)
 
-    def traversal(self):
+    def traversal(self, mode='breadth'):
         if self._root is None:
             print('Tree is None')
         else:
-            self.__traversal_depth_first()
+            if mode == 'breadth':
+                print('广度优先遍历：', end='\t')
+                self.__traversal_breadth_first()
+            elif mode == 'depth':
+                print('深度优先遍历：', end='\t')
+                self.__traversal_depth_first()
+            else:
+                raise ValueError('类"{}" -> 方法"{}" -> 参数"{}" 无效'.format(
+                    self.__class__.__name__, self.traversal.__name__, mode))
 
     def __traversal_depth_first(self):
         """
@@ -117,17 +127,41 @@ class Tree(object):
         """
             广度优先遍历
         """
-        pass
+        queue = deque()
+        queue.append(self._root)
+        while queue:
+            cur = queue.popleft()
+            if cur is None:
+                continue
+            print(cur, '-> ', end='')
+            queue.append(cur.left)
+            queue.append(cur.right)
+        print('')
 
     def __traversal_preorder(self, root):
         """
             深度优先遍历 -> 前序遍历
         """
-        if root is None:
-            return
-        print(root, end=' -> ')
-        self.__traversal_preorder(root.left)
-        self.__traversal_preorder(root.right)
+
+        # 递归实现
+        # if root is None:
+        #     return
+        # print(root, end=' -> ')
+        # self.__traversal_preorder(root.left)
+        # self.__traversal_preorder(root.right)
+
+        # 非递归实现
+        queue = deque()
+        cur = self._root
+        while queue or cur:
+            if cur:
+                print(cur, end=' -> ')
+
+                queue.append(cur)
+                cur = cur.left
+            else:
+                cur = queue.pop()
+                cur = cur.right
 
     def __traversal_inorder(self):
         """
@@ -162,10 +196,9 @@ class Tree(object):
 t = Tree()
 t.traversal()
 
-ret = map(t.add, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+ret = map(t.add, range(1, 8))
 # 必须执行一下，list才能真正实现map的功能？为什么？
 list(ret)
-t.traversal()
+t.traversal('breadth')
 
-t.add(9)
-t.traversal()
+t.traversal('depth')
