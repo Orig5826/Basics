@@ -62,6 +62,11 @@ class Node(object):
     def right(self, right):
         self._right = right
 
+    def __lt__(self,other):
+        return True if self._value < other._value else False
+
+    def __eq__(self,other):
+        return True if self._value == other._value else False
 
 class Tree(object):
     def __init__(self, root=None):
@@ -243,7 +248,7 @@ class Tree(object):
             # if (cur.left is None and cur.right is None) or\
             #         (pre is not None and (cur.right == pre)):     # 此法考虑不够全面
             if (cur.left is None and cur.right is None) or\
-                    (pre is not None and (cur.left == pre or cur.right == pre)):
+                    (pre is not None and (cur.left is pre or cur.right is pre)):
 
                 # print(cur, end=' -> ')
                 yield cur
