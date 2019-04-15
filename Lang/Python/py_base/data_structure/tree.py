@@ -80,8 +80,8 @@ class Tree(object):
             fun(self, *args, **kw)
         return type_check_wapper
 
-    # @type_check
-    def add(self, value):
+    @type_check
+    def append(self, value):
         node = Node(value)
         if self._root is None:
             self._root = node
@@ -150,7 +150,7 @@ class Tree(object):
             yield cur
             queue.append(cur.left)
             queue.append(cur.right)
-        print('')
+        # print('')
 
     # def __traversal_preorder(self, root):
     def traversal_preorder(self):
@@ -255,40 +255,41 @@ class Tree(object):
                 if cur.left:
                     queue.append(cur.left)
 
-# ----------------------------------------------
-# n = Node('root')
-# print(n)
+if __name__ == '__main__':
+    # ----------------------------------------------
+    # n = Node('root')
+    # print(n)
 
-# n2 = Node('parent_text')
-# n.parent = n2
-# print(n.parent)
+    # n2 = Node('parent_text')
+    # n.parent = n2
+    # print(n.parent)
 
-# n3 = Node('left_test')
-# n.left = n3
-# print(n.left)
-
-
-# n4 = Node('right_test')
-# n.right = n4
-# print(n.right)
-# ----------------------------------------------
-
-t = Tree()
-
-# 必须执行一下，list(ret)才能真正实现map的功能？为什么？
-# 因为python3 之后，map返回的是一个迭代对象
-ret = map(t.add, range(1, 11))
-list(ret)
+    # n3 = Node('left_test')
+    # n.left = n3
+    # print(n.left)
 
 
-trav = t.traversal_breadth_first()
-print('广度优先遍历: ', list(trav))
+    # n4 = Node('right_test')
+    # n.right = n4
+    # print(n.right)
+    # ----------------------------------------------
 
-trav = t.traversal_preorder()
-print('前序遍历: ', list(trav))
+    t = Tree()
 
-trav = t.traversal_inorder()
-print('中序遍历: ', list(trav))
+    # 必须执行一下，list(ret)才能真正实现map的功能？为什么？
+    # 因为python3 之后，map返回的是一个迭代对象
+    ret = map(t.append, range(1, 11))
+    list(ret)
 
-trav = t.traversal_postorder()
-print('后序遍历: ', list(trav))
+
+    trav = t.traversal_breadth_first()
+    print('广度优先遍历: ', list(trav))
+
+    trav = t.traversal_preorder()
+    print('前序遍历: ', list(trav))
+
+    trav = t.traversal_inorder()
+    print('中序遍历: ', list(trav))
+
+    trav = t.traversal_postorder()
+    print('后序遍历: ', list(trav))
