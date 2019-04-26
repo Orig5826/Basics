@@ -21,5 +21,37 @@
 - REFERENCES_LINK_SOURCE
     > 如果SOURCE_BROWSER配置YES，那么该项表明引用的文件可以直接跳转到相应源码处
 
+## 预处理
+- ENABLE_PREPROCESSING
+    > 开启预处理，开启之后对于#define可以识别，在c文件中也能创建链接
+- PREDEFINED
+    > 声明某个宏定义，对于通过#ifdef来条件判断的，很有效
+```
+PREDEFINED             = "DEBUG"
+```
+
+## GRAPH
+- HAVE_DOT
+    > DOT是Graphviz工具的一部分，若YES，则采用该工具绘图。其他同类工具选项无效
+- DOT_PATH
+    > 工具路径，若默认路径能找到该工具（似乎环境变量中添加路径有效），则该项可不填
+- INCLUDE_GRAPH
+    > 文档包含关系图，但占用时间大。主要针对头文件
+- INCLUDED_BY_GRAPH
+    > 文档被包含关系图，但占用时间大。主要针对头文件
+- CALL_GRAPH
+    > 函数调用关系图，但占用时间大
+    - 注意：不一定会把所有的调用关系都链接好，之前出现过明明函数调用没问题，但是关系图不显示的问题
+- CALLER_GRAPH
+    > 函数被调用关系图，但占用时间大
+```
+HAVE                   = YES
+DOT_PATH               = "D:\Program Files\graphviz\bin"
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
+CALL_GRAPH             = YES
+CALLER_GRAPH           = NO
+```
+
 ## 注释风格
 - 
