@@ -21,6 +21,21 @@
 - REFERENCES_LINK_SOURCE
     > 如果SOURCE_BROWSER配置YES，那么该项表明引用的文件可以直接跳转到相应源码处
 
+
+## EXTRACT 系列配置
+- EXTRACT_ALL
+- EXTRACT_PRIVATE
+    > 类的私有成员
+- EXTRACT_PACKAGE
+- EXTRACT_STATIC
+    > static 声明的变量和函数
+- EXTRACT_LOCAL_CLASSES
+    > 类的源文件也会被包含。"NO"仅仅包含头文件中的类定义
+- EXTRACT_LOCAL_METHODS 
+    > This flag is only useful for Objective-C code
+- EXTRACT_ANON_NSPACES
+
+
 ## 预处理
 - ENABLE_PREPROCESSING
     > 开启预处理，开启之后对于#define可以识别，在c文件中也能创建链接
