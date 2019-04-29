@@ -390,7 +390,7 @@ if __name__ == '__main__':
 
     # 必须执行一下，list(ret)才能真正实现map的功能？为什么？
     # 因为python3 之后，map返回的是一个迭代对象
-    ret = map(t.append, range(1, 16))
+    ret = map(t.append, range(1, 11))
     list(ret)
 
     trav = t.traversal_breadth_first()

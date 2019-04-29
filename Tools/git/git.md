@@ -53,11 +53,11 @@
     
 ----------------------------------------------------------------
 ## 远程常用操作 --- GitHub为例
-    - Git Bash
-        > 利用Git Bash创建SSH Key
-        > ssh-keygen -t rsa -C "Orig5826@163.com"
-        > 随后在用户主目录下会出现.ssh文件，里面含有rsa的公钥和私钥
-        > 登陆GitHub，在Setting中想办法将公钥数据添加到SSH key中，题目自己定
+- Git Bash
+    > 利用Git Bash创建SSH Key
+    > ssh-keygen -t rsa -C "Orig5826@163.com"
+    > 随后在用户主目录下会出现.ssh文件，里面含有rsa的公钥和私钥
+    > 登陆GitHub，在Setting中想办法将公钥数据添加到SSH key中，题目自己定
 `其实除了Github之外，中国也有Git托管：诸如gitee.com，coding.net`
 - clone
     > 从远程服务器中克隆一个本地库

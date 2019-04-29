@@ -11,7 +11,7 @@
 ## **默认类型转换**
 - "运算和比较"的默认类型转换
 	1. 例如：
-		```
+		```c
 		short a = 0;
 		unsigned char b = 0;
 		a = a + (b - 15) * 2;
@@ -24,7 +24,7 @@
 
 
 	2. 例如：
-		```
+		```c
 		unsigned int a = 0;
 		int b = 0;
 		if(b - 15 > a)
@@ -38,7 +38,9 @@
 		```
 		- 结果输出为：QQQ
 		> 为什么呢？因为当同一个等级出现有符号和无符号进行对比的时候，就直接切换为无符号进行对比了。若想要你原本想要的结果，则可以：
-		```
+		```c
+		unsigned int a = 0;
+		int b = 0;
 		if(b - 15 > (int)a)
 		{
 			printf("QQQ");
@@ -52,7 +54,7 @@
 
 ## **sizeof数组自身**
 - 代码示例如下
-```
+```c
 unsigned char config[] =
 {
 	0x09,0x02,
@@ -67,7 +69,7 @@ unsigned char config[] =
 		> 这当然和我原本的目的不一致了，似乎该编译器把sizeof所在的偏移作了当前的数组大小。
 - **[建议] 若在数组中需要计算自身大小，建议定义数组时，就显式的指明数的大小**
 	> 经测试，VS2010和CodeWarrior现象一致。
-```
+```c
 unsigned char config[5] =
 {
 	0x09,0x02,
@@ -79,7 +81,7 @@ unsigned char config[5] =
 ## **浮点数的对比问题**
 - [百度百科 : IEEE二进制浮点数算术标准(IEEE 754)](https://zhidao.baidu.com/question/409730820.html)
 	> 符点数是采用二进制科学计数法来进行存储的，因此，绝大多数的浮点数在计算机中是不能精确表示的。
-```
+```c
 #include <stdio.h>
 #include <math.h>
 
