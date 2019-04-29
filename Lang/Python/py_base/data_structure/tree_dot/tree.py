@@ -78,10 +78,39 @@ class TreeNode(object):
     def __eq__(self, other):
         return True if self._value == other._value else False
 
+    def add_left(self, node):
+        if not isinstance(node, TreeNode):
+            raise ValueError('类"{}" -> 方法"{}" -> 参数"{}" 无效'.format(
+                self.__class__.__name__, fun.__name__, node))
+        self.left = node
+        node.parent = self
+
+    def add_right(self, node):
+        if not isinstance(node, TreeNode):
+            raise ValueError('类"{}" -> 方法"{}" -> 参数"{}" 无效'.format(
+                self.__class__.__name__, fun.__name__, node))
+        self.right = node
+        node.parent = self
+
     def dot_node(self):
-        label_value = "\"<left>left|<parent>parent|<value>" + \
-            str(self.value) + "|<right>right\""
-        return Node(str(self._dot_index), label=label_value, shape='Mrecord',
+        # label_value = "\"<left>left|<parent>parent|<value>" + \
+        #    str(self.value) + "|<right>right\""
+        # return Node(str(self._dot_index), label=label_value, shape='Mrecord',
+                                    # fontcolor='blue')
+
+        # HTML 实现table表，功能更加强大
+        # 搜资料：HTML5 不再支持table的bgcolor
+        label_value = '''<\
+<table>\
+    <tr>\
+        <td port="left">left</td>\
+        <td port="parent" width="50" bgcolor="#FFFF00">parent</td>\
+        <td port="value" width="50" bgcolor="#00FF00">''' + str(self.value) + '''</td>\
+        <td port="right">right</td>\
+    </tr>\
+</table>\
+>'''
+        return Node(str(self._dot_index), label=label_value, shape='plaintext',
                     fontcolor='blue')
 
     def dot_name(self):
@@ -113,7 +142,7 @@ class Tree(object):
         # Dot
         self.graph = Dot(rankdir='TB')
         self.graph.set_type('digraph')
-        self.graph.set_name('Dot_Demo')
+        self.graph.set_name('Tree')
 
     def __str__(self):
         return str(self._root)
@@ -142,24 +171,16 @@ class Tree(object):
             while queue:
                 cur = queue.popleft()
                 if cur.left is None:
-                    cur.left = node
-                    node.parent = cur
+                    cur.add_left(node)
 
                     # DOT 添加 edge 左子树
-                    edge = Edge(cur.dot_left(), node.dot_value())
-                    self.graph.add_edge(edge)
-                    edge = Edge(node.dot_parent(), cur.dot_value())
-                    self.graph.add_edge(edge)
+                    self.dot_add_edge_left(cur, node)
                     return
                 elif cur.right is None:
-                    cur.right = node
-                    node.parent = cur
+                    cur.add_right(node)
 
                     # dot添加 edge 右子树
-                    edge = Edge(cur.dot_right(), node.dot_value())
-                    self.graph.add_edge(edge)
-                    edge = Edge(node.dot_parent(), cur.dot_value())
-                    self.graph.add_edge(edge)
+                    self.dot_add_edge_right(cur, node)
                     return
                 else:
                     # 若左右都不为空，则给判断列表加入子树，继续进行子树判断
@@ -201,7 +222,7 @@ class Tree(object):
 
     def traversal_breadth_first(self):
         """
-            广度优先遍历
+                广度优先遍历
         """
         queue = deque()
         queue.append(self._root)
@@ -218,7 +239,7 @@ class Tree(object):
     # def __traversal_preorder(self, root):
     def traversal_preorder(self):
         """
-            深度优先遍历 -> 前序遍历
+                深度优先遍历 -> 前序遍历
         """
         # 递归实现
         # if root is None:
@@ -243,7 +264,7 @@ class Tree(object):
 
     def traversal_inorder(self):
         """
-            深度优先遍历 -> 中序遍历
+                深度优先遍历 -> 中序遍历
         """
         # 非递归实现
         # print('<中序遍历>')
@@ -261,7 +282,7 @@ class Tree(object):
 
     def traversal_postorder(self):
         """
-            深度优先遍历 -> 后序遍历
+                深度优先遍历 -> 后序遍历
         """
         # print('<后序遍历>')
         # """
@@ -318,13 +339,29 @@ class Tree(object):
                 if cur.left:
                     queue.append(cur.left)
 
-    def dot_show(self):
-        graph = self.graph
+    def dot_add_edge_left(self, node_src, node_des):
+        if not isinstance(node_src, TreeNode) or not isinstance(node_src, TreeNode):
+            raise ValueError('类"{}" -> 方法"{}" -> 参数"{}"or"{}" 无效'.format(
+                self.__class__.__name__, fun.__name__, node_src, node_des))
+        edge = Edge(node_src.dot_left(), node_des.dot_value())
+        self.graph.add_edge(edge)
+        edge = Edge(node_des.dot_parent(), node_src.dot_value(), color='red')
+        self.graph.add_edge(edge)
 
-        ret = graph.write_raw("demo.dot")
+    def dot_add_edge_right(self, node_src, node_des):
+        if not isinstance(node_src, TreeNode) or not isinstance(node_src, TreeNode):
+            raise ValueError('类"{}" -> 方法"{}" -> 参数"{}"or"{}" 无效'.format(
+                self.__class__.__name__, fun.__name__, node_src, node_des))
+        edge = Edge(node_src.dot_right(), node_des.dot_value())
+        self.graph.add_edge(edge)
+        edge = Edge(node_des.dot_parent(), node_src.dot_value(), color='red')
+        self.graph.add_edge(edge)
+
+    def dot_show(self):
+        ret = self.graph.write_raw("demo.dot")
         if ret is not True:
             print('生成demo.dot失败')
-        ret = graph.write_svg("graph.svg")
+        ret = self.graph.write_svg("graph.svg")
         if ret is not True:
             print('生成graph.svg失败')
 
@@ -353,7 +390,7 @@ if __name__ == '__main__':
 
     # 必须执行一下，list(ret)才能真正实现map的功能？为什么？
     # 因为python3 之后，map返回的是一个迭代对象
-    ret = map(t.append, range(1, 11))
+    ret = map(t.append, range(1, 16))
     list(ret)
 
     trav = t.traversal_breadth_first()
