@@ -1,7 +1,12 @@
 digraph ofb {
 	label="对称算法：OFB流加密模式"
-	node [shape=ellipse,style=filled,color="#DADADA"]
-	
+	// 防止导出png，pdf等出现中文乱码
+	// 不过我常用的方式都是直接导出svg文件，然后需要其他的图片，直接转换接口
+	// 若是导出PDF的换，那就配置好字体，直接导出吧
+	graph [fontname="FangSong"];
+	edge [fontname="FangSong"];
+	node [shape=ellipse,style=filled,color="#DADADA",fontname="FangSong"];
+
 	subgraph cluster_stream_key{
 		label="流密钥生成过程";
 		
@@ -38,6 +43,8 @@ digraph ofb {
 		plain3 -> xor3 -> cipher3 [color=blue];
 		plain4 -> xor4 -> cipher4 [color=blue];
 		
+		# 虽然当前的排版已经很不错了
+		# 但是我对于rank的用法还不是很理解
 		{rank=same; xor1 xor2 xor3 xor4}
 		{rank=same; cipher1 cipher2 cipher3 cipher4}
 		{rank=sink; plain1 plain2 plain3 plain4}
