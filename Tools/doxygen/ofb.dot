@@ -1,0 +1,51 @@
+digraph ofb {
+	label="对称算法：OFB流加密模式"
+	node [shape=ellipse,style=filled,color="#DADADA"]
+	
+	subgraph cluster_stream_key{
+		label="流密钥生成过程";
+		
+		iv_start [label=初始向量,shape=box];
+		
+		stream_key1 [label=生成流密钥1];
+		stream_key2 [label=生成流密钥2];
+		stream_key3 [label=生成流密钥3];
+		stream_key4 [label=生成流密钥4];
+		
+		{rank=same; stream_key1 stream_key2 stream_key3 stream_key4}
+	}
+	
+	subgraph cluster_xor {
+		label="加密过程";
+		
+		plain1 [label=明文分组1];
+		plain2 [label=明文分组2];
+		plain3 [label=明文分组3];
+		plain4 [label=明文分组4];
+		
+		xor1 [label=xor, shape=circle];
+		xor2 [label=xor, shape=circle];
+		xor3 [label=xor, shape=circle];
+		xor4 [label=xor, shape=circle];
+		
+		cipher1 [label=密文分组1];
+		cipher2 [label=密文分组2];
+		cipher3 [label=密文分组3];
+		cipher4 [label=密文分组4];
+		
+		plain1 -> xor1 -> cipher1 [color=blue];
+		plain2 -> xor2 -> cipher2 [color=blue];
+		plain3 -> xor3 -> cipher3 [color=blue];
+		plain4 -> xor4 -> cipher4 [color=blue];
+		
+		{rank=same; xor1 xor2 xor3 xor4}
+		{rank=same; cipher1 cipher2 cipher3 cipher4}
+		{rank=sink; plain1 plain2 plain3 plain4}
+	};
+	
+	iv_start -> stream_key1 -> stream_key2 -> stream_key3 -> stream_key4;
+	stream_key1 -> xor1 [color=blue];
+	stream_key2 -> xor2 [color=blue];
+	stream_key3 -> xor3 [color=blue];
+	stream_key4 -> xor4 [color=blue];
+}
