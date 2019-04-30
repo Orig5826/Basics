@@ -1,5 +1,7 @@
 " 添加vim的一些参数，以方便vim用来写c程序
 
+set tabstop=4
+
 "配置状态栏显示
 set statusline=
 set statusline+=%1*[%n]
