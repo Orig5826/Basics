@@ -1,4 +1,10 @@
 
+# chm
+*.chm
+
+# SI4
+SIP.si4project/
+
 # python
 __pycache__/
 
@@ -15,6 +21,7 @@ Objects/
 *.uvoptx
 *.uvguix.*
 *.scvd
+JLinkLog.txt
 
 # Prerequisites
 *.d
