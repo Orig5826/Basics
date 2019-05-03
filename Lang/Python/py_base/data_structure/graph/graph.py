@@ -102,6 +102,52 @@ def find_short_path(graph, start, end, path=[]):
     return shortpath
 
 
+def breadth_first_search(graph, start):
+    prenodes = [start]   # 前驱节点
+    travel = [start]    # 已遍历过的顶点
+
+    graph_sets = set(graph.keys())
+    travel_sets = set(travel)
+    while travel_sets < graph_sets:
+        # 当前驱节点未空时退出
+        while prenodes:
+            nextnodes = []   # 当前顶点的邻接点
+            for prenode in prenodes:
+                for curnode in graph[prenode]:      # 遍历当前层的节点
+                    if curnode not in travel:       # 判断当前层节点是否被访问国
+                        travel.append(curnode)      # 若没有被访问过，则入队
+                        nextnodes.append(curnode)   # 将当前节点追加如新的前驱节点队列
+            # 当前层的节点都遍历完毕，则开始下一层的遍历
+            prenodes = nextnodes
+        travel_sets = set(travel)
+        prenodes = list(graph_sets - travel_sets)
+        if prenodes != []:
+            travel.append(prenodes[0])
+    return travel
+
+
+def depth_first_search(graph, start):
+    travel = []
+    stack = [start]
+
+    graph_sets = set(graph.keys())
+    travel_sets = set(travel)
+    while travel_sets < graph_sets:
+        # 堆栈空的时候退出
+        while stack:
+            curnode = stack.pop()           # 栈顶弹出
+            if curnode not in travel:       # 判断当前节点是否已经被访问过
+                travel.append(curnode)      # 若没访问过，则入队
+            for nextnode in graph[curnode]: # 遍历当前节点林邻接点
+                if nextnode not in travel:  # 没有被访问过的顶点全部入栈
+                    stack.append(nextnode)
+        travel_sets = set(travel)
+        leftnode = list(graph_sets - travel_sets)
+        if leftnode != []:
+            stack.append(leftnode[0])
+    return travel
+
+
 if __name__ == '__main__':
     result = find_path(graph, 'A', 'D')
     print("1. 路径查找结果：", result)
@@ -118,6 +164,15 @@ if __name__ == '__main__':
 
     result = find_short_path(graph, 'A', 'D')
     print("3. 查找最短路径：", result)
+    print('---------------------------------')
 
     # 生成图表
     dotgraph(graph)
+
+    # 广度优先遍历
+    result = breadth_first_search(graph, 'A')
+    print(result)
+
+    # 深度优先遍历
+    result = depth_first_search(graph, 'F')
+    print(result)
