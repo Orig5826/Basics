@@ -7,7 +7,7 @@
 
 void __cdecl odprintf(const char *format, ...)
 {
-	char buf[4096] = "[usbdisk] ";
+	char buf[1024] = "[usbdisk] ";
 	char *p = &buf[10];	// 和上面对应
 
 	va_list args;

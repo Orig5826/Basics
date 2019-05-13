@@ -21,7 +21,15 @@
 #ifdef _DEBUG
 #define DBG_LOG		odprintf	//printf
 #else
-#define DBG_LOG		odprintf
+/**
+ * 2019.5.13 出现很奇怪的现象
+ * usb_display()若usbdisk_debug_level>=2的时候
+ * 卡死在了odprintf函数中，不知道为什么
+ * 修改为不适用odprintf，而使用OutputDebugString
+ * 我个人觉得，odprintf函数中的实现可能还存在一定的bug
+ * 虽然网上使用的人说，这个函数他已经使用了好多年了
+ */
+#define DBG_LOG		OutputDebugString  //odprintf
 #endif
 
 
@@ -31,6 +39,10 @@ GUID GUID_GLOBAL = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 
 
 //cdrom
 //GUID GUID_GLOBAL = {0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b};
+
+
+#define SPT_SENSE_LENGTH 32			//!< 
+#define SPTWB_DATA_LENGTH 4096		//!< 数据发送接收缓存大小
 
 
 
@@ -61,7 +73,8 @@ static void  FormatErrorCode(void)
 	sprintf(szBuf,
 		"[ErrorCode = %d]: %s",
 		ErrorCode, (char *)lpMsgBuf);
-	DBG_LOG("%s\n", szBuf);
+	//DBG_LOG("%s\n", szBuf);
+	DBG_LOG(szBuf);
 
 	LocalFree(lpMsgBuf);
 }
@@ -173,7 +186,8 @@ static HANDLE usb_find(char * SymLink,int Len)
 			NULL);
 		if (hDevHandle == INVALID_HANDLE_VALUE)
 		{
-			DBG_LOG(" Open Device [%s] Failed\n",DevPath);
+			DBG_LOG(" Open Device [%s] Failed");
+			DBG_LOG(DevPath);
 			FormatErrorCode();
 
 			DBG_LOG("Maybe：\n"
@@ -196,7 +210,8 @@ static HANDLE usb_find(char * SymLink,int Len)
 		{
 			if (0 == memcmp(InquiryData + 8, SymLink, Len))
 			{
-				DBG_LOG("Find the Device: [%s]\n", InquiryData + 8);
+				DBG_LOG("Find the Device: [%s]");
+				DBG_LOG(InquiryData + 8);
 				return hDevHandle;
 			}
 		}
@@ -208,9 +223,6 @@ Exit:
 	DBG_LOG("----- END -----\n");
 	return NULL;
 }
-
-#define SPT_SENSE_LENGTH 32
-#define SPTWB_DATA_LENGTH 4096
 
 typedef struct _SCSI_PASS_THROUGH_WITH_BUFFERS {
 	SCSI_PASS_THROUGH spt;
@@ -303,13 +315,19 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 // ---------------------------------------------------------
 DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 {
-	DWORD i, j, k;
-	char debug_info[1024];
-	char * p = debug_info;
-
+	DWORD i, j;
+	char debug_info[128];	// 经过计算，最大长度为69字节。
+	char * p;
+	DWORD line;
+	// 要将uchar转换为hex形式显示
+	if (size == 0)
+	{
+		return;
+	}
+	p = debug_info;
 	for (i = 0; i < size; i += 16)
 	{
-		for (j = 0, k = 0; k < 16; j++, k++)
+		for (j = 0; j < 16; j++)
 		{
 			if (i + j < size)
 			{
@@ -334,7 +352,8 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 			//DBG_LOG("    ");
 			sprintf(p, "    ");
 			p += 3;
-			for (j = 0, k = 0; k < 16; j++, k++)
+
+			for (j = 0; j < 16; j++)
 			{
 				if (i + j < size)
 				{
@@ -358,7 +377,7 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 		{
 			//DBG_LOG("\n");
 			sprintf(p, "\n");
-			p += 2;
+			p += 1;
 		}
 
 		*p = '\0';
