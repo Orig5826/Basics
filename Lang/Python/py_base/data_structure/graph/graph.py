@@ -122,6 +122,7 @@ def breadth_first_search(graph, start):
         travel_sets = set(travel)
         prenodes = list(graph_sets - travel_sets)
         if prenodes != []:
+            prenodes.sort()
             travel.append(prenodes[0])
     return travel
 
@@ -144,6 +145,7 @@ def depth_first_search(graph, start):
         travel_sets = set(travel)
         leftnode = list(graph_sets - travel_sets)
         if leftnode != []:
+            leftnode.sort()
             stack.append(leftnode[0])
     return travel
 
@@ -174,5 +176,5 @@ if __name__ == '__main__':
     print(result)
 
     # 深度优先遍历
-    result = depth_first_search(graph, 'F')
+    result = depth_first_search(graph, 'A')
     print(result)
