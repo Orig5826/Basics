@@ -6,20 +6,29 @@
 - [USB_Setup](.\USB_Standard.docx)
 
 ### USB_SCSI 命令简介
+##### 基础常用命令
 - INQUIRY (0x12)
 	> 该命令询问Mass Storage设备的基本信息，如生产厂家，产品名称，产品版本等等。
 - READ_FORMAT_CAPACITIES (0x23)
 	> 该命令获取Mass Storage设备存储大小，Block长度（一般为一个扇区大小，默认为512）等信息。(大端模式)
+	- @RET: 容量列表头{00000008}(4B) | 块个数(4B) | 格式化介质：当前介质容量{02}(1B) | 块大小(4B)
 - READ_CAPACITY (0x25)
-	> 该命令返回最后一个块的索引和块的长度，其实该命令可以看成是READ_FORMAT_CAPACITIES命令的一个子集。
+	> 该命令可以看成是READ_FORMAT_CAPACITIES命令的一个子集。
+	- @RET: 逻辑块末地址(4B) | 逻辑块的大小(4B)
 - READ_10 (0x28)
 	> 该命令由PC端发出，请求Mass Storage设备发送指定扇区索引、扇区个数的数据。
+	- @PARAM: {28}(1B) |Logic_Unit_Num(1B:bit5-7) |Logical_Block_Address(4B) |Reserved(1B) |Transfer_Length(2B) | Reserved(3B)
+	- @RET: 1块数据
 - WRITE_10 (0x2A)
 	> 该命令由PC端发出，CBW命令块后面紧跟的就是相应扇区的数据。
 - REQUEST_SENSE (0x70)
 	> PC机每发送一个命令后，都会检测设备返回的CSW的状态值是否为0(Good Status),如果不为0，则PC机马上发送REQUEST_SENSE命令，询问出错的进一步信息。
 - TEST_UNIT_READY (0x00)
 	> 在没有其它命令进行操作时，PC端会每隔一定时间，就会发送该命令，主要是为了探测Mass Storage设备是否存在（类似心跳信号）。
+
+##### U盘用到的命令
+- Mode Sense(1A)
+	- @RET：{03000000}
 
 ### USB_HID 
 - 报告描述符详解
