@@ -5,7 +5,9 @@
 ### USB 枚举
 - [USB_Setup](.\USB_Standard.docx)
 
+
 ### USB_SCSI 命令简介
+> 没有特殊标注的的，均为从设备需要实现的命令
 ##### 基础常用命令
 - INQUIRY (0x12)
 	> 该命令询问Mass Storage设备的基本信息，如生产厂家，产品名称，产品版本等等。
@@ -26,9 +28,16 @@
 - TEST_UNIT_READY (0x00)
 	> 在没有其它命令进行操作时，PC端会每隔一定时间，就会发送该命令，主要是为了探测Mass Storage设备是否存在（类似心跳信号）。
 
+
 ##### U盘用到的命令
 - Mode Sense(1A)
 	- @RET：{03000000}
+	> 暂时不知道这个具体时用来做什么的，但是win10系统会要这条命令（其他系统还未测试过）
+- PREVENT-ALLOW MEDIUM REMOVAL Command (1e) >> [主]
+	> 请求一个可移除媒体设备来加载或卸载其介质(启用或者禁用逻辑单元中介质的移除)
+- START-STOP Unit Command (1b) >> [主]
+	> 允许或者禁止从可移除设备中移除其介质
+
 
 ### USB_HID 
 - 报告描述符详解
