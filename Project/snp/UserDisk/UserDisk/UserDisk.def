@@ -1,0 +1,11 @@
+LIBRARY      "UserDisk"
+VERSION      0.0
+;DESCRIPTION  "Reader communication dll"
+
+EXPORTS
+	User_ListDevs
+	User_ConnectDev
+	User_DisconnectDev
+	User_ResetCard
+	User_PPS
+	User_Transmit
