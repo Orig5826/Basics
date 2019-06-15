@@ -4,6 +4,8 @@ import numpy as np
 
 def coor_trans(point, theta):
     """
+        coordinate transformation (坐标转换)
+
         theta方向：以顺时针旋转为正
     """
     if len(point) != 2:
@@ -11,7 +13,7 @@ def coor_trans(point, theta):
     point = np.transpose(point)
     k = np.array([[np.cos(theta), np.sin(theta)],
                   [-np.sin(theta), np.cos(theta)]])
-    return np.dot(k,point)
+    return np.dot(k, point)
 
 
 if __name__ == "__main__":

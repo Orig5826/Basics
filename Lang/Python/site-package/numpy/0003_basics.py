@@ -2,10 +2,12 @@
 import numpy as np
 
 
-def basics_00():
+def vector_dot():
     a = np.array([1, 3, 5, 7, 9])
     b = np.array([1, 2, 3, 4, 5])
+    # 对应元素相乘
     print(a * b)
+    # 对应元素2次幂
     print(a ** 2)
     # dot product
     print(a.dot(b))
@@ -14,29 +16,38 @@ def basics_00():
     print(a.shape)
 
 
-def basics_01():
+def array_matrix_sum():
     d = np.arange(10)
+    # 求和：针对数组
     print(d.sum())
+    # 求最值
     print(np.min(d))    # 两种方式结果一致
     print(d.max())
+    # 累加
     print(d.cumsum())
 
     x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    # 求和：针对矩阵
     print(x.sum())
     print(np.sum(x, axis=0))  # 列sum
     print(x.sum(axis=1))  # 行sum
 
 
-def basics_02():
-    d = np.linspace(0, 100, 11)
-    #
+def array_matrix_slice():
+    # start,stop,num
+    d = np.linspace(0, 90, 10)
+    print(d)
+    # start,stop,num,endpoint=False
+    d = np.linspace(0, 100, 10, endpoint=False)
+    print(d)
+    # 切片
     indices = [1, 3, -1]
     print(d[indices])
     print(d[[1, 3, -1]])  # 外[]表示d的下标，内[]表示下标列表
-    #
     print(d[:5])
+    # 按照条件 切片
     print(d[d >= 50])
-    #
+    # 按照条件 查找元素下标
     index = np.where(d >= 50)
     print(index[0])
     print(d[index[0]])
@@ -44,18 +55,28 @@ def basics_02():
     e = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12],
                   [13, 14, 15, 16]])
     print(e)
+    # 矩阵切片方式
     print(e[1:3, 1:3])
+    # 选取矩阵中某点
     print(e[3, 2])
     print(e[(3, 2)])
-    print(e[[1, 1, 2, 2], [1, 2, 1, 2]])  # 坐标对应(1,1),(1,2),(2,1),(2,2)
+    # 花式索引 --- array[[x],[y]]
+    # 坐标对应(1,1),(1,2),(2,1),(2,2)
+    # 最终将回去的所有点排成一个一维数组
+    print(e[[1, 1, 2, 2], [1, 2, 1, 2]])
+    #
     print(e[np.arange(1, 3), 1:3])
+    # 返回布尔值，（针对对应元素）
+    # 该布尔值也可以用于索引切片
     print(e % 2 == 0)
+    print(e[e % 2 == 0])
 
 
-def basics_03():
+def array_stack():
     a = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
     b = np.array([0, 1, 0, -1])
     c = np.array([0, 1, 0, -1]).reshape(2, 2)
+    print('-------------堆叠--------------')
     # 垂直堆叠
     r = np.vstack([a, b])
     print(r)
@@ -63,16 +84,20 @@ def basics_03():
     r2 = np.hstack([a, c])
     print(r2)
 
+    print('---------堆叠（方式2）----------')
     # 方式2（以垂直为例）
     b = np.array([[0, 1, 0, -1]])  # concatenate要求dimension一致
     r3 = np.concatenate((a, b), axis=0)
+    # r3 = np.concatenate((a, c), axis=1)
     print(r3)
 
+    print('---------堆叠（方式3）----------')
     # 方式3（以水平为例）
-    r4 = np.r_[a, b]
+    # r4 = np.r_[a, b]  # 垂直堆叠
+    r4 = np.c_[a, c]
     print(r4)
 
-    print('-------------应用示例--------------')
+    print('-------------扩展--------------')
     x = np.array([1, 2, 3])
     # repeat以元素为单位扩展
     ret = np.repeat(x, 3)
@@ -84,13 +109,15 @@ def basics_03():
     print(ret3)
 
 
-def create_array_function():
+def create_matrix():
     a = np.zeros((3, 3))
     print(a)
     b = np.ones((3, 2))
     print(b)
+    # 用9填充3*3的矩阵
     c = np.full((3, 3), 9)
     print(c)
+    # 用6填充类似b的矩阵
     d = np.full_like(b, 6)
     print(d)
     e = np.eye(3)
@@ -99,28 +126,42 @@ def create_array_function():
     print(r)
 
 
-def dot_cross_product():
-    # 1 dimension
+def dot_product():
+    # 针对 1 dimension
+    # 此时dot作用类似于inner(内积)
+    # 作用式：两向量数量积
     v = np.array([9, 10])
     w = np.array([11, 12])
-    print(v.dot(w))     # Two different ways to express
-    print(np.dot(v, w))  # ret = 219
-    # 2 dimension
+    print(v.dot(w))         # Two different ways to express
+    print(np.dot(v, w))     # ret = 219
+
+    # 针对 2 dimension
+    # 作用是：矩阵乘法
     x = np.array([[1, 2], [3, 4]])
     y = np.array([[5, 6], [7, 8]])
     print(np.dot(x, y))  # dot for 2d -> Matrix / vector product
     # ret = [[19,22],[43,50]]
 
+    # 针对 矩阵
+    # 作用是：矩阵乘法
+    x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    print(x)
+    y = np.eye(3)
+    y[(1, 0)] = 2   # 用矩阵描述 矩阵消元法（高斯消元法）
+    print(y)
+    print(np.dot(y, x))
 
-def transpose():
+
+def matrix_transpose():
     x = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     print(x.T)
     # @attention 1d   .T无效
     y = np.array([1, 2, 3])
     print(y.T)
+
     # 翻转行&列的方式
-    print(x[::-1])      # 翻转行
-    print(x[:, ::-1])    # 翻转列
+    print(x[::-1])          # 翻转行
+    print(x[:, ::-1])       # 翻转列
 
 
 def broadcasting(mode=2):
@@ -148,27 +189,52 @@ def broadcasting(mode=2):
         y = None
     print(y)
 
-
-def broadcasting_02(mode=2):
+    """
+        广播应用2
+    """
     a = np.array([1, 2, 3])
     b = np.array([4, 5])
-    print(a.reshape((3, 1)) * b)
+    c = a.reshape((3, 1))
+    print(c)
+    print(c * b)
 
 
 def linalg_demo():
+    # 资料链接
+    # https://www.numpy.org.cn/article/basics/numpy_matrices_vectors.html
+
+    print('----- 解线性方程组 -----')
     A = np.array([[2, 1, -2], [3, 0, 1], [1, 1, -1]])
     b = np.transpose(np.array([[-3, 5, -2]]))
     x = np.linalg.solve(A, b)
     print(x)
-    # 资料链接
-    # https://www.numpy.org.cn/article/basics/numpy_matrices_vectors.html
+    # 查看一些结果，看是否正确
+    print(A.dot(x))
+
+    print('----- 求矩阵的逆 -----')
+    C = np.linalg.inv(A)
+    # 使用round的目的是，让特别小的数，例如1.11e-16显示为0
+    print(C)
+    print(np.round(C, 6))
+    ret = C.dot(A)
+    print(np.round(ret, 6))
+
+    print('----- 计算行列式 -----')
+    # 方式1
+    # D = np.array([[3, 4], [5, 6]])
+    # E = np.asmatrix(D)
+    # 方式2
+    E = np.mat('3,4; 5,6')
+    print(E)
+    ret = np.linalg.det(E)
+    print(np.round(ret, 6))
 
 
 def float_random_demo():
-    a = np.random.random((5, 5))
+    a = np.random.random((10, 10))
     np.set_printoptions(precision=3)  # 显示精度3位小数
     np.set_printoptions(threshold=3)  # 最多显示6项，其他项使用省略号
-    # np.set_printoptions(threshold=np.nan) # 显示所有项目
+    # np.set_printoptions(threshold=np.nan)   # 显示所有项目
     print(a)
 
 
@@ -182,4 +248,14 @@ def uniformization():
 
 
 if __name__ == "__main__":
+    # vector_dot()
+    # array_matrix_sum()
+    # array_matrix_slice()
+    # array_stack()
+    # create_matrix()
+    # dot_product()
+    # matrix_transpose()
+    # broadcasting(0)
+    # linalg_demo()
+    # float_random_demo()
     uniformization()
