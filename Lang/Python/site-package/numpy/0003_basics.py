@@ -1,6 +1,19 @@
 
 import numpy as np
 
+"""
+    备注：本示例中所有的matrix都使用的是array来体现
+    实际上python中存在专门的matrix
+
+    # 主要注意matrix和array的区别
+    # matrix 使用更加接近matlab的使用方式
+    简单示例如下：
+    B = np.matrix('1,2;3,4')
+    print(B*B)
+    # 注意：若使用matrix，则*直接表示矩阵乘法
+    # 而元素对应乘积则使用 multiply() 函数
+"""
+
 
 def vector_dot():
     a = np.array([1, 3, 5, 7, 9])
