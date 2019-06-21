@@ -10,6 +10,11 @@ __pycache__/
 
 # .vs
 *.vs
+Debug/
+Release/
+x86/
+x64/
+ARM/
 
 # .vscode
 .vscode/
