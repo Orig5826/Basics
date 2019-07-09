@@ -1,2 +1,2 @@
 @echo off
-del *.plain *.cipher
+del *.plain *.cipher *.bin
