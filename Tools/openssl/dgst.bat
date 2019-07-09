@@ -24,4 +24,3 @@ REM 数据和密钥作为输入，摘要信息作为输出，常用于认证
 REM 命令中的密钥12345678是个字符串
 openssl dgst -sha256 -hex -hmac 12345678 openssl_tools.md
 openssl dgst -sha256 -r -hex -hmac 12345678 dgst.bin
-pause
