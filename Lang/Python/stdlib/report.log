@@ -1,0 +1,2 @@
+[2019-07-16 09:58:01]  021_logging.py  line:25  (INFO)  "2.0 div 0 err!"   
+[2019-07-16 09:58:01]  021_logging.py  line:26  (WARNING)  "3.0 div 0 err!"   
