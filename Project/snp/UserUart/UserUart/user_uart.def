@@ -1,4 +1,4 @@
-LIBRARY      "UserDisk"
+LIBRARY      "UserUart"
 VERSION      0.0
 ;DESCRIPTION  "Reader communication dll"
 
