@@ -126,7 +126,7 @@ bool uart_write(uint8_t * sbuf, uint32_t slen)
 	DWORD write_len;
 	uint8_t temp;
 
-	// uart_start
+	// 1. 发送数据头 0x55
 	temp = 0x55;
 	if (true != WriteFile(hCom, &temp, 1, &write_len, NULL))
 	{
@@ -137,23 +137,23 @@ bool uart_write(uint8_t * sbuf, uint32_t slen)
 		return false;
 	}
 
-	// uart_data
-	if (true != WriteFile(hCom, sbuf, slen, &write_len, NULL))
-	{
-		return false;
-	}
-	if (write_len != slen)
-	{
-		return false;
-	}
-
-	// uart_end
-	temp = 0xAA;
+	// 2. 发送长度字段（暂定一字节）
+	temp = slen & 0xFF;
 	if (true != WriteFile(hCom, &temp, 1, &write_len, NULL))
 	{
 		return false;
 	}
 	if (write_len != 1)
+	{
+		return false;
+	}
+
+	// 3. 发送实际数据
+	if (true != WriteFile(hCom, sbuf, slen, &write_len, NULL))
+	{
+		return false;
+	}
+	if (write_len != slen)
 	{
 		return false;
 	}
@@ -168,9 +168,6 @@ bool uart_write(uint8_t * sbuf, uint32_t slen)
 bool uart_read(uint8_t * rbuf, uint32_t * rlen)
 {
 	DWORD read_len;
-	uint32_t i = 0;
-	uint32_t recv_head_flag = 1;
-	// bool ret;
 
 	if (true != ReadFile(hCom, rbuf, UART_BUF_SIZE_MAX + 1, &read_len, NULL))
 	{
@@ -178,7 +175,7 @@ bool uart_read(uint8_t * rbuf, uint32_t * rlen)
 		return false;
 	}
 	*rlen = read_len - 2;
-	memcpy(rbuf, rbuf + 1, *rlen);
+	memmove(rbuf, rbuf + 2, *rlen);
 	if (*rlen == UART_BUF_SIZE_MAX + 1)
 	{
 		return false;
