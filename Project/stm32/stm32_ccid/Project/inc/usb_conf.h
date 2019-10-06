@@ -50,7 +50,13 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define EP_NUM     (2)
+
+/**
+  2019.10.06
+  尴尬的事情就在这里，新增加了端点2，却没有给此处的参数2修改为3
+  导致CCID设备一直枚举失败。
+*/
+#define EP_NUM     (3)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
@@ -66,12 +72,8 @@
 
 /* EP1  */
 /* tx buffer base address */
-#define ENDP1_TXADDR        (0x100)
-#define ENDP1_RXADDR        (0x104)
-
-#define ENDP2_TXADDR        (0x100)
-#define ENDP2_RXADDR        (0x104)
-
+#define ENDP1_TXADDR        (0x98)
+#define ENDP2_RXADDR        (0xD8)
 
 /*-------------------------------------------------------------*/
 /* -------------------   ISTR events  -------------------------*/
@@ -86,15 +88,15 @@
 /* CTR service routines */
 /* associated to defined endpoints */
 /* #define  EP1_IN_Callback   NOP_Process */
-// #define  EP2_IN_Callback   NOP_Process
+#define  EP2_IN_Callback   NOP_Process
 #define  EP3_IN_Callback   NOP_Process
 #define  EP4_IN_Callback   NOP_Process
 #define  EP5_IN_Callback   NOP_Process
 #define  EP6_IN_Callback   NOP_Process
 #define  EP7_IN_Callback   NOP_Process
 
-//#define  EP1_OUT_Callback   NOP_Process
-//#define  EP2_OUT_Callback   NOP_Process
+#define  EP1_OUT_Callback   NOP_Process
+/* #define  EP2_OUT_Callback   NOP_Process */
 #define  EP3_OUT_Callback   NOP_Process
 #define  EP4_OUT_Callback   NOP_Process
 #define  EP5_OUT_Callback   NOP_Process

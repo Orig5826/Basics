@@ -62,7 +62,7 @@ extern volatile uint8_t ccid_i2c_dataok_flag;
 * Input          : None.
 * Output         : None.
 * Return         : None.
-*******************************************************************************/
+*******************************************************************************
 void EP1_OUT_Callback(void)
 {
 #if 0
@@ -76,7 +76,7 @@ void EP1_OUT_Callback(void)
   SetEPRxStatus(ENDP1, EP_RX_VALID);
 
   
-  /* Write the descriptor through the endpoint */
+  // Write the descriptor through the endpoint
   USB_SIL_Write(EP1_IN, (uint8_t*)Send_Buffer, Send_Length);
   SetEPTxValid(ENDP1);
   UartSendString((uint8_t*)"Write\r\n",0);
@@ -85,6 +85,7 @@ void EP1_OUT_Callback(void)
   UartSendString((uint8_t*)"EP1 OUT",0);
   ccid_i2c_dataok_flag = 1;
 }
+*/
 
 /*******************************************************************************
 * Function Name  : EP1_IN_Callback.
@@ -95,7 +96,6 @@ void EP1_OUT_Callback(void)
 *******************************************************************************/
 void EP1_IN_Callback(void)
 {
-  UartSendString((uint8_t*)"EP1 IN",0);
   PrevXferComplete = 1;
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
@@ -103,9 +103,9 @@ void EP1_IN_Callback(void)
 
 void EP2_OUT_Callback(void)
 {
-  UartSendString((uint8_t*)"EP2 OUT",0);
   ccid_i2c_dataok_flag = 1;
 }
+
 
 /*******************************************************************************
 * Function Name  : EP1_IN_Callback.
@@ -113,11 +113,11 @@ void EP2_OUT_Callback(void)
 * Input          : None.
 * Output         : None.
 * Return         : None.
-*******************************************************************************/
+*******************************************************************************
 void EP2_IN_Callback(void)
 {
   UartSendString((uint8_t*)"EP2 IN",0);
   PrevXferComplete = 1;
 }
-
+*/
 

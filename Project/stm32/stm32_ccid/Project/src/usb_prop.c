@@ -182,24 +182,24 @@ void CustomHID_Reset(void)
   SetEPRxCount(ENDP0, Device_Property.MaxPacketSize);	// 接收缓冲区支持64个字节。
   SetEPRxValid(ENDP0);									// 使能端点0的接收，因为很快就要接收SETUP令牌包后面跟着的数据包了。
 
+  /**
+	2019.10.06 更新端点1&2初始化配置
+	*/
   /* Initialize Endpoint 1 */
-  SetEPType(ENDP1, EP_BULK);							// 配置为Bulk类型
+  SetEPType(ENDP1, EP_BULK);
   SetEPTxAddr(ENDP1, ENDP1_TXADDR);
-  SetEPRxAddr(ENDP1, ENDP1_RXADDR);
-  SetEPTxCount(ENDP1, 64);
-  SetEPRxCount(ENDP1, 64);
-  SetEPRxStatus(ENDP1, EP_RX_DIS);
   SetEPTxStatus(ENDP1, EP_TX_NAK);
+  SetEPRxStatus(ENDP1, EP_RX_DIS);
 
-  //2019.05.03
   /* Initialize Endpoint 2 */
   SetEPType(ENDP2, EP_BULK);
-  SetEPTxAddr(ENDP2, ENDP2_TXADDR);
   SetEPRxAddr(ENDP2, ENDP2_RXADDR);
-  SetEPTxCount(ENDP2, 64);
-  SetEPRxCount(ENDP2, 64);
-  SetEPRxStatus(ENDP2, EP_RX_NAK);
+  SetEPRxCount(ENDP2, Device_Property.MaxPacketSize);
+  SetEPRxStatus(ENDP2, EP_RX_VALID);
   SetEPTxStatus(ENDP2, EP_TX_DIS);
+
+  SetEPRxCount(ENDP0, Device_Property.MaxPacketSize);
+  SetEPRxValid(ENDP0);
 
   /* Set this device to response on default address */
   SetDeviceAddress(0);

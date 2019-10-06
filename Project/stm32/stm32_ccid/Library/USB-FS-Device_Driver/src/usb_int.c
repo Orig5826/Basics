@@ -148,12 +148,7 @@ void CTR_LP(void)
       /* process related endpoint register */
       wEPVal = _GetENDPOINT(EPindex);
 
-	  
-	  // Uart Debug
-	  UartSendString((const uint8_t *)"USB_Istr  CTR_LP\r\n",0);
-	  UartSendHex((const uint8_t *)EPindex,1);
 
-	  
       if ((wEPVal & EP_CTR_RX) != 0)
       {
         /* clear int flag */

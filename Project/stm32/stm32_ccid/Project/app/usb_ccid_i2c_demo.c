@@ -20,7 +20,7 @@
 #include <string.h>
 #include "i2c_hard.h"
 
-#define USB_CCID_I2C_DEMO
+
 volatile uint8_t ccid_i2c_dataok_flag = 0;
 __IO uint8_t PrevXferComplete;
 /**
@@ -293,7 +293,7 @@ void SetAPDU(APDU *pAPDU, u8 *APDU_Buff, u32 APDU_Len)
 	pAPDU->pData = NULL;
 	pAPDU->Le = 0x00;
 
-	if (APDU_Len >= 4)
+	if (APDU_Len > 4)
 	{
 		// 判断是否为扩展APDU
 		if (APDU_Buff[4] != 0x00)
@@ -311,15 +311,57 @@ void SetAPDU(APDU *pAPDU, u8 *APDU_Buff, u32 APDU_Len)
 				if (pAPDU->Lc + 5 < APDU_Len)
 				{
 					// Case 4
-					pAPDU->Le = APDU_Buff[5 + pAPDU->Lc];
+					if(pAPDU->Lc + 5 + 1 ==  APDU_Len)
+					{
+						pAPDU->Le = APDU_Buff[5 + pAPDU->Lc];
+					}
+					else if(pAPDU->Lc + 5 + 3 ==  APDU_Len)
+					{
+						// Lc不扩展，Le扩展
+						pAPDU->Le = APDU_Buff[5 + pAPDU->Lc + 1] << 0x08;
+						pAPDU->Le |= APDU_Buff[5 + pAPDU->Lc + 2];
+					}
+					else
+					{
+						//Error
+						//ret = 0;
+					}
 				}
 			}
 		}
 		else
 		{
-			//扩展APDU，暂未实现
+			if (APDU_Len == 0x07)
+			{
+				// Case 2
+				pAPDU->Le = APDU_Buff[5] << 0x08;
+				pAPDU->Le |= APDU_Buff[6];
+			}
+			else
+			{
+				pAPDU->Lc = APDU_Buff[5] << 0x08;
+				pAPDU->Lc |= APDU_Buff[6];
+				pAPDU->pData = &APDU_Buff[7];
+				
+				if(pAPDU->Lc + 0x07 + 1 == APDU_Len)
+				{
+					pAPDU->Le = APDU_Buff[0x07 + pAPDU->Lc];
+				}
+				else if(pAPDU->Lc + 0x07 + 3 == APDU_Len)
+				{
+					// 若Lc扩展，Le也扩展
+					pAPDU->Le = APDU_Buff[0x07 + pAPDU->Lc + 1] << 0x08;
+					pAPDU->Le |= APDU_Buff[0x07 + pAPDU->Lc + 2];
+				}
+				else
+				{
+					//Error
+					//ret = 0;
+				}
+			}
 		}
 	}
+	//return ret;
 }
 
 /**
@@ -401,17 +443,12 @@ u8 isCase(emCase Case,const APDU * pAPDU)
  */
 void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 {
-#ifndef USB_CCID_I2C_DEMO
-	u32 i = 0;
-#endif
 	APDU pAPDU;
-
 	SetAPDU(&pAPDU, rBuf, rLen);
 
 	*sLen = 2;
 	switch (pAPDU.INS)
 	{
-#ifdef USB_CCID_I2C_DEMO
 	case 0xA4:
 	case 0xCA:
 	case 0xCB:
@@ -431,98 +468,6 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 		memmove(rBuf,rBuf + 5,rLen - 5);
 		rLen -= 5;
 	} //break;
-	default:
-	{
-#if 0
-		// ** 计算校验值，不包括长度字段 **
-		{
-			uint8_t temp = 0;
-			uint32_t i = 0;
-			
-			for(i = 0; i < rLen; i++)
-			{
-				temp ^= rBuf[i];
-			}
-
-			memmove(rBuf + 2,rBuf,rLen);
-			rBuf[0] = (rLen >> 8) & 0xff;
-			rBuf[1] = (rLen     ) & 0xff;
-			rLen += 2;
-			
-			rBuf[rLen] = temp;
-			rLen += 1;
-			
-			I2C_Write(rBuf,rLen);
-		}
-		Delay(10000);
-		{
-			uint8_t temp = 0;
-			uint32_t i = 0;
-			
-			I2C_Read(sBuf,(uint16_t *)sLen);
-			*sLen -= 1;
-			for(i = 0; i < *sLen - 2; i++)
-			{
-				temp ^= sBuf[2 + i];
-			}
-			
-			if(temp != sBuf[*sLen])
-			{
-				sBuf[0] = 0x00;
-				sBuf[1] = 0x00;
-				*sLen = 2;
-				return;
-			}
-			
-			*sLen -= 2;
-			memmove(sBuf,sBuf + 2,*sLen);
-		}
-#else
-		// ** 计算校验值，需要包括长度字段 **
-		{
-			uint8_t temp = 0;
-			uint32_t i = 0;
-
-			memmove(rBuf + 2,rBuf,rLen);
-			rBuf[0] = (rLen >> 8) & 0xff;
-			rBuf[1] = (rLen     ) & 0xff;
-			rLen += 2;
-			
-			for(i = 0; i < rLen; i++)
-			{
-				temp ^= rBuf[i];
-			}
-			rBuf[rLen] = temp;
-			rLen += 1;
-			
-			I2C_Write(rBuf,rLen);
-		}
-		Delay(500000);
-		{
-			uint8_t temp = 0;
-			uint32_t i = 0;
-			
-			I2C_Read(sBuf,(uint16_t *)sLen);
-			*sLen -= 1;
-			for(i = 0; i < *sLen; i++)
-			{
-				temp ^= sBuf[i];
-			}
-			
-			if(temp != sBuf[*sLen])
-			{
-				sBuf[0] = 0x00;
-				sBuf[1] = 0x00;
-				*sLen = 2;
-				return;
-			}
-			
-			*sLen -= 2;
-			memmove(sBuf,sBuf + 2,*sLen);
-		}
-#endif
-	}break;
-#else
 	case 0x84:
 	{
 		if(!isCase(CASE2,&pAPDU))
@@ -544,17 +489,11 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 			return;
 		}
 
-		#if 1
 		// 1.0 该数据用来调试而已
-		for (i = 0; i < pAPDU.Le; i++)
+		for (int i = 0; i < pAPDU.Le; i++)
 		{
 			sBuf[i] = i;
 		}
-		#else
-		// 1.1 生成随机数
-		TRNG_Init(TRUE_RANDOM_NUMBER);
-		Get_RND_Bytes(sBuf,pAPDU.Le);
-		#endif
 		sBuf[pAPDU.Le] = 0x90;
 		sBuf[pAPDU.Le + 1] = 0x00;
 		*sLen += pAPDU.Le;
@@ -578,7 +517,6 @@ void UserCommond(u8 *rBuf, u32 rLen, u8 *sBuf, u32 *sLen)
 		sBuf[1] = 0x00;
 	}
 	break;
-#endif
 	}
 }
 
@@ -595,11 +533,11 @@ void CCID_Command(void)
 	struct _CCID_Common_Msg *pCCID_Cmd;
 	memset(s_ucCCIDBuffer, 0x00, CCID_BUFF_SIZE);
 
-	UartSendString((uint8_t*)"CCID_Command Start\r\n",0);
+	//UartSendString((uint8_t*)"CCID_Command Start\r\n",0);
 
 	/*
 		将CCID放在的main函数的循环当中，不放在EP1_OUT中断当中，因为每次来了中断，
-	其实仅仅有64字节数据，若数据包长查过64，则后续的数据应该等下次来了中断再进行执行。
+	其实仅仅有64字节数据，若数据包长大于64，则后续的数据应该等下次来了中断再进行执行。
 	而我之前将CCID_Command直接放在了EP1_OUT_Callback函数当中，这样后续的数据肯定没法紧挨着接收且放在
 	合适的缓存位置。现在采用了中断中添加变量标志，然后所有的数据都放在了while(1)循环中判断。
 	这样可以防止数据丢失。当然了，死循环等待法也有弊端，但相对于当前的应用来说，这种方式较为稳定。

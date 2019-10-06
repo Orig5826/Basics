@@ -113,9 +113,10 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	
 
 	/* Class Descriptor */
+#define CCID_TRANS_LEN		(0x640)
 	0x36,					//bLength
 	0x21,					//bDescriptorType	: CCID
-	0x00, 0x01,				//bcdCCID			: v1.1
+	0x01, 0x01,				//bcdCCID			: v1.1
 	0x00,					//bMaxSlotIndex		: [00,...,0F]
 	0x01,					//bVoltageSupport	: 01->5V  02->3V  04->1.8V
 	0x01, 0x00, 0x00, 0x00, //dwProtocols		: 01->T=0    02->T=1    03->T0&T1
@@ -128,8 +129,9 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	0x00, 0x00, 0x00, 0x00, //dwMaxIFSD
 	0x00, 0x00, 0x00, 0x00, //dwSynchProtocols
 	0x00, 0x00, 0x00, 0x00, //dwMechanical
-	0x40, 0x08, 0x02, 0x00, //dwFeatures
-	0x0f, 0x01, 0x00, 0x00, //dwMaxCCIDMessageLength: 271
+	0x40, 0x08, 0x04, 0x00, //dwFeatures
+	// 0x0f, 0x01, 0x00, 0x00, //dwMaxCCIDMessageLength: 271
+	(CCID_TRANS_LEN&0xff),((CCID_TRANS_LEN>>8)&0xff),0x00,0x00,
 	0xff,					//bClassGetResponse
 	0xff,					//bClassEnvelope
 	0x00, 0x00,				//wLcdLayout
@@ -210,8 +212,8 @@ const uint8_t CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
 {
 	CUSTOMHID_SIZ_STRING_PRODUCT,          /* bLength */
 	USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
-	'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, '_', 0, 'S', 0,
-	'N', 0, 'P', 0, '_', 0, 'T', 0, 'o', 0, 'o', 0, 'l', 0,
+	's', 0, 't', 0, 'm', 0, '3', 0, '2', 0, '_', 0, 's', 0,
+	'n', 0, 'p', 0, '_', 0, 't', 0, 'o', 0, 'o', 0, 'l', 0,
 	' ', 0
 };
 uint8_t CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
