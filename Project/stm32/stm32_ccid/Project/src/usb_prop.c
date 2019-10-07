@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V4.1.0
   * @date    26-May-2017
-  * @brief   All processing related to Custom HID Demo
+  * @brief   All processing related to CCID Demo
   ******************************************************************************
   * @attention
   *
@@ -65,81 +65,75 @@ DEVICE Device_Table =
 
 DEVICE_PROP Device_Property =
   {
-    CustomHID_init,
-    CustomHID_Reset,
-    CustomHID_Status_In,
-    CustomHID_Status_Out,
-    CustomHID_Data_Setup,
-    CustomHID_NoData_Setup,
-    CustomHID_Get_Interface_Setting,
-    CustomHID_GetDeviceDescriptor,
-    CustomHID_GetConfigDescriptor,
-    CustomHID_GetStringDescriptor,
+    CCID_init,
+    CCID_Reset,
+    CCID_Status_In,
+    CCID_Status_Out,
+    CCID_Data_Setup,
+    CCID_NoData_Setup,
+    CCID_Get_Interface_Setting,
+    CCID_GetDeviceDescriptor,
+    CCID_GetConfigDescriptor,
+    CCID_GetStringDescriptor,
     0,
     0x40 /*MAX PACKET SIZE*/
   };
 USER_STANDARD_REQUESTS User_Standard_Requests =
   {
-    CustomHID_GetConfiguration,
-    CustomHID_SetConfiguration,
-    CustomHID_GetInterface,
-    CustomHID_SetInterface,
-    CustomHID_GetStatus,
-    CustomHID_ClearFeature,
-    CustomHID_SetEndPointFeature,
-    CustomHID_SetDeviceFeature,
-    CustomHID_SetDeviceAddress
+    CCID_GetConfiguration,
+    CCID_SetConfiguration,
+    CCID_GetInterface,
+    CCID_SetInterface,
+    CCID_GetStatus,
+    CCID_ClearFeature,
+    CCID_SetEndPointFeature,
+    CCID_SetDeviceFeature,
+    CCID_SetDeviceAddress
   };
 
 ONE_DESCRIPTOR Device_Descriptor =
   {
-    (uint8_t*)CustomHID_DeviceDescriptor,
-    CUSTOMHID_SIZ_DEVICE_DESC
+    (uint8_t*)CCID_DeviceDescriptor,
+    CCID_SIZ_DEVICE_DESC
   };
 
 ONE_DESCRIPTOR Config_Descriptor =
   {
-    (uint8_t*)CustomHID_ConfigDescriptor,
-    CUSTOMHID_SIZ_CONFIG_DESC
+    (uint8_t*)CCID_ConfigDescriptor,
+    CCID_SIZ_CONFIG_DESC
   };
 
-ONE_DESCRIPTOR CustomHID_Report_Descriptor =
+ONE_DESCRIPTOR CCID_Class_Descriptor =
   {
-    (uint8_t *)CustomHID_ReportDescriptor,
-    CUSTOMHID_SIZ_REPORT_DESC
-  };
-
-ONE_DESCRIPTOR CustomHID_Hid_Descriptor =
-  {
-    (uint8_t*)CustomHID_ConfigDescriptor + CUSTOMHID_OFF_HID_DESC,
-    CUSTOMHID_SIZ_HID_DESC
+    (uint8_t*)CCID_ConfigDescriptor + CCID_OFF_CLASS_DESC,
+    CCID_SIZ_CCID_DESC
   };
 
 ONE_DESCRIPTOR String_Descriptor[4] =
   {
-    {(uint8_t*)CustomHID_StringLangID, CUSTOMHID_SIZ_STRING_LANGID},
-    {(uint8_t*)CustomHID_StringVendor, CUSTOMHID_SIZ_STRING_VENDOR},
-    {(uint8_t*)CustomHID_StringProduct, CUSTOMHID_SIZ_STRING_PRODUCT},
-    {(uint8_t*)CustomHID_StringSerial, CUSTOMHID_SIZ_STRING_SERIAL}
+    {(uint8_t*)CCID_StringLangID, CCID_SIZ_STRING_LANGID},
+    {(uint8_t*)CCID_StringVendor, CCID_SIZ_STRING_VENDOR},
+    {(uint8_t*)CCID_StringProduct, CCID_SIZ_STRING_PRODUCT},
+    {(uint8_t*)CCID_StringSerial, CCID_SIZ_STRING_SERIAL}
   };
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 
-/*CustomHID_SetReport_Feature function prototypes*/
-uint8_t *CustomHID_SetReport_Feature(uint16_t Length);
+/*CCID_SetReport_Feature function prototypes*/
+uint8_t *CCID_SetReport_Feature(uint16_t Length);
 
 /* Extern function prototypes ------------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : CustomHID_init.
-* Description    : Custom HID init routine.
+* Function Name  : CCID_init.
+* Description    : CCID init routine.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_init(void)
+void CCID_init(void)
 {
   /* Update the serial number string descriptor with the data from the unique 
   ID*/
@@ -156,20 +150,20 @@ void CustomHID_init(void)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_Reset.
-* Description    : Custom HID reset routine.
+* Function Name  : CCID_Reset.
+* Description    : CCID reset routine.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_Reset(void)
+void CCID_Reset(void)
 {
-  /* Set CustomHID_DEVICE as not configured */
+  /* Set CCID_DEVICE as not configured */
   pInformation->Current_Configuration = 0;
   pInformation->Current_Interface = 0;/*the default Interface*/
   
   /* Current Feature initialization */
-  pInformation->Current_Feature = CustomHID_ConfigDescriptor[7];
+  pInformation->Current_Feature = CCID_ConfigDescriptor[7];
  
   SetBTABLE(BTABLE_ADDRESS);
 
@@ -206,14 +200,14 @@ void CustomHID_Reset(void)
   bDeviceState = ATTACHED;
 }
 /*******************************************************************************
-* Function Name  : CustomHID_SetConfiguration.
+* Function Name  : CCID_SetConfiguration.
 * Description    : Update the device state to configured and command the ADC 
 *                  conversion.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_SetConfiguration(void)
+void CCID_SetConfiguration(void)
 {
   if (pInformation->Current_Configuration != 0)
   {
@@ -231,24 +225,24 @@ void CustomHID_SetConfiguration(void)
   }
 }
 /*******************************************************************************
-* Function Name  : CustomHID_SetConfiguration.
+* Function Name  : CCID_SetConfiguration.
 * Description    : Update the device state to addressed.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_SetDeviceAddress (void)
+void CCID_SetDeviceAddress (void)
 {
   bDeviceState = ADDRESSED;
 }
 /*******************************************************************************
-* Function Name  : CustomHID_Status_In.
+* Function Name  : CCID_Status_In.
 * Description    : Joystick status IN routine.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_Status_In(void)
+void CCID_Status_In(void)
 {  
   BitAction Led_State;
   
@@ -315,24 +309,24 @@ void CustomHID_Status_In(void)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_Status_Out
+* Function Name  : CCID_Status_Out
 * Description    : Joystick status OUT routine.
 * Input          : None.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void CustomHID_Status_Out (void)
+void CCID_Status_Out (void)
 {
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_Data_Setup
+* Function Name  : CCID_Data_Setup
 * Description    : Handle the data class specific requests.
 * Input          : Request Nb.
 * Output         : None.
 * Return         : USB_UNSUPPORT or USB_SUCCESS.
 *******************************************************************************/
-RESULT CustomHID_Data_Setup(uint8_t RequestNo)
+RESULT CCID_Data_Setup(uint8_t RequestNo)
 {
   uint8_t *(*CopyRoutine)(uint16_t);
   
@@ -345,14 +339,9 @@ RESULT CustomHID_Data_Setup(uint8_t RequestNo)
       && (Type_Recipient == (STANDARD_REQUEST | INTERFACE_RECIPIENT))
         )
   {
-    
-    if (pInformation->USBwValue1 == REPORT_DESCRIPTOR)
+    if (pInformation->USBwValue1 == CCID_DESCRIPTOR_TYPE)
     {
-      CopyRoutine = CustomHID_GetReportDescriptor;
-    }
-    else if (pInformation->USBwValue1 == HID_DESCRIPTOR_TYPE)
-    {
-      CopyRoutine = CustomHID_GetHIDDescriptor;
+      CopyRoutine = CCID_GetCCIDDescriptor;
     }
     
   } /* End of GET_DESCRIPTOR */
@@ -363,10 +352,10 @@ RESULT CustomHID_Data_Setup(uint8_t RequestNo)
     switch( RequestNo )
     {
     case GET_PROTOCOL:
-      CopyRoutine = CustomHID_GetProtocolValue;
+      CopyRoutine = CCID_GetProtocolValue;
       break;
     case SET_REPORT:
-      CopyRoutine = CustomHID_SetReport_Feature;
+      CopyRoutine = CCID_SetReport_Feature;
       Request = SET_REPORT;
       break;
     default:
@@ -386,13 +375,13 @@ RESULT CustomHID_Data_Setup(uint8_t RequestNo)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_SetReport_Feature
+* Function Name  : CCID_SetReport_Feature
 * Description    : Set Feature request handling
 * Input          : Length.
 * Output         : None.
 * Return         : Buffer
 *******************************************************************************/
-uint8_t *CustomHID_SetReport_Feature(uint16_t Length)
+uint8_t *CCID_SetReport_Feature(uint16_t Length)
 {
   if (Length == 0)
   {
@@ -406,18 +395,18 @@ uint8_t *CustomHID_SetReport_Feature(uint16_t Length)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_NoData_Setup
+* Function Name  : CCID_NoData_Setup
 * Description    : handle the no data class specific requests
 * Input          : Request Nb.
 * Output         : None.
 * Return         : USB_UNSUPPORT or USB_SUCCESS.
 *******************************************************************************/
-RESULT CustomHID_NoData_Setup(uint8_t RequestNo)
+RESULT CCID_NoData_Setup(uint8_t RequestNo)
 {
   if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT))
       && (RequestNo == SET_PROTOCOL))
   {
-    return CustomHID_SetProtocol();
+    return CCID_SetProtocol();
   }
 
   else
@@ -427,37 +416,37 @@ RESULT CustomHID_NoData_Setup(uint8_t RequestNo)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_GetDeviceDescriptor.
+* Function Name  : CCID_GetDeviceDescriptor.
 * Description    : Gets the device descriptor.
 * Input          : Length
 * Output         : None.
 * Return         : The address of the device descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetDeviceDescriptor(uint16_t Length)
+uint8_t *CCID_GetDeviceDescriptor(uint16_t Length)
 {
   return Standard_GetDescriptorData(Length, &Device_Descriptor);
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_GetConfigDescriptor.
+* Function Name  : CCID_GetConfigDescriptor.
 * Description    : Gets the configuration descriptor.
 * Input          : Length
 * Output         : None.
 * Return         : The address of the configuration descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetConfigDescriptor(uint16_t Length)
+uint8_t *CCID_GetConfigDescriptor(uint16_t Length)
 {
   return Standard_GetDescriptorData(Length, &Config_Descriptor);
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_GetStringDescriptor
+* Function Name  : CCID_GetStringDescriptor
 * Description    : Gets the string descriptors according to the needed index
 * Input          : Length
 * Output         : None.
 * Return         : The address of the string descriptors.
 *******************************************************************************/
-uint8_t *CustomHID_GetStringDescriptor(uint16_t Length)
+uint8_t *CCID_GetStringDescriptor(uint16_t Length)
 {
   uint8_t wValue0 = pInformation->USBwValue0;
   if (wValue0 >= 4)
@@ -470,32 +459,21 @@ uint8_t *CustomHID_GetStringDescriptor(uint16_t Length)
   }
 }
 
+
 /*******************************************************************************
-* Function Name  : CustomHID_GetReportDescriptor.
-* Description    : Gets the HID report descriptor.
+* Function Name  : CCID_GetCCIDDescriptor.
+* Description    : Gets the CCID descriptor.
 * Input          : Length
 * Output         : None.
 * Return         : The address of the configuration descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetReportDescriptor(uint16_t Length)
+uint8_t *CCID_GetCCIDDescriptor(uint16_t Length)
 {
-  return Standard_GetDescriptorData(Length, &CustomHID_Report_Descriptor);
+  return Standard_GetDescriptorData(Length, &CCID_Class_Descriptor);
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_GetHIDDescriptor.
-* Description    : Gets the HID descriptor.
-* Input          : Length
-* Output         : None.
-* Return         : The address of the configuration descriptor.
-*******************************************************************************/
-uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length)
-{
-  return Standard_GetDescriptorData(Length, &CustomHID_Hid_Descriptor);
-}
-
-/*******************************************************************************
-* Function Name  : CustomHID_Get_Interface_Setting.
+* Function Name  : CCID_Get_Interface_Setting.
 * Description    : tests the interface and the alternate setting according to the
 *                  supported one.
 * Input          : - Interface : interface number.
@@ -503,7 +481,7 @@ uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : USB_SUCCESS or USB_UNSUPPORT.
 *******************************************************************************/
-RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
+RESULT CCID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
 {
   if (AlternateSetting > 0)
   {
@@ -517,13 +495,13 @@ RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetti
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_SetProtocol
+* Function Name  : CCID_SetProtocol
 * Description    : Joystick Set Protocol request routine.
 * Input          : None.
 * Output         : None.
 * Return         : USB SUCCESS.
 *******************************************************************************/
-RESULT CustomHID_SetProtocol(void)
+RESULT CCID_SetProtocol(void)
 {
   uint8_t wValue0 = pInformation->USBwValue0;
   ProtocolValue = wValue0;
@@ -531,13 +509,13 @@ RESULT CustomHID_SetProtocol(void)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_GetProtocolValue
+* Function Name  : CCID_GetProtocolValue
 * Description    : get the protocol value
 * Input          : Length.
 * Output         : None.
 * Return         : address of the protocol value.
 *******************************************************************************/
-uint8_t *CustomHID_GetProtocolValue(uint16_t Length)
+uint8_t *CCID_GetProtocolValue(uint16_t Length)
 {
   if (Length == 0)
   {

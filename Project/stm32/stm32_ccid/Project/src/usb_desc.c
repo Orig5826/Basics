@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V4.1.0
   * @date    26-May-2017
-  * @brief   Descriptors for Custom HID Demo
+  * @brief   Descriptors for CCID Demo
   ******************************************************************************
   * @attention
   *
@@ -49,7 +49,7 @@
 /* Private functions ---------------------------------------------------------*/
 
 /* USB Standard Device Descriptor */
-const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
+const uint8_t CCID_DeviceDescriptor[CCID_SIZ_DEVICE_DESC] =
 {
 	0x12,                       /*bLength */
 	USB_DEVICE_DESCRIPTOR_TYPE, /*bDescriptorType*/
@@ -75,20 +75,20 @@ const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
                                              device serial number */
 	0x01                        /*bNumConfigurations*/
 }
-; /* CustomHID_DeviceDescriptor */
+; /* CCID_DeviceDescriptor */
 
 
 /* USB Configuration Descriptor */
 /*   All Descriptors (Configuration, Interface, Endpoint, Class, Vendor */
-const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
+const uint8_t CCID_ConfigDescriptor[CCID_SIZ_CONFIG_DESC] =
 {
 	0x09, /* bLength: Configuration Descriptor size */
 	USB_CONFIGURATION_DESCRIPTOR_TYPE, /* bDescriptorType: Configuration */
 	/* wTotalLength: Bytes returned */
-	// CUSTOMHID_SIZ_CONFIG_DESC,
+	// CCID_SIZ_CONFIG_DESC,
 	// 0x00,
-	sizeof(CustomHID_ConfigDescriptor) & 0xFF,
-	(sizeof(CustomHID_ConfigDescriptor) >> 8) & 0xFF,
+	sizeof(CCID_ConfigDescriptor) & 0xFF,
+	(sizeof(CCID_ConfigDescriptor) >> 8) & 0xFF,
 	0x01,         /* bNumInterfaces: 1 interface */
 	0x01,         /* bConfigurationValue: Configuration value */
 	0x00,         /* iConfiguration: Index of string descriptor describing
@@ -97,8 +97,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	0x32,         /* MaxPower 100 mA: this current is used for detecting Vbus */
 
 
-	// CCID接口描述符 ？
-	/************** Descriptor of Custom HID interface ****************/
+	/************** Descriptor of CCID interface ****************/
 	/* 09 */
 	0x09,         /* bLength: Interface Descriptor size */
 	USB_INTERFACE_DESCRIPTOR_TYPE,/* bDescriptorType: Interface descriptor type */
@@ -138,7 +137,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	0x00,					//bPINSupport
 	0x01,					//bMaxCCIDBusySlots
 
-	/******************** Descriptor of Custom HID endpoints ******************/
+	/******************** Descriptor of CCID endpoints ******************/
 	/* 27 */
 	0x07,          /* bLength: Endpoint Descriptor size */
 	USB_ENDPOINT_DESCRIPTOR_TYPE, /* bDescriptorType: */
@@ -168,57 +167,38 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 	/* 41 */
 	0x00,
 }
-; /* CustomHID_ConfigDescriptor */
-
-
-const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
-{
-	0x06, 0x00, 0xFF, //Usage Page:
-	0x09, 0x01,		//Usage: Undefined
-	0xa1, 0x01,		//Collection
-	0x15, 0x00,		//Logical Minimum
-	0x25, 0xFF,		//Logical Maximum
-	0x19, 0x01,		//Usage Minimum
-	0x29, 0x08,		//Usage Maximum
-	0x95, 0x40,		//Report Count
-	0x75, 0x08,		//Report Size
-	0x81, 0x02,		//Input (Data, Variable, Absolute,Buffered Bytes)
-	0x19, 0x01,		//Usage Minimum
-	0x29, 0x08,		//Usage Maximum
-	0x91, 0x02,		//Feature (Data, Variable, Absolute,Buffered Bytes)
-	0xc0				//End Collection
-};
+; /* CCID_ConfigDescriptor */
 
 /* USB String Descriptors (optional) */
-const uint8_t CustomHID_StringLangID[CUSTOMHID_SIZ_STRING_LANGID] =
+const uint8_t CCID_StringLangID[CCID_SIZ_STRING_LANGID] =
 {
-	CUSTOMHID_SIZ_STRING_LANGID,
+	CCID_SIZ_STRING_LANGID,
 	USB_STRING_DESCRIPTOR_TYPE,
 	0x09,
 	0x04
 }
 ; /* LangID = 0x0409: U.S. English */
 
-const uint8_t CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
+const uint8_t CCID_StringVendor[CCID_SIZ_STRING_VENDOR] =
 {
-	CUSTOMHID_SIZ_STRING_VENDOR, /* Size of Vendor string */
+	CCID_SIZ_STRING_VENDOR, /* Size of Vendor string */
 	USB_STRING_DESCRIPTOR_TYPE,  /* bDescriptorType*/
 	/* Manufacturer: "STMicroelectronics" */
 	'H', 0, 'o', 0, 'n', 0, 'g', 0, 's', 0, 'i', 0,
 	'-', 0, 'I', 0, 'C', 0
 };
 
-const uint8_t CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
+const uint8_t CCID_StringProduct[CCID_SIZ_STRING_PRODUCT] =
 {
-	CUSTOMHID_SIZ_STRING_PRODUCT,          /* bLength */
+	CCID_SIZ_STRING_PRODUCT,          /* bLength */
 	USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
 	's', 0, 't', 0, 'm', 0, '3', 0, '2', 0, '_', 0, 's', 0,
 	'n', 0, 'p', 0, '_', 0, 't', 0, 'o', 0, 'o', 0, 'l', 0,
 	' ', 0
 };
-uint8_t CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
+uint8_t CCID_StringSerial[CCID_SIZ_STRING_SERIAL] =
 {
-	CUSTOMHID_SIZ_STRING_SERIAL,           /* bLength */
+	CCID_SIZ_STRING_SERIAL,           /* bLength */
 	USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
 	'1', 0, '.', 0, '0', 0, '0', 0,
 };

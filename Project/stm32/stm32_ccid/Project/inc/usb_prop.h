@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V4.1.0
   * @date    26-May-2017
-  * @brief   All processing related to Custom HID demo
+  * @brief   All processing related to CCID demo
   ******************************************************************************
   * @attention
   *
@@ -42,7 +42,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-typedef enum _HID_REQUESTS
+typedef enum _CCID_REQUESTS
 {
   GET_REPORT = 1,
   GET_IDLE,
@@ -51,40 +51,39 @@ typedef enum _HID_REQUESTS
   SET_REPORT = 9,
   SET_IDLE,
   SET_PROTOCOL
-} HID_REQUESTS;
+} CCID_REQUESTS;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void CustomHID_init(void);
-void CustomHID_Reset(void);
-void CustomHID_SetConfiguration(void);
-void CustomHID_SetDeviceAddress (void);
-void CustomHID_Status_In (void);
-void CustomHID_Status_Out (void);
-RESULT CustomHID_Data_Setup(uint8_t);
-RESULT CustomHID_NoData_Setup(uint8_t);
-RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting);
-uint8_t *CustomHID_GetDeviceDescriptor(uint16_t );
-uint8_t *CustomHID_GetConfigDescriptor(uint16_t);
-uint8_t *CustomHID_GetStringDescriptor(uint16_t);
-RESULT CustomHID_SetProtocol(void);
-uint8_t *CustomHID_GetProtocolValue(uint16_t Length);
-RESULT CustomHID_SetProtocol(void);
-uint8_t *CustomHID_GetReportDescriptor(uint16_t Length);
-uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length);
+void CCID_init(void);
+void CCID_Reset(void);
+void CCID_SetConfiguration(void);
+void CCID_SetDeviceAddress (void);
+void CCID_Status_In (void);
+void CCID_Status_Out (void);
+RESULT CCID_Data_Setup(uint8_t);
+RESULT CCID_NoData_Setup(uint8_t);
+RESULT CCID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting);
+uint8_t *CCID_GetDeviceDescriptor(uint16_t );
+uint8_t *CCID_GetConfigDescriptor(uint16_t);
+uint8_t *CCID_GetStringDescriptor(uint16_t);
+RESULT CCID_SetProtocol(void);
+uint8_t *CCID_GetProtocolValue(uint16_t Length);
+RESULT CCID_SetProtocol(void);
+uint8_t *CCID_GetCCIDDescriptor(uint16_t Length);
 
 
 /* Exported define -----------------------------------------------------------*/
-#define CustomHID_GetConfiguration          NOP_Process
-//#define CustomHID_SetConfiguration          NOP_Process
-#define CustomHID_GetInterface              NOP_Process
-#define CustomHID_SetInterface              NOP_Process
-#define CustomHID_GetStatus                 NOP_Process
-#define CustomHID_ClearFeature              NOP_Process
-#define CustomHID_SetEndPointFeature        NOP_Process
-#define CustomHID_SetDeviceFeature          NOP_Process
-//#define CustomHID_SetDeviceAddress          NOP_Process
+#define CCID_GetConfiguration          NOP_Process
+//#define CCID_SetConfiguration          NOP_Process
+#define CCID_GetInterface              NOP_Process
+#define CCID_SetInterface              NOP_Process
+#define CCID_GetStatus                 NOP_Process
+#define CCID_ClearFeature              NOP_Process
+#define CCID_SetEndPointFeature        NOP_Process
+#define CCID_SetDeviceFeature          NOP_Process
+//#define CCID_SetDeviceAddress          NOP_Process
 
 #define REPORT_DESCRIPTOR                  0x22
 

@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V4.1.0
   * @date    26-May-2017
-  * @brief   Custom HID demo configuration file
+  * @brief   CCID demo configuration file
   ******************************************************************************
   * @attention
   *

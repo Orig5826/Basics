@@ -538,8 +538,8 @@ void Get_SerialNum(void)
   
   if (Device_Serial0 != 0)
   {
-    IntToUnicode (Device_Serial0, &CustomHID_StringSerial[2] , 8);
-    IntToUnicode (Device_Serial1, &CustomHID_StringSerial[18], 4);
+    IntToUnicode (Device_Serial0, &CCID_StringSerial[2] , 8);
+    IntToUnicode (Device_Serial1, &CCID_StringSerial[18], 4);
   }
 }
 
