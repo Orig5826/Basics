@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	Timer_Example();
+	SPI_Example();
 	
 	return 0;
 }

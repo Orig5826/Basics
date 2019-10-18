@@ -21,6 +21,10 @@
 #define I2C_WRITE_ADDR				(SLAVE_ADDR << 1)
 #define I2C_READ_ADDR				(SLAVE_ADDR << 1 | 0x01)
 
+/**
+ * @brief I2C初始化配置
+ * 
+ */
 void I2C_Init_Config(void)
 {
 	I2C_InitTypeDef  i2c_config;
@@ -54,9 +58,12 @@ void I2C_Init_Config(void)
 	I2C_AcknowledgeConfig(I2Cx, ENABLE);
 }
 
-//--------------------------------------------------
-//	I2C 数据写入
-//--------------------------------------------------
+/**
+ * @brief I2C 数据写入
+ * 
+ * @param sBuf 待发送的数据
+ * @param sLen 待发送的数据长度
+ */
 void I2C_Write(u8* sBuf,u16 sLen)
 {
 	if((0x00 == sLen) || (NULL == sBuf))
@@ -91,10 +98,12 @@ void I2C_Write(u8* sBuf,u16 sLen)
 	I2C_GenerateSTOP(I2Cx, ENABLE);
 }
 
-
-//--------------------------------------------------
-//	I2C 数据读取
-//--------------------------------------------------
+/**
+ * @brief I2C 数据读取
+ * 
+ * @param rBuf 数据缓存
+ * @param rLen 接收到的数据长度
+ */
 void I2C_Read(u8* rBuf , u16 *rLen)
 {
 	u16 rev_len=0;
@@ -176,6 +185,10 @@ void I2C_Read(u8* rBuf , u16 *rLen)
 	I2C_AcknowledgeConfig(I2Cx, ENABLE);
 }
 
+/**
+ * @brief 简单延时函数
+ * 
+ */
 static void Delay(void)
 {
 	volatile uint32_t n = 0x00080000;
@@ -186,6 +199,10 @@ static void Delay(void)
 	}
 }
 
+/**
+ * @brief I2C 通讯示例
+ * 
+ */
 void I2C_Hard_Example(void)
 {
 	uint8_t apdu[] = {0x00,0x05,0x00,0x84,0x00,0x00,0x08,0x8C};

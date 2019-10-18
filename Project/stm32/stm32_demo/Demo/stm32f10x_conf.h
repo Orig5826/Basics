@@ -43,7 +43,7 @@
 #include "stm32f10x_rcc.h"
 //#include "stm32f10x_rtc.h"
 //#include "stm32f10x_sdio.h"
-//#include "stm32f10x_spi.h"
+#include "stm32f10x_spi.h"
 #include "stm32f10x_tim.h"
 #include "stm32f10x_usart.h"
 //#include "stm32f10x_wwdg.h"
@@ -62,7 +62,9 @@
 #include "led.h"
 #include "timer.h"
 #include "uart.h"
-
+#include "i2c.h"
+#include "i2c_hard.h"
+#include "spi.h"
 
 void Timer_Example(void);
 
