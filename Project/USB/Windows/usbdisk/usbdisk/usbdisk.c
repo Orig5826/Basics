@@ -45,6 +45,8 @@ GUID GUID_GLOBAL = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 
 #define SPTWB_DATA_LENGTH 4096		//!< 数据发送接收缓存大小
 
 
+// usbdisk版本号
+#define USBDISK_VERSION		"usbdisk_v1.1"
 
 
 /*
@@ -423,56 +425,24 @@ DLL_API void CALL usb_set_debug_level(uint8_t debug_level)
 	usbdisk_debug_level = debug_level;
 }
 
-DLL_API bool CALL usb_write(uint8_t * sBuf, uint32_t sLen)
+DLL_API bool CALL usb_write(uint8_t * cmd, uint8_t cmd_len, uint8_t * sBuf, uint32_t sLen)
 {
-	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
-	UCHAR CB[31] = {0xff};
-	if (TRUE != usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, 1, NULL, &rLen))
+	DWORD rLen = 0;			//此处无用，仅仅是为了函数参数的调用
+	UCHAR CB[31] = {0xff};	//默认第一个字节为0xFF，但是现在可以在外部修改了
+	if (cmd_len > 16)
 	{
 		return FALSE;
 	}
-	if (usbdisk_debug_level >= 1 && sLen != 0)
-	{
-		DBG_LOG("[Write]:\n");
-		usb_display(sBuf, sLen);
-	}
-	return TRUE;
-}
-DLL_API bool CALL usb_read(uint8_t * rBuf, uint32_t * rLen)
-{
-	BOOL ret = FALSE;
-	UCHAR CB[31] = { 0xff };
+	memcpy(CB, cmd, cmd_len);
 
-	ret = usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_IN, NULL, *rLen, CB, 1, rBuf, (PDWORD)rLen);
-	if (ret != FALSE)
-	{
-		if (usbdisk_debug_level >= 1)
-		{
-			DBG_LOG("[Read]:\n");
-			usb_display(rBuf,*rLen);
-		}
-	}
-	return ret;
-}
-
-DLL_API bool CALL usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen)
-{
-	DWORD rLen = 0;		//此处无用，仅仅是为了函数参数的调用
-	UCHAR CB[31] = { 0xfd };
-	if (apdu_len > 15)
-	{
-		return FALSE;
-	}
-	memcpy(CB + 1, apdu, apdu_len);
-
-	if (TRUE != usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, apdu_len + 1, NULL, &rLen))
+	if (TRUE != usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_OUT, sBuf, sLen, CB, cmd_len, NULL, &rLen))
 	{
 		return FALSE;
 	}
 
 	if (usbdisk_debug_level >= 3)
 	{
-		usb_display(CB, apdu_len + 1);
+		usb_display(CB, cmd_len);
 	}
 
 	if (usbdisk_debug_level >=1 && sLen != 0)
@@ -483,22 +453,23 @@ DLL_API bool CALL usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf,
 
 	return TRUE;
 }
-DLL_API bool CALL usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen)
+
+DLL_API bool CALL usb_read(uint8_t * cmd, uint8_t cmd_len, uint8_t * rBuf, uint32_t * rLen)
 {
 	BOOL ret = FALSE;
 	UCHAR CB[31] = { 0xfe };
-	if (apdu_len > 15)
+	if (cmd_len > 16)
 	{
 		return FALSE;
 	}
-	memcpy(CB + 1, apdu, apdu_len);
+	memcpy(CB, cmd, cmd_len);
 
-	ret = usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_IN, NULL, *rLen, CB, apdu_len + 1, rBuf, (PDWORD)rLen);
+	ret = usb_scsi_cmd(s_Handle, SCSI_IOCTL_DATA_IN, NULL, *rLen, CB, cmd_len, rBuf, (PDWORD)rLen);
 	if (ret != FALSE)
 	{
 		if (usbdisk_debug_level >= 3)
 		{
-			usb_display(CB, apdu_len + 1);
+			usb_display(CB, cmd_len);
 		}
 
 		if (usbdisk_debug_level >= 1)
@@ -508,6 +479,11 @@ DLL_API bool CALL usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, 
 		}
 	}
 	return ret;
+}
+
+DLL_API char*  CALL get_version(void)
+{
+	return USBDISK_VERSION;
 }
 
 #if 0
