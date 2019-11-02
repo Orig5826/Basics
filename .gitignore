@@ -23,7 +23,7 @@ ARM/
 DebugConfig/
 Listings/
 Objects/
-*.uvoptx
+# *.uvoptx
 *.uvguix.*
 *.scvd
 JLinkLog.txt

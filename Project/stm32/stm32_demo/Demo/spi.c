@@ -9,6 +9,7 @@
  * 
  */
 #include "spi.h"
+#include <string.h>
 
 /**
  * @brief SPI初始化配置
@@ -47,7 +48,7 @@ void SPI_Init_Config(void)
 	spi_config.SPI_Direction = SPI_Direction_2Lines_FullDuplex;		//设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
 	spi_config.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
 	spi_config.SPI_DataSize = SPI_DataSize_8b;	//设置SPI的数据大小:SPI发送接收8位帧结构
-	spi_config.SPI_CPOL = SPI_CPOL_Low;			//串行同步时钟的空闲状态为低电平
+	spi_config.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为低电平
 	spi_config.SPI_CPHA = SPI_CPHA_2Edge;		//串行同步时钟的第2个跳变沿（上升或下降）数据被采样
 	spi_config.SPI_NSS = SPI_NSS_Soft;			//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
 	spi_config.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;	//定义波特率预分频的值:波特率预分频值为64
@@ -71,7 +72,7 @@ void SPI_Init_Config(void)
 u8 SPI1_Send(u8 * sbuf, u32 slen)
 {
 	u32 i = 0;
-	u8 retry = 0;
+	u32 retry = 0;
 
 	SPI_CS_DN();
 	for(i = 0; i < slen; i++)
@@ -80,7 +81,7 @@ u8 SPI1_Send(u8 * sbuf, u32 slen)
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET) //0：发送缓冲非空,等待发送缓冲器变空
 		{
 			retry++;
-			if(retry > 200)
+			if(retry > 500)
 			{
 				return 0;
 			}
@@ -105,7 +106,7 @@ u8 SPI1_Send(u8 * sbuf, u32 slen)
 u8 SPI1_Recv(u8 * rbuf, u32 rlen)
 {
 	u32 i = 0;
-	u8 retry = 0;
+	u32 retry = 0;
 
 	// ------------------------------------------
 	// 将数据接收前的第一个字节舍弃，因为是
@@ -120,24 +121,24 @@ u8 SPI1_Recv(u8 * rbuf, u32 rlen)
 
 
 	SPI_CS_DN();
-	for(i = 0; i < 16; i++)
+	for(i = 0; i < rlen; i++)
 	{
 		retry = 0;
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET) //0：发送缓冲非空,等待发送缓冲器变空
 		{
 			retry++;
-			if(retry > 200)
+			if(retry > 500)
 			{
 				return 0;
 			}
 		}
-		SPI_I2S_SendData(SPI1, 0xFF);
+		SPI_I2S_SendData(SPI1, 0x00);
 		
 		retry = 0;
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET)//等待接收数据完成
 		{
 			retry++;
-			if(retry>200)
+			if(retry > 500)
 			{
 				return 0;
 			}
@@ -168,29 +169,72 @@ static void Delay(u32 n)
 	}
 }
 
+
+#define BUFFER_SIZE		1024
+static uint8_t sbuf[BUFFER_SIZE];
+static uint8_t rbuf[BUFFER_SIZE];
+
 /**
  * @brief SPI通讯示例
  * 
  */
 void SPI_Example(void)
 {
-	u8 data[16] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
-	u8 res[16] = {0};
+	uint32_t i = 0;
+	uint8_t blink = 0;
+	LED_Init();
 	SPI_Init_Config();
 	
-	Delay(50);
-	SPI1_Send(data,16);
-	Delay(1);
-	SPI1_Recv(res,16);
-	
-	Delay(50);
-	SPI1_Send(data,16);
-	Delay(1);
-	SPI1_Recv(res,16);
+	LED_ON;
+	Delay(3000);
+	for(i = 0; i < BUFFER_SIZE; i++)
+	{
+		sbuf[i] = i & 0xff;
+	}
+	memset(rbuf,0x00,BUFFER_SIZE);
+	LED_OFF;
+	Delay(1000);
 	
 	while(1)
 	{
-		;
+		SPI1_Send(sbuf,BUFFER_SIZE);
+		Delay(10);
+		SPI1_Recv(rbuf,BUFFER_SIZE);
+		
+		for(i = 0; i < BUFFER_SIZE; i++)
+		{
+			if(sbuf[i] != rbuf[i])
+			{
+				// 出错 -> 快闪烁
+				while(1)
+				{
+					// 正确 -> 慢闪烁
+					if(blink == 0)
+					{
+						blink = 1;
+						LED_ON;
+					}
+					else
+					{
+						blink = 0;
+						LED_OFF;
+					}
+					Delay(100);
+				}
+			}
+		}
+		
+		// 正确 -> 慢闪烁
+		if(blink == 0)
+		{
+			blink = 1;
+			LED_ON;
+		}
+		else
+		{
+			blink = 0;
+			LED_OFF;
+		}
+		Delay(1000);
 	}
 }
-
