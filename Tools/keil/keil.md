@@ -13,6 +13,6 @@
 
   > 输出相应的bin文件
 
-- fromelf -c -o "$L@L.txt" "#L"
+- fromelf -c -o "$L@L".dis "#L"
 
   > 将编译后的汇编代码输出到指定文件

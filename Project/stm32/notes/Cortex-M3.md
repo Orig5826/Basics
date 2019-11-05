@@ -11,31 +11,55 @@
 
 
 
-## 状态寄存器
+## 程序状态寄存器 xPSR
 
 - **APSR** 应用程序状态寄存器 （CPSR当前程序状态寄存器）
+  
+  > 这里面比较复杂的主要是C，仔细阅读CM3指令集手册。应该就能理解了
+  
   - N 负数标志 Negative
+  
+    - 针对有符号数，看最高bit即可
   
   - Z 零结果标志 Zero
   
+    - 看是否为0即可
+  
   - C 进位/借位标志 Carry
+  
+    - 从解释的2^32看，表明该标志对做加法时，是针对无符号数的
+  
+    > A carry occurs: 
+    >
+    > • if the result of an addition is greater than or equal to 2^32 
+    >
+    > • if the result of a subtraction is positive or zero 
+    >
+    > • as the result of an inline barrel shifter operation in a move or logical instruction. 
   
   - V 溢出标志 oVerflow
   
-  - S 饱和标志 Saturation 【它不作为条件转移的依据】
+    - 看到该标志提到了bit[31]，我的理解是它用于判断有符号数，对吧？
+  
+    > Overflow occurs when the sign of the result, in bit[31], does not match the sign of the result had the operation been performed at infinite precision, for example:
+    > • if adding two negative values results in a positive value
+    > • if adding two positive values results in a negative value
+    > • if subtracting a positive value from a negative value generates a positive value
+    > • if subtracting a negative value from a positive value generates a negative value
+  
+  - Q 饱和标志 Saturation 【它不作为条件转移的依据】
   
     > 该标志的作用是啥？我没有太理解
+    >
+    > ——【网络资料】某变量达到上限or下限时被置为1
   
-- CPSR
+- **EPSR**
 
   - T
     - 0 表示执行ARM指令
     - 1 表示执行Thumb指令
-  - 
-
-- **后缀**
-  - S 要求更新APSR中的S标志，比如MOVS
-  - EQ,NE,LT,GT等，有条件的执行命令
+  
+- **IPSR**
 
 ### 寄存器使用说明
 
@@ -67,29 +91,41 @@
 
 > 资料源自Keil
 
-| {cond} |Suffix                     |Tested Status Flags Description |
-| :----: | :----:                    | :----:                         |
-|EQ      |Z set                      |equal                           |
-|NE      |Z clear                    |not equal                       |
-|CS/HS   |C set                      |unsigned higher or same         |
-|CC/LO   |C clear                    |unsigned lower                  |
-|MI      |N set                      |negative                        |
-|PL      |N clear                    |positive or zero                |
-|VS      |V set                      |overflow                        |
-|VC      |V clear                    |no overflow                     |
-|HI      |C set and Z clear          |unsigned higher                 |
-|LS      |C clear or Z set           |unsigned lower or same          |
-|GE      |N equals V                 |signed greater or equal         |
-|LT      |N not equal to V           |signed less than                |
-|GT      |Z clear AND (N equals V)   |signed greater than             |
-|LE      |Z set OR (N not equal to V)|signed less than or equal       |
-|AL      |(ignored)                  |always (usually omitted)        |
+| {cond} |           Suffix            | Tested Status Flags Description |
+| :----: | :-------------------------: | :-----------------------------: |
+|   EQ   |            Z set            |              equal              |
+|   NE   |           Z clear           |            not equal            |
+| CS/HS  |            C set            |     unsigned higher or same     |
+| CC/LO  |           C clear           |         unsigned lower          |
+|   MI   |            N set            |            negative             |
+|   PL   |           N clear           |        positive or zero         |
+|   VS   |            V set            |            overflow             |
+|   VC   |           V clear           |           no overflow           |
+|   HI   |      C set and Z clear      |         unsigned higher         |
+|   LS   |      C clear or Z set       |     unsigned lower or same      |
+|   GE   |         N equals V          |     signed greater or equal     |
+|   LT   |      N not equal to V       |        signed less than         |
+|   GT   |  Z clear AND (N equals V)   |       signed greater than       |
+|   LE   | Z set OR (N not equal to V) |    signed less than or equal    |
+|   AL   |          (ignored)          |    always (usually omitted)     |
 
 
 
 ## 1. 伪指令
 
 - **EQU** 类似于宏定义
+
+- DCB
+
+  > 用于分配一片连续的字节存储单元并用指定的数据初始化
+
+- DCW
+
+  > 用于分配一片连续的半字(16bit)存储单元并用指定的数据初始化
+
+- DCD
+
+  > 用于分配一片连续的字(32bit)存储单元并用指定的数据初始化
 
 ## 2. 常用指令
 
@@ -127,14 +163,30 @@
   STR	R1, [R0]	;执行完毕该指令后,IRQ#0被使能
   ```
 
+  - STRB(Byte=8bit)和STRH(Harf-Word=16bit)理解就行，不再重复解释
+  
 - **B** 
 
   - B Lable
 
   ```assembly
-  ;keil: c -> switch
+  ; example1
+  ; keil: c -> switch
   CMP	r0,#0x02
   BEQ 0x000019C
+  
+  ;example2
+  CMP r4,r0
+  BCC 0x00000AC6		; [r4] < [r0]时进行跳转
+  					; 常见于for循环中
+  ;2019.11.04
+  ; 但是逻辑不对呀，若r4<r0，也即[r4]-[r0]<0,因此是需要借位的，此时C应该为1呀，那么BCC条件就不成立了。那么怎么会跳到0x00000AC6呢？
+  ;2019.11.05 终于理解了
+  ;查看了CM3手册之后吗，发现C标志置位的方式有点非人类呀，居然是当[r4]>=[r0]时，C才置位。（当时为什么要这样设计？我不太理解，可能还需要从数电的角度理解下吧。以后有机会理解了之后，要在这里继续做个备注哦^_^）
+  ;这样上述代码终于解释通了,CMP指令对比的方式，本质是做减法。只不过结果不保存。
+  ;其中上述[r4]<[r0]的时候，N=1，C=0，Z=0 （实测）
+  ;当[r4]=[r0]时，N=0,C=1,Z=1 （实测）
+  ;当[r4]>[r0]时，N=0,C=1,Z=0 （我的预期）
   ```
 
 - **BL** （跳转前会在R14中保存PC当前值，因此可以通过将R14内容重新加载到PC中，用于返回跳转前的指令处执行。因此该指令是实现子程序调用的一个基本常用手段） ——R14也叫链接寄存器(Lr)
@@ -188,14 +240,4 @@
   ```
 
   
-
-  
-
-## 3. 其他
-
-**DCB** 
-
-DCH
-
-DCW
 
