@@ -1,7 +1,7 @@
 import numpy as np
 
 '''
-	py卷积计算
+	py鍗风Н璁＄畻
 '''
 a = np.array([1,2])
 b = np.array([3,4])
@@ -11,7 +11,7 @@ ret = np.convolve(a,b)
 print(ret)
 
 '''
-	系数向量内积
+	绯绘暟鍚戦噺鍐呯Н
 '''
 c = np.array([[2,1,0,],[0,2,1],[0,0,2]])
 d = np.array([0,3,4])
@@ -29,7 +29,7 @@ def lsl(lst,k,cnt):
 
 def conv(a,b):
 	'''
-		将卷积转换为矩阵运算
+		灏嗗嵎绉浆鎹负鐭╅樀杩愮畻
 	'''
 	l_a = len(a)
 	l_b = len(b)
