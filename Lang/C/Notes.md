@@ -27,8 +27,10 @@ typedef long (WINAPI * pCloseDevice)(long hDev);
 		现在你理解了吗？
 	
 	- 特殊(感觉很少用) #define  _B(x)  #@x
+		
 		- 例如：调用_B(1) 表示  '1'
 	- 经典用法，举例说明
+		
 		> 可以直接将宏定义中的数字转化为字符串
 ```c
 #define VER_NAME				"MJA"
@@ -43,6 +45,7 @@ typedef long (WINAPI * pCloseDevice)(long hDev);
 
 - 符号：##
 	> 这个符号主要用于链接，使其成为一个整体
+	
 	- 在某种程度上，可以减少代码量
 ```c
 #define GETDATA(TYPE,...)\
@@ -101,3 +104,91 @@ Data data[2] = {
 	}
 };
 ```
+
+## 内存泄漏话题
+
+- 指针相关概念
+
+  - 空指针
+
+  - 野指针
+
+    > 未被初始化的指针
+
+  - 悬空指针
+
+    > 原指向的对象已经被释放了的指针。（也通常有人把悬空指针归为野指针，区分开叫我更加习惯，感觉好理解）
+
+- 避免出现此类问题的好习惯
+
+  1. 指针在创建之时，要么被初始化，要么被设置为NULL。（避免野指针）
+
+  2. 通过malloc等分配空间之后，要使用if语句判断空间是否分配成功。
+
+  3. 指针被释放之后，一定要把该指针置为NULL。（避免悬空指针）
+
+- 指针使用相关注意点
+
+  1. 注意指针指向对象的作用域
+
+     ```c
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     #include <stdint.h>
+     #include <string.h>
+     
+     char * p = NULL;
+     
+     void print_set()
+     {
+         int i = 0;
+         char ch[11];
+     
+         for(i = 0; i < 10; i++)
+         {
+             ch[i] = '0' + i;
+         }
+         ch[i] = '\0';
+         p = &ch[0];
+     }
+     
+     void print_str()
+     {
+         printf("%s",p);
+     }
+     
+     void alloc_stack_again()
+     {
+         int i = 0;
+         char ch[8];
+     
+         for(i = 0; i < 7; i++)
+         {
+             ch[i] = 'A' + i;
+         }
+         ch[i] = '\0';
+     }
+     
+     void main()
+     {
+         print_set();
+         alloc_stack_again();
+         print_str();
+     }
+     
+     // 使用codeblocks测试结果为
+     // 
+     // 012ABCDEFG
+     ```
+
+     
+
+  2. 注意已经通过malloc分配空间的指针被再复制（或者++等副作用操作）
+
+     > 一开始想：该问题是否可以通过将需要用到malloc的变量，初始化为指针常量。
+     >
+     > 后来一想，不对。若不在初始化的时候malloc呢？就不行了
+
+  3. 注意多个指针指向同一块堆空间的情况，若通过其中一个指针释放，则其他指针怎么办？
+
