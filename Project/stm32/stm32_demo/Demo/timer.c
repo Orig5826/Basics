@@ -44,7 +44,7 @@ uint8_t sendflag = 0;
 void Timer_Example(void)
 {
 	LED_Init();
-	LED_OFF; 
+	LED_OFF(); 
 
 	UartInit();
 	UartSendString("uart ok!\r\n",10);

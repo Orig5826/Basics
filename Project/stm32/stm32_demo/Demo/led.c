@@ -9,7 +9,7 @@ void LED_Init(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
 	//GPIO_StructInit(&gpio);
-	gpio.GPIO_Pin = GPIO_Pin_8;
+	gpio.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
 	gpio.GPIO_Mode = GPIO_Mode_Out_PP;
 	gpio.GPIO_Speed = GPIO_Speed_10MHz;
 	

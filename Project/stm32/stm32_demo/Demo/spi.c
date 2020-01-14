@@ -185,14 +185,14 @@ void SPI_Example(void)
 	LED_Init();
 	SPI_Init_Config();
 	
-	LED_ON;
+	LED_ON();
 	Delay(3000);
 	for(i = 0; i < BUFFER_SIZE; i++)
 	{
 		sbuf[i] = i & 0xff;
 	}
 	memset(rbuf,0x00,BUFFER_SIZE);
-	LED_OFF;
+	LED_OFF();
 	Delay(1000);
 	
 	while(1)
@@ -212,12 +212,12 @@ void SPI_Example(void)
 					if(blink == 0)
 					{
 						blink = 1;
-						LED_ON;
+						LED_ON();
 					}
 					else
 					{
 						blink = 0;
-						LED_OFF;
+						LED_OFF();
 					}
 					Delay(100);
 				}
@@ -228,12 +228,12 @@ void SPI_Example(void)
 		if(blink == 0)
 		{
 			blink = 1;
-			LED_ON;
+			LED_ON();
 		}
 		else
 		{
 			blink = 0;
-			LED_OFF;
+			LED_OFF();
 		}
 		Delay(1000);
 	}
