@@ -35,6 +35,8 @@
         通过点击，控制亮灭状态
     </p>
 
+    <input id='number' type='text'>
+    <button type='button' onclick="num_check()">验证</button>
 </body>
 
 <script>
@@ -47,17 +49,36 @@
 
 <script>
     function changestatus() {
-        element = document.getElementById("light")
-        console.log(element)
-        if (element.src.match('off'))
+        var light = document.getElementById("light")
+
+        // 代码1
+        // console.log(light)
+        // if (light.src.match('off'))
+        // {
+        //     console.log("亮")
+        //     light.src='images/light_on.gif'
+        // }
+        // else
+        // {
+        //     console.log("灭")
+        //     light.src='images/light_off.gif'
+        // }
+
+        // 代码2
+        light.src = light.src.match('off') ? 'images/light_on.gif' : 'images/light_off.gif'
+    }
+</script>
+
+<script>
+    function num_check(){
+        var x = document.getElementById('number').value
+        if(x==""||isNaN(x))
         {
-            console.debug("亮")
-            element.src='images/light_on.gif'
+            alert("输入有误")
         }
         else
         {
-            console.debug("灭")
-            element.src='images/light_off.gif'
+            alert("输入正确")
         }
     }
 </script>
