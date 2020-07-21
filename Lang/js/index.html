@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>帕奇笔记</title>
+</head>
+
+<body>
+    <h1 align=center>帕奇笔记</h1>
+
+    <a href="https:www.baidu.com" id="demo">
+        <!-- <p id="demo"></p> 换行的demo-->
+    </a>
+    <button type="button" onclick="myFunction()"> 显示链接正确名称 </button>
+
+    <!-- 其中alert表示显示带有一条指定消息和一个 OK 按钮的警告框 -->
+    <p>
+        <button type="button" onclick="alert('欢迎使用')"> 欢迎弹窗</button>
+    </p>
+
+    <script>
+        document.getElementById("demo").innerHTML = "超级链接";
+    </script>
+
+    <p>
+        这是一个<strong>段落</strong>
+    </p>
+    <script>
+        document.write("<h2>脚本方式插入：这是一个标题2</h2>")
+    </script>
+
+    <HR align=left width=300 color=#987cb9 SIZE=1>
+    <img id='light' onclick="changestatus()" src='images/light_off.gif' width="80" height="140">
+    <p>
+        通过点击，控制亮灭状态
+    </p>
+
+</body>
+
+<script>
+    function myFunction() {
+        word = document.getElementById("demo")
+        word.innerHTML = "百度一下，你就知道";
+        word.style.color='#0000FF'
+    }
+</script>
+
+<script>
+    function changestatus() {
+        element = document.getElementById("light")
+        console.log(element)
+        if (element.src.match('off'))
+        {
+            console.debug("亮")
+            element.src='images/light_on.gif'
+        }
+        else
+        {
+            console.debug("灭")
+            element.src='images/light_off.gif'
+        }
+    }
+</script>
+
+</html>
