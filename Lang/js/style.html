@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -27,23 +28,13 @@
 
             test = document.getElementById('nowtime').innerHTML = "当前时间：" + year + "年" + month + "月" + day + "日 " + hour + ":" + minus + ":" + second;
         }
-        function time_check(t) {
+        function time_check(t){
             return t < 10 ? "0" + t : t;
         }
     </script>
 
-    <!-- 1. CCS内部样式 -->
-    <style>
-        h3 {
-            color: blue;
-            text-align: right;
-        }
-
-        p {
-            color: red;
-            font-size: 8pt;
-        }
-    </style>
+    <!-- 3. 外部样式 -->
+    <link rel="stylesheet" type="text/css" href="css/mystyle.css">
 </head>
 
 <body>
@@ -51,8 +42,7 @@
     <p align=center>
         带有var声明的变量为局部变量，没有var声明则为全局变量
     </p>
-    <!-- 2. CCS内部样式 -->
-    <button style="color: rgb(180,0,180);" onclick="this.innerHTML=Date()">在按钮自身显示时间</button>
+    <button onclick="this.innerHTML=Date()">在按钮自身显示时间</button>
 
     <p id='test1'></p>
     <p id='test2'></p>
