@@ -33,7 +33,7 @@ print('>> ingegrate定积分')
 print(integrate(x,(x,0,3)))
 
 
-print('>> eries级数展开')
+print('>> series级数展开')
 s = exp(x).series(x,0,10)
 # print(s)
 pprint(s)
