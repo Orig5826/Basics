@@ -320,7 +320,7 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size)
 	DWORD i, j;
 	char debug_info[128];	// 经过计算，最大长度为69字节。
 	char * p;
-	DWORD line;
+	// DWORD line;
 	// 要将uchar转换为hex形式显示
 	if (size == 0)
 	{
@@ -392,7 +392,7 @@ DLL_API bool CALL usb_open(PUCHAR symbolic_link)
 {
 	int Len;
 
-	Len = strlen(symbolic_link);
+	Len = (int)strlen(symbolic_link);
 	s_Handle = usb_find(symbolic_link,Len);
 	if (s_Handle == NULL)
 	{

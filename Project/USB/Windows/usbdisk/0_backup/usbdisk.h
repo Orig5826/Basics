@@ -31,6 +31,11 @@ typedef BOOL bool;
 DLL_API bool CALL usb_open(PUCHAR symbolic_link);
 // 关闭设备
 DLL_API void CALL usb_close(void);
+// 数据读写接口 
+DLL_API bool CALL usb_write(uint8_t * cmd, uint8_t cmd_len, uint8_t * sBuf, uint32_t sLen);
+DLL_API bool CALL usb_read(uint8_t * cmd, uint8_t cmd_len, uint8_t * rBuf, uint32_t * rLen);
+
+
 // 显示数据
 DLL_API void CALL usb_display(PUCHAR buffer, DWORD size);
 // 配置Debug信息的详细等级
@@ -38,13 +43,8 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size);
 // 1.基本信息，write&read
 // 2.在1基础上附件assic显示信息
 DLL_API void CALL usb_set_debug_level(uint8_t debug_level);
+// 读取版本号
+DLL_API char*  CALL get_version(void);
 
-// 数据读写接口 
-// CMD = 0xff
-DLL_API bool CALL usb_write(uint8_t * sBuf, uint32_t sLen);
-DLL_API bool CALL usb_read(uint8_t * rBuf, uint32_t * rLen);
-// CMD = 0xfd/fe
-DLL_API bool CALL usb_write_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * sBuf, uint32_t sLen);
-DLL_API bool CALL usb_read_hs(uint8_t * apdu, uint8_t apdu_len, uint8_t * rBuf, uint32_t * rLen);
 
 #endif

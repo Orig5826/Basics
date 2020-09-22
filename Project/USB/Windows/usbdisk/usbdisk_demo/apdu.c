@@ -105,8 +105,8 @@ static BOOL SendAPDU(uint8_t CLA, uint8_t INS, uint8_t P1, uint8_t P2, uint32_t 
 		return FALSE;
 	}
 	// Send APDU
-	usb_write(SendBuffer, SendLength);
-	usb_read(RecvBuffer, &RecvLength);
+	usb_write_ff(SendBuffer, SendLength);
+	usb_read_ff(RecvBuffer, &RecvLength);
 
 	if (RecvBuffer[RecvLength - 2] != 0x90 && RecvBuffer[RecvLength - 1] != 0x00)
 	{
