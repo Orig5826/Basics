@@ -438,12 +438,13 @@ DLL_API bool CALL usb_write(uint8_t * cmd, uint8_t cmd_len, uint8_t * sBuf, uint
 
 	if (usbdisk_debug_level >= 3)
 	{
+		DBG_LOG("--- usb_write_cmd ---\n");
 		usb_display(CB, cmd_len);
 	}
 
 	if (usbdisk_debug_level >=1 && sLen != 0)
 	{
-		DBG_LOG("[Write_HS]:\n");
+		DBG_LOG("--- usb_write ---\n");
 		usb_display(sBuf, sLen);
 	}
 
@@ -465,12 +466,13 @@ DLL_API bool CALL usb_read(uint8_t * cmd, uint8_t cmd_len, uint8_t * rBuf, uint3
 	{
 		if (usbdisk_debug_level >= 3)
 		{
+			DBG_LOG("--- usb_read_cmd ---\n");
 			usb_display(CB, cmd_len);
 		}
 
 		if (usbdisk_debug_level >= 1)
 		{
-			DBG_LOG("[Read_HS]:\n");
+			DBG_LOG("--- usb_read ---\n");
 			usb_display(rBuf, *rLen);
 		}
 	}
