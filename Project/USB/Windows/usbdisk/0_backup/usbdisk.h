@@ -12,6 +12,7 @@
 #define DLL_API _declspec(dllimport)
 #endif
 
+
 /*
 __cdecl
 	C/C++默认调用方式，函数从右到左压栈，函数本身不清理堆栈，由调用者负责清理。
@@ -24,6 +25,7 @@ __stdcall
 */
 
 #define CALL	__stdcall
+
 
 typedef BOOL bool;
 
@@ -43,8 +45,6 @@ DLL_API void CALL usb_display(PUCHAR buffer, DWORD size);
 // 1.基本信息，write&read
 // 2.在1基础上附件assic显示信息
 DLL_API void CALL usb_set_debug_level(uint8_t debug_level);
-// 读取版本号
-DLL_API char*  CALL get_version(void);
 
 
 #endif

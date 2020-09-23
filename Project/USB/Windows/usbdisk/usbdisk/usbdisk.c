@@ -45,10 +45,6 @@ GUID GUID_GLOBAL = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 
 #define SPTWB_DATA_LENGTH 4096		//!< 数据发送接收缓存大小
 
 
-// usbdisk版本号
-#define USBDISK_VERSION		"usbdisk_v1.1"
-
-
 /*
  * 文件作用域变量
  */
@@ -479,11 +475,6 @@ DLL_API bool CALL usb_read(uint8_t * cmd, uint8_t cmd_len, uint8_t * rBuf, uint3
 		}
 	}
 	return ret;
-}
-
-DLL_API char*  CALL get_version(void)
-{
-	return USBDISK_VERSION;
 }
 
 #if 0

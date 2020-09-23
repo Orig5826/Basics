@@ -150,7 +150,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="usbdisk.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="usbdisk.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
