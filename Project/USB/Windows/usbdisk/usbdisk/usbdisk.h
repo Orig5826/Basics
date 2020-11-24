@@ -6,13 +6,6 @@
 #include <stdint.h>
 #include <Windows.h>
 
-#ifdef DLL_EXPORTS
-#define DLL_API  _declspec(dllexport)
-#else
-#define DLL_API _declspec(dllimport)
-#endif
-
-
 /*
 __cdecl
 	C/C++默认调用方式，函数从右到左压栈，函数本身不清理堆栈，由调用者负责清理。
@@ -23,28 +16,24 @@ __stdcall
 
 若在没有不定长参数的情况下，一般都使用__stdcall
 */
-
 #define CALL	__stdcall
 
+#ifdef DLL_EXPORTS
+#define DLL_DEF  _declspec(dllexport)
+#else
+#define DLL_DEF _declspec(dllimport)
+#endif
 
-typedef BOOL bool;
 
+#define DLL_API  DLL_DEF CALL
+
+// ------------------------------------------------
 // 打开设备 
-DLL_API bool CALL usb_open(PUCHAR symbolic_link);
+HANDLE DLL_API usb_open(uint8_t* symbolic_link);
 // 关闭设备
-DLL_API void CALL usb_close(void);
+BOOL DLL_API usb_close(HANDLE handle);
 // 数据读写接口 
-DLL_API bool CALL usb_write(uint8_t * cmd, uint8_t cmd_len, uint8_t * sBuf, uint32_t sLen);
-DLL_API bool CALL usb_read(uint8_t * cmd, uint8_t cmd_len, uint8_t * rBuf, uint32_t * rLen);
-
-
-// 显示数据
-DLL_API void CALL usb_display(PUCHAR buffer, DWORD size);
-// 配置Debug信息的详细等级
-// 0.仅显示底层信息
-// 1.基本信息，write&read
-// 2.在1基础上附件assic显示信息
-DLL_API void CALL usb_set_debug_level(uint8_t debug_level);
-
+BOOL DLL_API usb_write(HANDLE handle, uint8_t* cmd, uint8_t cmd_len, uint8_t* sBuf, uint32_t sLen);
+BOOL DLL_API usb_read(HANDLE handle, uint8_t* cmd, uint8_t cmd_len, uint8_t* rBuf, uint32_t* rLen);
 
 #endif

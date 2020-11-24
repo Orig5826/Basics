@@ -43,32 +43,31 @@ int __cdecl main(int argc,char * argv[])
 }
 
 
-
-void usb_write_ff(uint8_t* data, uint32_t len)
+void usb_write_ff(HANDLE handle, uint8_t* data, uint32_t len)
 {
 	uint8_t cmd[16] = { 0xff };
-	usb_write(cmd, 1, data, len);
-}
-void usb_read_ff(uint8_t* data, uint32_t *len)
-{
-	uint8_t cmd[16] = { 0xff };
-	usb_read(cmd, 1, data, len);
+	usb_write(handle, cmd, 1, data, len);
 }
 
-void usb_write_hs(uint8_t *apdu, uint32_t cmdlen, uint8_t* data, uint32_t len)
+void usb_read_ff(HANDLE handle, uint8_t* data, uint32_t* len)
+{
+	uint8_t cmd[16] = { 0xff };
+	usb_read(handle, cmd, 1, data, len);
+}
+
+void usb_write_hs(HANDLE handle, uint8_t *apdu, uint32_t cmdlen, uint8_t* data, uint32_t len)
 {
 	uint8_t cmd[16] = { 0xfd };
 	memcpy(cmd + 1, apdu, cmdlen);
-	usb_write(cmd, 1 + cmdlen, data, len);
+	usb_write(handle, cmd, 1 + cmdlen, data, len);
 }
-void usb_read_hs(uint8_t * apdu, uint32_t cmdlen, uint8_t* data, uint32_t *len)
+
+void usb_read_hs(HANDLE handle, uint8_t * apdu, uint32_t cmdlen, uint8_t* data, uint32_t *len)
 {
 	uint8_t cmd[16] = { 0xfe };
 	memcpy(cmd + 1, apdu, cmdlen);
-	usb_read(cmd, 1 + cmdlen, data, len);
+	usb_read(handle, cmd, 1 + cmdlen, data, len);
 }
-
-
 
 
 // ---------------------------------------------------------------
@@ -82,21 +81,23 @@ void default_test()
 	uint8_t rBuf[32];
 	uint32_t rLen = 32;
 
-	if (FALSE == usb_open(SYMBOLIC_LINK))
+	HANDLE handle = NULL;
+
+	handle = usb_open(SYMBOLIC_LINK);
+	if (handle == NULL)
 	{
 		printf("设备打开失败");
 		exit(-1);
 	}
-	usb_set_debug_level(2);
+
 	//
-	usb_write_ff(sBuf, 32);
+	usb_write_ff(handle,sBuf, 32);
 	//
 	memset(rBuf, 0x00, sizeof(rBuf));
-	usb_read_ff(rBuf, &rLen);
+	usb_read_ff(handle,rBuf, &rLen);
 
-	usb_write_hs(apdu, 5, sBuf, 32);
-	usb_read_hs(apdu, 5, rBuf, &rLen);
+	usb_write_hs(handle,apdu, 5, sBuf, 32);
+	usb_read_hs(handle,apdu, 5, rBuf, &rLen);
 
-	usb_close();
+	usb_close(handle);
 }
-

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 #include "stdio.h"
 #include "stdlib.h"
 #include "usbdisk.h"
@@ -38,5 +40,5 @@ void apdu_test();
 void APDU_Test();
 
 
-void usb_write_ff(uint8_t* data, uint32_t len);
-void usb_read_ff(uint8_t* data, uint32_t* len);
+void usb_write_ff(HANDLE handle,uint8_t* data, uint32_t len);
+void usb_read_ff(HANDLE handle, uint8_t* data, uint32_t* len);

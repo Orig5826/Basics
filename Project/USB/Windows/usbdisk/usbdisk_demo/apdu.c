@@ -20,6 +20,8 @@ static uint8_t RecvBuffer[BUFFER_SIZE_MAX];
 static uint32_t SendLength;
 static uint32_t RecvLength;
 
+static HANDLE handle = NULL;
+
 static BOOL SendAPDU(uint8_t CLA, uint8_t INS, uint8_t P1, uint8_t P2, uint32_t Lc, uint8_t* data, uint32_t Le)
 {
 	// 暂定长度字段（Le,Lc）都为1个字节，因为目前没有发送太长的数据
@@ -105,8 +107,8 @@ static BOOL SendAPDU(uint8_t CLA, uint8_t INS, uint8_t P1, uint8_t P2, uint32_t 
 		return FALSE;
 	}
 	// Send APDU
-	usb_write_ff(SendBuffer, SendLength);
-	usb_read_ff(RecvBuffer, &RecvLength);
+	usb_write_ff(handle,SendBuffer, SendLength);
+	usb_read_ff(handle,RecvBuffer, &RecvLength);
 
 	if (RecvBuffer[RecvLength - 2] != 0x90 && RecvBuffer[RecvLength - 1] != 0x00)
 	{
@@ -146,7 +148,10 @@ void apdu_test()
 {
 	clock_t start, end;
 	uint8_t data[1024] = { 0 };
-	if (FALSE == usb_open(SYMBOLIC_LINK))
+	HANDLE handle;
+
+	handle = usb_open(SYMBOLIC_LINK);
+	if (handle == NULL)
 	{
 		printf("设备打开失败");
 		exit(-1);
@@ -161,7 +166,7 @@ void apdu_test()
 
 	end = clock();
 	printf("计时: %fs\n", (double)(end - start) / CLK_TCK);
-	usb_close();
+	usb_close(handle);
 }
 
 // -----------------------------------------------------------------------
@@ -302,17 +307,14 @@ BOOL Decrypt_SM4(uint8_t * inBuf, uint32_t inLen, uint8_t *outBuf, uint32_t *out
 
 
 
-
-
-
 // ----------------------------------------------------------------------------------
 void APDU_Initial(stAPDU * apdu)
 {
-	if (TRUE != usb_open(SYMBOLIC_LINK))
+	handle = usb_open(SYMBOLIC_LINK);
+	if (handle == NULL);
 	{
 		exit(-1);
 	}
-	usb_set_debug_level(2);
 
 	apdu->Initial = Initial;
 	apdu->GetChallenge = GetChallenge;
@@ -326,7 +328,7 @@ void APDU_Initial(stAPDU * apdu)
 
 void APDU_Exit(void)
 {
-	usb_close();
+	usb_close(handle);
 }
 
 void APDU_Test()
