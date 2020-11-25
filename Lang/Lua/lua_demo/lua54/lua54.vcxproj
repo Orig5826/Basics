@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e9c0dff0-fd14-4aed-b8cb-304b831f55a8}</ProjectGuid>
-    <RootNamespace>luadll</RootNamespace>
+    <ProjectGuid>{272b1e08-2ba3-49dd-bffc-d8c48ced6a7e}</ProjectGuid>
+    <RootNamespace>lua54</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -86,10 +86,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;WIN32;_DEBUG;LUADLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LUA54_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,10 +101,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;WIN32;NDEBUG;LUADLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;WIN32;NDEBUG;LUA54_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,10 +116,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;_DEBUG;LUADLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;LUA54_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,10 +131,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;NDEBUG;LUADLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_BUILD_AS_DLL;NDEBUG;LUA54_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,35 +142,6 @@
       <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\lapi.h" />
-    <ClInclude Include="..\src\lauxlib.h" />
-    <ClInclude Include="..\src\lcode.h" />
-    <ClInclude Include="..\src\lctype.h" />
-    <ClInclude Include="..\src\ldebug.h" />
-    <ClInclude Include="..\src\ldo.h" />
-    <ClInclude Include="..\src\lfunc.h" />
-    <ClInclude Include="..\src\lgc.h" />
-    <ClInclude Include="..\src\ljumptab.h" />
-    <ClInclude Include="..\src\llex.h" />
-    <ClInclude Include="..\src\llimits.h" />
-    <ClInclude Include="..\src\lmem.h" />
-    <ClInclude Include="..\src\lobject.h" />
-    <ClInclude Include="..\src\lopcodes.h" />
-    <ClInclude Include="..\src\lopnames.h" />
-    <ClInclude Include="..\src\lparser.h" />
-    <ClInclude Include="..\src\lprefix.h" />
-    <ClInclude Include="..\src\lstate.h" />
-    <ClInclude Include="..\src\lstring.h" />
-    <ClInclude Include="..\src\ltable.h" />
-    <ClInclude Include="..\src\ltm.h" />
-    <ClInclude Include="..\src\lua.h" />
-    <ClInclude Include="..\src\luaconf.h" />
-    <ClInclude Include="..\src\lualib.h" />
-    <ClInclude Include="..\src\lundump.h" />
-    <ClInclude Include="..\src\lvm.h" />
-    <ClInclude Include="..\src\lzio.h" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\lapi.c" />
     <ClCompile Include="..\src\lauxlib.c" />
@@ -208,10 +171,41 @@
     <ClCompile Include="..\src\ltable.c" />
     <ClCompile Include="..\src\ltablib.c" />
     <ClCompile Include="..\src\ltm.c" />
+    <ClCompile Include="..\src\lua.c" />
     <ClCompile Include="..\src\lundump.c" />
     <ClCompile Include="..\src\lutf8lib.c" />
     <ClCompile Include="..\src\lvm.c" />
     <ClCompile Include="..\src\lzio.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\lapi.h" />
+    <ClInclude Include="..\src\lauxlib.h" />
+    <ClInclude Include="..\src\lcode.h" />
+    <ClInclude Include="..\src\lctype.h" />
+    <ClInclude Include="..\src\ldebug.h" />
+    <ClInclude Include="..\src\ldo.h" />
+    <ClInclude Include="..\src\lfunc.h" />
+    <ClInclude Include="..\src\lgc.h" />
+    <ClInclude Include="..\src\ljumptab.h" />
+    <ClInclude Include="..\src\llex.h" />
+    <ClInclude Include="..\src\llimits.h" />
+    <ClInclude Include="..\src\lmem.h" />
+    <ClInclude Include="..\src\lobject.h" />
+    <ClInclude Include="..\src\lopcodes.h" />
+    <ClInclude Include="..\src\lopnames.h" />
+    <ClInclude Include="..\src\lparser.h" />
+    <ClInclude Include="..\src\lprefix.h" />
+    <ClInclude Include="..\src\lstate.h" />
+    <ClInclude Include="..\src\lstring.h" />
+    <ClInclude Include="..\src\ltable.h" />
+    <ClInclude Include="..\src\ltm.h" />
+    <ClInclude Include="..\src\lua.h" />
+    <ClInclude Include="..\src\lua.hpp" />
+    <ClInclude Include="..\src\luaconf.h" />
+    <ClInclude Include="..\src\lualib.h" />
+    <ClInclude Include="..\src\lundump.h" />
+    <ClInclude Include="..\src\lvm.h" />
+    <ClInclude Include="..\src\lzio.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
