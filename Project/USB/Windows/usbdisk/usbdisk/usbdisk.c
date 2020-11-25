@@ -137,14 +137,14 @@ static int GetDevicePath(int num, LPTSTR path)
 */
 static HANDLE usb_find(char * SymLink,int Len)
 {
-	HANDLE hDevHandle = NULL;
+	HANDLE hDevHandle = INVALID_HANDLE_VALUE;
 	char DevPath[256];
 
 	// 必须保证长度正确
 	if (Len > 28)
 	{
 		DBG("The Length of SymLink Is Overflow!\n");
-		return NULL;
+		goto find_exit;
 	}
 
 	// 通过Inquiry命令过滤设备
@@ -161,7 +161,7 @@ static HANDLE usb_find(char * SymLink,int Len)
 		if (!rv)
 		{
 			DBG("Can't Find the Device!\n");
-			return NULL;
+			goto find_exit;
 		}
 #endif
 		// 通过CreateFile打开相应的设备
@@ -181,7 +181,7 @@ static HANDLE usb_find(char * SymLink,int Len)
 			DBG("Maybe：\n"
 				"	1.Do Administrator Rights Need?\n"
 				"	2.Is the device name correct?\n");
-			goto Exit;
+			goto find_exit;
 		}
 
 		UCHAR InquiryData[37] = {0};
@@ -208,9 +208,7 @@ static HANDLE usb_find(char * SymLink,int Len)
 		CloseHandle(hDevHandle);
 	}
 
-Exit:
-	CloseHandle(hDevHandle);
-	DBG("----- END -----\n");
+find_exit:
 	return NULL;
 }
 
@@ -308,7 +306,7 @@ HANDLE DLL_API usb_open(uint8_t* symbolic_link)
 
 	length = (int)strlen(symbolic_link);
 	handle = usb_find(symbolic_link, length);
-	if (handle)
+	if (handle != NULL)
 	{
 		DBG("---------------- Open USB Device ----------------\n");
 	}

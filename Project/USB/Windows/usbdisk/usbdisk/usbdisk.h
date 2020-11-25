@@ -15,8 +15,12 @@ __stdcall
 	函数自身修改堆栈。函数名自动加前导的下划线，后面紧跟一个@符号，其后紧跟着参数的尺寸
 
 若在没有不定长参数的情况下，一般都使用__stdcall
-*/
+
+#define CALL	__cdecl
 #define CALL	__stdcall
+*/
+#define CALL
+
 
 #ifdef DLL_EXPORTS
 #define DLL_DEF  _declspec(dllexport)

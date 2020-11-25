@@ -6,7 +6,8 @@
 #include "stdlib.h"
 #include "usbdisk.h"
 
-#define SYMBOLIC_LINK	"HSEC    USBCOS"
+// #define SYMBOLIC_LINK	"HSEC    USBCOS"
+#define SYMBOLIC_LINK	"HSEC    usb2uart_c1test 0003"
 
 
 #define PACKAGE_SIZE_MAX	(0x400)
