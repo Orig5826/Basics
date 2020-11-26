@@ -14,4 +14,9 @@ copy .\Release\%Lib%          .\0_backup\%Lib%
 copy .\Release\%Demo%         .\0_backup\%Demo%
 copy .\Release\%Exe%         .\0_backup\%Exe%
 
+
+set lusbdisk="lusbdisk.dll"
+copy .\Release\%lusbdisk%         .\0_backup\%lusbdisk%
+
+
 pause

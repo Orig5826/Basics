@@ -12,6 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "lua\lua.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua54", "lua54\lua54.vcxproj", "{272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lusbdisk", "lusbdisk\lusbdisk.vcxproj", "{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}"
+	ProjectSection(ProjectDependencies) = postProject
+		{272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E} = {272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,6 +49,14 @@ Global
 		{272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E}.Release|x64.Build.0 = Release|x64
 		{272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E}.Release|x86.ActiveCfg = Release|Win32
 		{272B1E08-2BA3-49DD-BFFC-D8C48CED6A7E}.Release|x86.Build.0 = Release|Win32
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Debug|x64.ActiveCfg = Debug|x64
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Debug|x64.Build.0 = Debug|x64
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Debug|x86.ActiveCfg = Debug|Win32
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Debug|x86.Build.0 = Debug|Win32
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Release|x64.ActiveCfg = Release|x64
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Release|x64.Build.0 = Release|x64
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Release|x86.ActiveCfg = Release|Win32
+		{E377462F-2E34-4F5F-A2A8-8F6CAA86FD46}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
