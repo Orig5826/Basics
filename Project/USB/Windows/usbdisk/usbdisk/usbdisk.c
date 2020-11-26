@@ -301,7 +301,7 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 
 HANDLE DLL_API usb_open(uint8_t* symbolic_link)
 {
-	HANDLE handle;
+	HANDLE handle = NULL;
 	int length;
 
 	length = (int)strlen(symbolic_link);
