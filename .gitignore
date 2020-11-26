@@ -19,6 +19,7 @@ x86/
 x64/
 ARM/
 *.vcxproj.user
+*.aps
 
 # .vscode
 .vscode/

@@ -24,27 +24,12 @@
     <ClCompile Include="main.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lua\lua_usbdisk.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="usbdisk.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\luaconf.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lualib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lauxlib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lua\lua.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
