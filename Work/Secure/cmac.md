@@ -4,9 +4,13 @@ CMAC算法实现
 
     使用K=cmac_key对全0做ecb加密运算。得到密文C。
 
-    若C的最高bit为1，则K1 = C<<1。否则K1 = (C1<<1) ^ const_Rb。其中const_Rb为全0。
+    若C的最高bit为1，则K1 = C<<1。否则K1 = (C1<<1) ^ const_Rb。
     
-    若C的最高bit为1，则K2=K1<<1。否则K2 = ( K1<<1) ^ const_Rb。其中const_Rb为全0
+    若C的最高bit为1，则K2=K1<<1。否则K2 = ( K1<<1) ^ const_Rb。
+    
+    其中const_Rb为一个大数常量，和密钥K1和K2长度相关。
+    
+    例如：0x1B for 64-bit, 0x87 for 128-bit, and 0x425 for 256-bit blocks.
     
 2. 计算流程：
 
