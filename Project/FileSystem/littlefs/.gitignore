@@ -1,0 +1,22 @@
+
+# vs2019
+Debug/
+
+
+# vscode
+.vscode
+.vs
+
+
+# 
+HSC32K1_Demo_Data/
+
+# KEIL
+*.uvguix.*
+Listings/
+Objects/
+JlinkLog.txt
+
+# SI4
+SIP.si4project/
+*.pre
