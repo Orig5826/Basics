@@ -1,7 +1,7 @@
 /**
  * @file crc.c
  * @author wenjf
- * @brief  CRC_CCIT Calculate
+ * @brief
  * @version 0.1
  * @date 2018-12-06
  * 
@@ -11,21 +11,26 @@
 
 #include "crc.h"
 
-struct _crc_ccit
+// 内部使用
+#define CRC_ST_CUSTOM			0x10
+#define CRC_ST_INIT				0x11
+#define CRC_ST_UPDATE			0x13
+
+struct _crc
 {
-	// uint8_t width;
+	// basic parameters
 	uint16_t init;
 	uint16_t xor;
 	uint8_t reverse_in;
 	uint8_t reverse_out;
 	uint8_t mode;
-}crc_ccit;
-
-enum _crc_status
-{
-	CRC_IDLE,
-	CRC_SETMODE
-}crc_status = CRC_IDLE;
+	// result
+	uint16_t value;
+	// status
+	uint8_t st;
+	// endian
+	uint8_t endian;
+}crc;
 
 const uint16_t crc_ccit_table[256] =
 {
@@ -63,106 +68,227 @@ const uint16_t crc_ccit_table[256] =
 	0x6E17U, 0x7E36U, 0x4E55U, 0x5E74U, 0x2E93U, 0x3EB2U, 0x0ED1U, 0x1EF0U
 };
 
-static uint16_t u16_bit_reverse(uint16_t src_byte)
+static uint16_t u16_bit_reverse(uint16_t data)
 {
-	uint16_t rev_byte = 0, j;
+	data = (data & 0xFF00) >> 8 | (data & 0x00FF) << 8;
+	data = (data & 0xF0F0) >> 4 | (data & 0x0F0F) << 4;
+	data = (data & 0xCCCC) >> 2 | (data & 0x3333) << 2;
+	data = (data & 0xAAAA) >> 1 | (data & 0x5555) << 1;
+	return data;
+}
 
-	for (j = 0; j < 16; j++)
+static uint8_t u8_bit_reverse(uint8_t data)
+{
+	data = (data & 0xF0) >> 4 | (data & 0x0F) << 4;
+	data = (data & 0xCC) >> 2 | (data & 0x33) << 2;
+	data = (data & 0xAA) >> 1 | (data & 0x55) << 1;
+	return data;
+}
+
+/**
+ * @brief 0. 自定义参数
+ * 
+ * @param init 初值
+ * @param xor 结果异或值
+ * @param reverse_in 输入数据是否需要按位翻转
+ * @param reverse_out 输出数据是否需要按位翻转
+ */
+void crc_ccit_custom(uint16_t init, uint16_t xor, uint8_t reverse_in, uint8_t reverse_out)
+{
+	crc.init = init;
+	crc.xor = xor;
+	crc.reverse_in = reverse_in;
+	crc.reverse_out = reverse_out;
+	crc.mode = CRC_CUSTOM;
+
+	crc.st = CRC_ST_CUSTOM;
+}
+
+/**
+ * @brief 1. 初始化
+ *     若自定义参数，则需要先执行**_custom函数
+ * @param mode 模式（宏定义CRC_CCIT_xx）
+ * @param endian 结果大小端
+ * @return uint8_t 状态（宏定义CRC_ST_xx）
+ */
+uint8_t crc_ccit_init(uint8_t mode, uint8_t endian)
+{
+	if (crc.st != CRC_ST_CUSTOM)
 	{
-		rev_byte <<= 1;
-		rev_byte |= src_byte & 0x01;
-		src_byte >>= 1;
+		crc.init = 0x0000;
+		crc.xor = 0x0000;
+		crc.reverse_in = 0;
+		crc.reverse_out = 0;
+		crc.mode = mode;
+
+		crc.st = CRC_ST_INIT;
 	}
-	return rev_byte;
-}
 
-static uint8_t u8_bit_reverse(uint8_t src_byte)
-{
-	uint8_t rev_byte = 0, j;
-
-	for (j = 0; j < 8; j++)
+	if (endian != 0 && endian != 1)
 	{
-		rev_byte <<= 1;
-		rev_byte |= src_byte & 0x01;
-		src_byte >>= 1;
+		crc.st = CRC_ST_ERR;
+		return CRC_ST_ERR;
 	}
-	return rev_byte;
-}
 
-void crc_ccit_custom(uint16_t init,uint16_t xor,uint8_t reverse_in,uint8_t reverse_out)
-{
-	crc_ccit.init = init;
-	crc_ccit.xor = xor;
-	crc_ccit.reverse_in = reverse_in;
-	crc_ccit.reverse_out = reverse_out;
-	crc_ccit.mode = CRC_CCIT_CUSTOM;
-
-	crc_status = CRC_SETMODE;
-}
-
-void crc_ccit_setmode(uint8_t mode)
-{
-	crc_ccit.init = 0x0000;
-	crc_ccit.xor = 0x0000;
-	crc_ccit.reverse_in = 0;
-	crc_ccit.reverse_out = 0;
-	crc_ccit.mode = mode;
-
-	crc_status = CRC_SETMODE;
+	crc.value = 0;
+	crc.endian = endian;
 	switch (mode)
 	{
 	case CRC_CCIT_KERMIT:
 	{
-		crc_ccit.reverse_in = 1;
-		crc_ccit.reverse_out = 1;
+		crc.reverse_in = 1;
+		crc.reverse_out = 1;
 	}break;
 	case CRC_CCIT_XMODEM:
 	{
 		// crc_calc default mode
 	}break;
+	case CRC_CCIT_FALSE:
+	{
+		crc.init = 0xFFFF;
+	}break;
+	case CRC_CCIT_GENIBUS:
+	{
+		crc.init = 0xFFFF;
+		crc.xor = 0xFFFF;
+	}break;
 	case CRC_CCIT_X_25:
 	{
-		crc_ccit.init = 0xFFFF;
-		crc_ccit.xor = 0xFFFF;
-		crc_ccit.reverse_in = 1;
-		crc_ccit.reverse_out = 1;
+		crc.init = 0xFFFF;
+		crc.xor = 0xFFFF;
+		crc.reverse_in = 1;
+		crc.reverse_out = 1;
+	}break;
+	case CRC_CCIT_MCRF4XX:
+	{
+		crc.init = 0xFFFF;
+	}break;
+	case CRC_CCIT_AUG_CCIT:
+	{
+		crc.init = 0x1D0F;
+	}break;
+	case CRC_CCIT_TMS37157:
+	{
+		crc.init = 0x89EC;
+		crc.reverse_in = 1;
+		crc.reverse_out = 1;
+	}break;
+	case CRC_CCIT_RIELLO:
+	{
+		crc.init = 0xB2AA;
+		crc.reverse_in = 1;
+		crc.reverse_out = 1;
+	}break;
+	case CRC_CCIT_CRC_A:
+	{
+		crc.init = 0xC6C6;
+		crc.reverse_in = 1;
+		crc.reverse_out = 1;
+	}break;
+
+	case CRC_CUSTOM:
+	{
+		if (crc.st != CRC_ST_CUSTOM)
+		{
+			crc.st = CRC_ST_ERR;
+			return CRC_ST_ERR;
+		}
+		crc.st = CRC_ST_INIT;
 	}break;
 	default:
-		// printf("you should use the function : crc_ccit_custom\n");
-		crc_status = CRC_IDLE;
-		break;
+	{
+		crc.st = CRC_ST_ERR;
+		return CRC_ST_ERR;
+	}/*break;*/
 	}
+
+	crc.value = crc.init;
+	return CRC_ST_SUCCESS;
 }
 
-uint16_t crc_ccit_calc(const uint8_t *bytes, unsigned len)
+/**
+ * @brief 2. 更新数据（可连续）
+ * 
+ * @param bytes 数据内容
+ * @param len 数据长度
+ * @return uint8_t 状态（宏定义CRC_ST_xx）
+ */
+uint8_t crc_ccit_update(uint8_t * data, uint32_t len)
 {
-	uint16_t crc_value = crc_ccit.init;
+	uint16_t crc_value;
 	uint16_t temp;
 
-	if (crc_status != CRC_SETMODE)
+	if (crc.st != CRC_ST_INIT && crc.st != CRC_ST_UPDATE)
+	{
+		crc.st = CRC_ST_ERR;
+		return CRC_ST_ERR;
+	}
+
+	crc_value = crc.value;
+	while (len --)
+	{
+		temp = (uint16_t)(crc_value >> 8);
+		if (crc.reverse_in == 1)
+		{
+			temp ^= u8_bit_reverse(*data);
+		}
+		else
+		{
+			temp ^= *(data);
+		}
+
+		crc_value = ((crc_value << 8) ^ crc_ccit_table[temp & 0xff]) & 0xFFFF;
+		data++;
+	}
+
+	crc.value = crc_value;
+	crc.st = CRC_ST_UPDATE;
+
+	return CRC_ST_SUCCESS;
+}
+
+/**
+ * @brief 3. 取CRC结果
+ * 
+ * @return uint16_t 
+ */
+uint16_t crc_ccit_get_result(void)
+{
+	uint16_t crc_value;
+	if (crc.st != CRC_ST_UPDATE)
 	{
 		return 0;
 	}
 
-	while (len --)
-	{
-		temp = (uint16_t)(crc_value >> 8);
-		if (crc_ccit.reverse_in == 1)
-		{
-			temp ^= u8_bit_reverse(*bytes);
-		}
-		else
-		{
-			temp ^= *(bytes);
-		}
-
-		crc_value = ((crc_value << 8) ^ crc_ccit_table[temp & 0xff]) & 0xFFFF;
-		bytes++;
-	}
-
-	if (crc_ccit.reverse_out == 1)
+	crc_value = crc.value;
+	if (crc.reverse_out == 1)
 	{
 		crc_value = u16_bit_reverse(crc_value);
 	}
-	return crc_value ^ crc_ccit.xor;
+	crc_value = crc_value ^ crc.xor;
+
+	if (crc.endian == 1)
+	{
+		crc.value = (crc_value & 0xff) << 8 | (crc_value & 0xff00) >> 8;
+	}
+	else
+	{
+		crc.value = crc_value;
+	}
+
+	// 状态置为无效
+	crc.st = CRC_ST_SUCCESS;
+	return crc.value;
 }
+
+/**
+ * @brief CRC 成员函数
+ * 
+ */
+crc_t g_crc =
+{
+	crc_ccit_custom,
+	crc_ccit_init,
+	crc_ccit_update,
+	crc_ccit_get_result,
+};
