@@ -3,6 +3,7 @@
         <Shortcut id="42046" Ctrl="no" Alt="yes" Shift="no" Key="83" />
         <Shortcut id="42054" Ctrl="no" Alt="yes" Shift="no" Key="84" />
         <Shortcut id="42028" Ctrl="no" Alt="yes" Shift="no" Key="57" />
+        <Shortcut id="44025" Ctrl="no" Alt="yes" Shift="no" Key="68" />
     </InternalCommands>
     <Macros>
         <Macro name="Trim Trailing Space and Save" Ctrl="no" Alt="yes" Shift="yes" Key="83">
@@ -10,20 +11,19 @@
             <Action type="2" message="0" wParam="41006" lParam="0" sParam="" />
         </Macro>
         <Macro name="hex(no space) -&gt; C_hex" Ctrl="no" Alt="no" Shift="no" Key="0">
-			<!-- 全选 -->
-			<!-- <Action type="0" message="2013" wParam="0" lParam="0" sParam="" /> -->
-
-			<!-- 替换窗口？ -->
+            <!-- 全选 -->
+            <!-- <Action type="0" message="2013" wParam="0" lParam="0" sParam="" /> -->
+            <!-- 替换窗口？ -->
             <Action type="3" message="1700" wParam="0" lParam="0" sParam="" />
-			<!-- 查找目标 -->
+            <!-- 查找目标 -->
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="([0-9a-fA-F]{2})(?&lt;=[0-9a-fA-F]{2})?" />
-			<!-- 正则 -->
+            <!-- 正则 -->
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
-			<!-- 替换为 -->
+            <!-- 替换为 -->
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="0x\1," />
-			<!-- 选取范围内 -->
+            <!-- 选取范围内 -->
             <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
-			<!-- 全部替换命令？ -->
+            <!-- 全部替换命令？ -->
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
         <Macro name="C_hex(no space) -&gt; hex" Ctrl="no" Alt="no" Shift="no" Key="0">
@@ -39,7 +39,7 @@
             <Action type="3" message="1601" wParam="0" lParam="0" sParam="((0x[0-9a-fA-F]{2},){16})" />
             <Action type="3" message="1625" wParam="0" lParam="2" sParam="" />
             <Action type="3" message="1602" wParam="0" lParam="0" sParam="\1\r\n" />
-           <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
+            <Action type="3" message="1702" wParam="0" lParam="898" sParam="" />
             <Action type="3" message="1701" wParam="0" lParam="1609" sParam="" />
         </Macro>
         <Macro name="multi lines -&gt; one lines" Ctrl="no" Alt="no" Shift="no" Key="0">
@@ -61,6 +61,9 @@
         <Command name="Open file in another instance" Ctrl="no" Alt="yes" Shift="no" Key="117">$(NPP_FULL_FILE_PATH) $(CURRENT_WORD) -nosession -multiInst</Command>
         <Command name="Send via Outlook" Ctrl="yes" Alt="yes" Shift="yes" Key="79">outlook /a &quot;$(FULL_CURRENT_PATH)&quot;</Command>
         <Command name="py_run" Ctrl="yes" Alt="no" Shift="no" Key="116">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; python &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
+        <Command name="lua_run" Ctrl="yes" Alt="no" Shift="no" Key="117">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; lua &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
+        <Command name="astyle" Ctrl="no" Alt="yes" Shift="no" Key="82">&quot;D:\Command\AStyle\bin\AStyle.exe&quot; --style=ansi -s4 -c -N -L -m0 -M40 --suffix=.bak &quot;$(FULL_CURRENT_PATH)&quot;</Command>
+        <Command name="cmd" Ctrl="no" Alt="yes" Shift="no" Key="80">cmd /k cd /D &quot;$(CURRENT_DIRECTORY)&quot;</Command>
     </UserDefinedCommands>
     <PluginCommands>
         <PluginCommand moduleName="NppConverter.dll" internalID="0" Ctrl="no" Alt="yes" Shift="no" Key="188" />
