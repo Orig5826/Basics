@@ -62,7 +62,7 @@
         <Command name="Send via Outlook" Ctrl="yes" Alt="yes" Shift="yes" Key="79">outlook /a &quot;$(FULL_CURRENT_PATH)&quot;</Command>
         <Command name="py_run" Ctrl="yes" Alt="no" Shift="no" Key="116">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; python &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
         <Command name="lua_run" Ctrl="yes" Alt="no" Shift="no" Key="117">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; lua &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
-        <Command name="astyle" Ctrl="no" Alt="yes" Shift="no" Key="82">&quot;D:\Command\AStyle\bin\AStyle.exe&quot; --style=ansi -s4 -c -N -L -m0 -M40 --suffix=.bak &quot;$(FULL_CURRENT_PATH)&quot;</Command>
+        <Command name="astyle" Ctrl="no" Alt="yes" Shift="no" Key="82">&quot;D:\Command\AStyle\bin\AStyle.exe&quot; --style=ansi -s4 -c -w -p -xg -U -k3 -W3 -N -L -m0 -M40 --suffix=.bak &quot;$(FULL_CURRENT_PATH)&quot;</Command>
         <Command name="cmd" Ctrl="no" Alt="yes" Shift="no" Key="80">cmd /k cd /D &quot;$(CURRENT_DIRECTORY)&quot;</Command>
     </UserDefinedCommands>
     <PluginCommands>
