@@ -4,11 +4,10 @@
 //带有行号，文件名，函数名的调试信息
 //-------------------------------
 #ifdef DEBUG
-#define DBG(...) fprintf(stderr, "---------------------------------		\
-		\r\n\t- Debug -\r\n[File]\t%s\r\n[Func]\t%s()\r\n[Line]\t%d\r\n[Desc]\t", __FILE__, __FUNCTION__, __LINE__); \
-		fprintf(stderr, __VA_ARGS__);	\
-		fprintf(stderr,"\r\n");			\
-		fprintf(stderr,"---------------------------------\r\n")
+#define DBG(...) do{ \
+	printf("File \"%s\" , Line %d , Function \"%s\" \n",__FILE__,  __LINE__, __FUNCTION__);\
+	printf(__VA_ARGS__); \
+}while(0)
 #else
 #define DBG(...)
 #endif
