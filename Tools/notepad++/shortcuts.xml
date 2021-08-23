@@ -52,14 +52,9 @@
         </Macro>
     </Macros>
     <UserDefinedCommands>
-        <Command name="Launch in Firefox" Ctrl="yes" Alt="yes" Shift="yes" Key="88">firefox &quot;$(FULL_CURRENT_PATH)&quot;</Command>
-        <Command name="Launch in IE" Ctrl="yes" Alt="yes" Shift="yes" Key="73">iexplore &quot;$(FULL_CURRENT_PATH)&quot;</Command>
-        <Command name="Launch in Chrome" Ctrl="yes" Alt="yes" Shift="yes" Key="82">chrome &quot;$(FULL_CURRENT_PATH)&quot;</Command>
-        <Command name="Launch in Safari" Ctrl="yes" Alt="yes" Shift="yes" Key="65">safari &quot;$(FULL_CURRENT_PATH)&quot;</Command>
-        <Command name="Get php help" Ctrl="no" Alt="yes" Shift="no" Key="112">http://www.php.net/$(CURRENT_WORD)</Command>
-        <Command name="Wikipedia Search" Ctrl="no" Alt="yes" Shift="no" Key="114">https://en.wikipedia.org/wiki/Special:Search?search=$(CURRENT_WORD)</Command>
-        <Command name="Open file in another instance" Ctrl="no" Alt="yes" Shift="no" Key="117">$(NPP_FULL_FILE_PATH) $(CURRENT_WORD) -nosession -multiInst</Command>
-        <Command name="Send via Outlook" Ctrl="yes" Alt="yes" Shift="yes" Key="79">outlook /a &quot;$(FULL_CURRENT_PATH)&quot;</Command>
+        <Command name="360Chrome" Ctrl="no" Alt="yes" Shift="yes" Key="113">360chrome &quot;$(FULL_CURRENT_PATH)&quot;</Command>
+        <Command name="Baidu" Ctrl="no" Alt="yes" Shift="no" Key="114">https://www.baidu.com/s?wd=$(CURRENT_WORD)</Command>
+		<Command name="Translate" Ctrl="no" Alt="yes" Shift="no" Key="115">https://fanyi.baidu.com/translate?aldtype=16047&query=&keyfrom=baidu&smartresult=dict&lang=auto2zh#auto/zh/</Command>
         <Command name="py_run" Ctrl="yes" Alt="no" Shift="no" Key="116">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; python &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
         <Command name="lua_run" Ctrl="yes" Alt="no" Shift="no" Key="117">cmd /C cd /d &quot;$(CURRENT_DIRECTORY)&quot; &amp; lua &quot;$(FULL_CURRENT_PATH)&quot; &amp; cd &quot;$(CURRENT_DIRECTORY)&quot; &amp; pause</Command>
         <Command name="astyle" Ctrl="no" Alt="yes" Shift="no" Key="82">&quot;D:\Command\AStyle\bin\AStyle.exe&quot; --style=ansi -s4 -c -w -p -xg -U -k3 -W3 -N -L -m0 -M40 --suffix=.bak &quot;$(FULL_CURRENT_PATH)&quot;</Command>
