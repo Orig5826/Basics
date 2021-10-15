@@ -1,15 +1,14 @@
 #define DLL_EXPORTS
 
+#define DLL_EXPORTS
+#include "usbdisk.h"
+
 #include <Windows.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <ctype.h>
 
 #include "common.h"
-
-
-#define DLL_EXPORTS
-#include "usbdisk.h"
 
 
 void __cdecl odprintf(const char *format, ...)

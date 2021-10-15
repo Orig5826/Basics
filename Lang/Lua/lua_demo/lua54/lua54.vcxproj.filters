@@ -99,9 +99,6 @@
     <ClCompile Include="..\src\ltm.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\lua.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\lundump.c">
       <Filter>源文件</Filter>
     </ClCompile>
