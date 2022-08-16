@@ -20,10 +20,8 @@
 
 
 // -------------------------------------------------
-//udisk
-GUID GUID_GLOBAL = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b };
-//cdrom
-//GUID GUID_GLOBAL = {0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b};
+GUID GUID_USBDISK = { 0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b };
+GUID GUID_USBCDROM = { 0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b};
 
 
 #define SPT_SENSE_LENGTH 32					//!< 
@@ -68,7 +66,7 @@ static void FormatErrorCode(void)
 }
 
 
-static int GetDevicePath(int num, LPTSTR path)
+static int GetDevicePath(int num, LPTSTR path, GUID guid)
 {
 	HDEVINFO hardwareDeviceInfo;
 	SP_INTERFACE_DEVICE_DATA deviceInfoData;
@@ -78,7 +76,7 @@ static int GetDevicePath(int num, LPTSTR path)
 	PSP_INTERFACE_DEVICE_DETAIL_DATA functionClassDeviceData;
 
 	hardwareDeviceInfo = SetupDiGetClassDevs(
-		&GUID_GLOBAL,
+		&guid,
 		NULL, // Define no enumerator (global)
 		NULL, // Define no
 		(DIGCF_PRESENT | // Only Devices present
@@ -88,7 +86,7 @@ static int GetDevicePath(int num, LPTSTR path)
 
 	result = SetupDiEnumDeviceInterfaces(hardwareDeviceInfo,
 		0, // We don't care about specific PDOs
-		&GUID_GLOBAL,
+		&guid,
 		num,
 		&deviceInfoData);
 
@@ -157,11 +155,15 @@ static HANDLE usb_find(char * SymLink,int Len)
 	int rv = 0;
 	for (int i = 0; i < 256; i++)
 	{
-		rv = GetDevicePath(i, DevPath);
+		rv = GetDevicePath(i, DevPath, GUID_USBDISK);
 		if (!rv)
 		{
-			DBG("Can't Find the Device!\n");
-			goto find_exit;
+			rv = GetDevicePath(i, DevPath, GUID_USBCDROM);
+			if (!rv)
+			{
+				DBG("Can't Find the Device!\n");
+				goto find_exit;
+			}
 		}
 #endif
 		// 通过CreateFile打开相应的设备
