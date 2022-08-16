@@ -236,7 +236,7 @@ static BOOL usb_scsi_cmd(HANDLE hDevHandle, UCHAR Direction, PUCHAR pData, DWORD
 		offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, ucSenseBuf);
 
 	// Directiong & TimeOut
-	sptwb.spt.TimeOutValue = 2;
+	sptwb.spt.TimeOutValue = 10;
 	sptwb.spt.DataIn = Direction;
 	// Data
 	sptwb.spt.DataTransferLength = Data_Length;
