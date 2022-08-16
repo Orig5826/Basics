@@ -3,8 +3,6 @@ from ctypes import *
 from time import sleep
 import os
 
-from gmusb.typeconv import *
-
 # usbdisk.dll -> maxsize=4096
 BUFFER_SIZE_MAX = 0x1000
 # --------------------------------------------
@@ -172,6 +170,7 @@ class usbdisk():
 
 if __name__ == "__main__":
     usb = usbdisk()
-    if False != usb.open("HSEC    usb2uart_c1test 0002"):
-        apdu = [0x00, 0x84, 0x00, 0x00, 0x10]
-        usb.trans(apdu)
+    if False != usb.open("HSEC    hsc32k1_usb2sti 1.00"):
+        for i in range(10):
+            apdu = [0x00, 0x84, 0x00, 0x00, 0x10]
+            usb.trans(apdu)
