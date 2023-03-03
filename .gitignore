@@ -1,7 +1,6 @@
 # 某些中间文件
 hid_cfg
 
-
 # chm
 *.chm
 
@@ -20,6 +19,7 @@ x64/
 ARM/
 *.vcxproj.user
 *.aps
+
 
 # .vscode
 .vscode/

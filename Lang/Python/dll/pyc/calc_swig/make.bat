@@ -34,11 +34,11 @@ echo cl命令必须使用VS提供的专用命令行工具
 set src="calc_wrap.c"
 REM 之所以名称使用_(下划线)，是为了和swig生成的calc_module.py配合使用
 set des="_calc_module.pyd"
-set PyInc="D:\\Lang\\Python\\include"
-set PyLib="D:\\Lang\\Python\\libs\\python37.lib"
+set PyInc="D:\\Lang\\Python\\Python38\\include"
+set PyLib="D:\\Lang\\Python\\Python38\\libs\\python38.lib"
 
 REM vs2017
-cl /LD calc.c %src% /Fe%des% /I%PyInc% %PyLib% 
+cl /LD calc.c %src% /Fe%des% /I %PyInc% %PyLib% 
 
 )
 )

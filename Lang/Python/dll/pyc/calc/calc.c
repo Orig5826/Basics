@@ -1,6 +1,6 @@
 
 #include <Python.h>
-#pragma comment(lib,"python37.lib")
+#pragma comment(lib,"python38.lib")
 
 #include "calc.h"
 
@@ -64,7 +64,7 @@ static struct PyModuleDef calc_module =
 	导出函数 PyInit_calc_module(名字不能随便起，"PyInit_ + 模块名")
 	导出函数中将模块名称与导出表进行连接
 */
-PyMODINIT_FUNC PyInit_calc_module(void)
+PyMODINIT_FUNC PyInit_calc(void)
 {
 	PyObject *m;
 	m = PyModule_Create(&calc_module);
