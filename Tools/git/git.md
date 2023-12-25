@@ -133,6 +133,25 @@
 	
 		> 以后就可以使用该命令将更新的代码提交到远程库中
 
+### 本地分支和远程分支不一致的情况
+```shell
+# 先将远程分支更新到本地，但不合并
+git fetch origin
+
+# 然后查看下差异
+git diff master origin/master
+
+# 如需要，可以将远程分支合并到本地分支中
+git merge origin/master 
+# 如果提示错误：fatal: refusing to merge unrelated histories。那么
+# 加上如下命令，可以让两个不相干的分支强行合并
+git merge origin/master --allow-unrelated-histories
+
+# 最后push即可
+git push origin master
+
+```
+
 ----------------------------------------------------------------
 ## 分支合并等操作
 - branch
