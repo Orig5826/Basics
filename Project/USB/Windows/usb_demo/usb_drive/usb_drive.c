@@ -10,12 +10,12 @@
 
 //#define USB_DRIVER_DEBUG
 
+#define HIDMINI_DEFAULT_PID              0x084B			  
 
 //
 // These are the default device attributes set in the driver
 // which are used to identify the device.
 //
-#define HIDMINI_DEFAULT_PID              0x084B
 #define HIDMINI_DEFAULT_VID              0x4853
 
 static USHORT s_hid_device_pid;

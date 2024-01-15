@@ -5,6 +5,7 @@
 
 #include <windows.h>
 
+#if 0
 // 控制台相关操作
 // 控制字体颜色显示
 #define SET_FORECOLOR(x) (FOREGROUND_INTENSITY | BACKGROUND_INTENSITY | (x) | BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED)
@@ -14,11 +15,22 @@
 #define SET_CMD_BLUE()		( SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), SET_FORECOLOR(FOREGROUND_BLUE)) )
 #define SET_CMD_PURPLE()	( SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), SET_FORECOLOR(FOREGROUND_RED | FOREGROUND_BLUE)) )
 #define SET_CMD_DEFAULT()	( SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), SET_DEFAULTCOLOR()) )
+#else
+
+#define SET_FORECOLOR(x)    
+#define SET_DEFAULTCOLOR()  
+
+#define SET_CMD_RED()        
+#define SET_CMD_BLUE()       
+#define SET_CMD_PURPLE()     
+#define SET_CMD_DEFAULT()
+
+#endif
 
 #define GET_STR_DISP(x) {\
 len = sizeof(str);\
 USB_HID_GetString(str, len, ##x);\
-printf("["#x"]:\n\t\t%S\n",(PWSTR)str); /* %S 似乎是windows上用于显示wchar_t的*/ \
+	printf("["#x"]:\n\t\t%S\n",(PWSTR)str); /* %S 似乎是windows上用于显示wchar_t的*/ \
 }
 
 void Display(unsigned char * data, unsigned int len)
