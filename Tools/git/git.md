@@ -240,4 +240,15 @@ git push origin master
 
 
 
-
+## 问题
+```
+Cloning into 'Basics'...
+The authenticity of host 'github.com (20.205.243.166)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+Host key verification failed.
+fatal: Could not read from remote repository.
+```
+如果遇到以上问题，那么要注意，Are you sure ...的时候，。不要直接回车。
+而是输入yes之后，再回车。
