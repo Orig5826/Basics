@@ -11,8 +11,8 @@ func main() {
     b := 10
     fmt.Println(b)
 
-    x,y := 128, "back to home"
-    fmt.Println(x, y)
+    m,n := 128, "back to home"
+    fmt.Println(m, n)
 
     // 常量
     const length int = 10
@@ -72,4 +72,18 @@ func main() {
     // 指针
     var ptr *int = &a3
     fmt.Println(*ptr)
+
+    // 类型
+    var x interface{}
+    x = "hello"
+    switch x.(type) {
+    case nil:
+        fmt.Println("nil")
+    case int:
+        fmt.Println("int")
+    case string:
+        fmt.Println("string")
+    default:
+        fmt.Println("other")
+    }
 }
