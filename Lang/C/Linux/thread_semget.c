@@ -1,9 +1,3 @@
-/**
-由于信号量只能进行两种操作等待和发送信号，即P(sv)和V(sv),他们的行为是这样的：
-- P(sv)：如果sv的值大于零，就给它减1；如果它的值为零，就挂起该进程的执行
-- V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运行，如果没有进程因等待sv而挂起，就给它加1.
-举个例子，就是两个进程共享信号量sv，一旦其中一个进程执行了P(sv)操作，它将得到信号量，并可以进入临界区，使sv减1。而第二个进程将被阻止进入临界区，因为当它试图执行P(sv)时，sv为0，它会被挂起以等待第一个进程离开临界区域并执行V(sv)释放信号量，这时第二个进程就可以恢复执行。
-*/
 #include <stdio.h>  
 #include <stdlib.h>  
 #include <pthread.h>  
@@ -16,6 +10,7 @@
 #include <sys/sem.h>
 
 
+// #define COUNT_MAX   10
 #define COUNT_MAX   100000
 uint32_t count = 0;
 
@@ -23,11 +18,58 @@ uint32_t count = 0;
 #define USE_SEM
 
 #ifdef USE_SEM
-#define NUM_SEMS 2       // 信号量的数量  
-// #define SEM_VALUE 1     // 信号量的初始值  
+int g_semid;
 
-key_t key;
-int semid;
+int sem_new(int sem_num)
+{
+    key_t key;
+    int semid = 0;
+
+    // 生成一个唯一的key值，通常使用ftok函数  
+    // if ((key = ftok(".", 'R')) == -1) {  
+    //     perror("ftok");  
+    //     exit(1);  
+    // }
+    key = IPC_PRIVATE;
+
+    // 创建信号量集  
+    if ((semid = semget(key, sem_num, IPC_CREAT | 0666)) == -1) {  
+        perror("semget");  
+        exit(1);  
+    }
+
+    // ----- 初始化信号量的值 -----
+    // 按照当前程序的设计
+    // 初值可以影响两线程谁先执行count++;
+    union semun {  
+        int val;  
+        struct semid_ds *buf;  
+        unsigned short *array;  
+    }arg;
+    arg.val = 0;        // 初值
+    if (semctl(semid, 0, SETVAL, arg) == -1) {  
+        perror("semctl");  
+        exit(1);  
+    }
+
+    union semun arg2;
+    arg2.val = 1;        // 初值
+    if (semctl(semid, 1, SETVAL, arg2) == -1) {  
+        perror("semctl");  
+        exit(1);  
+    }
+
+    return semid;
+}
+
+void sem_del(int semid)
+{
+    // 删除信号量集  
+    if (semctl(semid, 0, IPC_RMID) == -1) {  
+        perror("semctl");  
+        exit(1);  
+    }
+}
 
 void sem_p(int semid, int index)
 {
@@ -53,8 +95,6 @@ void sem_v(int semid, int index)
         exit(1);
     }
 }
-
-
 #endif
 
 void *thread_function(void *arg) {
@@ -63,16 +103,16 @@ void *thread_function(void *arg) {
     for(uint32_t i = 0; i < COUNT_MAX; i++)
     {
         #ifdef USE_SEM
-        sem_p(semid, 0);
+        sem_p(g_semid, 0);
         #endif
 
-        // printf(".");
+        // printf("1");
 
         count++;
         count--;
 
         #ifdef USE_SEM
-        sem_v(semid, 1);
+        sem_v(g_semid, 1);
         #endif
     }
     return NULL;  
@@ -85,16 +125,16 @@ void *thread_function2(void *arg) {
     for(uint32_t i = 0; i < COUNT_MAX; i++)
     {
         #ifdef USE_SEM
-        sem_p(semid, 1);
+        sem_p(g_semid, 1);
         #endif
 
-        // printf("-");
+        // printf("2");
 
         count++;
         count--;
 
         #ifdef USE_SEM
-        sem_v(semid, 0);
+        sem_v(g_semid, 0);
         #endif
     }
     return NULL;  
@@ -109,37 +149,7 @@ int main(int argc, char *argv[])
     int  iret1, iret2;
 
     #ifdef USE_SEM
-    // 生成一个唯一的key值，通常使用ftok函数  
-    // if ((key = ftok(".", 'R')) == -1) {  
-    //     perror("ftok");  
-    //     exit(1);  
-    // }
-    key = IPC_PRIVATE;
-
-    // 创建信号量集  
-    if ((semid = semget(key, NUM_SEMS, IPC_CREAT | 0666)) == -1) {  
-        perror("semget");  
-        exit(1);  
-    }
-
-    // 初始化信号量的值  
-    union semun {  
-        int val;  
-        struct semid_ds *buf;  
-        unsigned short *array;  
-    }arg;
-    arg.val = 1;
-    if (semctl(semid, 0, SETVAL, arg) == -1) {  
-        perror("semctl");  
-        exit(1);  
-    }
-
-    union semun arg2;
-    arg2.val = 0;
-    if (semctl(semid, 1, SETVAL, arg2) == -1) {  
-        perror("semctl");  
-        exit(1);  
-    }
+    g_semid = sem_new(2);
     #endif
 
     // 创建线程 1  
@@ -161,11 +171,7 @@ int main(int argc, char *argv[])
     pthread_join(thread2, NULL);
 
     #ifdef USE_SEM
-    // 删除信号量集  
-    if (semctl(semid, 0, IPC_RMID) == -1) {  
-        perror("semctl");  
-        exit(1);  
-    }
+    sem_del(g_semid);
     #endif
 
     printf("count = %d\n", count); 
