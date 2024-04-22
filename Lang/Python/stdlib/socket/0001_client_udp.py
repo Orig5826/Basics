@@ -16,29 +16,21 @@ def time_calc(time_diff, datalen):
         print("{:10.2f}".format(8*datalen/1024/1024/time_diff),end="")
     print("")
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# net_addr = ('192.168.10.135', 8080)
-net_addr = ('192.168.30.131', 8080)
-
-try:
-    # 建立连接:
-    s.connect(net_addr)
-except:
-    print('{}:{} Connect Failed!'.format(*net_addr))
-    sys.exit(-1)
-
+net_addr = ('192.168.10.135', 8080)
+# net_addr = ('192.168.30.131', 8080)
 
 print('echo test by 1024 bytes!')
 time_items()
 
-
 # --------------------------------
 # 测试包长
-package_size = 2048
+# package_size = 2048       # recvfrom卡死，不知道为什么
+package_size = 1024
 
 # 测试轮次
-count = 1000
+count = 10000
 
 
 # 生成随机数
@@ -49,8 +41,8 @@ for i in range(package_size):
 # 开始计时
 start_time = time.time()
 for i in range(count):
-    s.send(cmd)
-    res = s.recv(package_size)
+    s.sendto(cmd, net_addr)
+    data, address = s.recvfrom(package_size)
 
 end_time = time.time()
 
