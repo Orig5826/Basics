@@ -17,14 +17,14 @@
 #define PORT                8080
 #define BACKLOG             5
 
-#define BUFFER_SIZE_MAX     4096 //1024
+#define BUFFER_SIZE_MAX     1024
 
 uint8_t recv_buf[BUFFER_SIZE_MAX];
 uint32_t recv_len = 0;
 
 int socket_server_tcp_demo(void)
 {
-    int sock_fd = -1;
+    int sockfd = -1;
     struct sockaddr_in server_addr;
     int connect_fd = -1;
     socklen_t addrlen = 0;
@@ -34,15 +34,15 @@ int socket_server_tcp_demo(void)
 
     // 创建套接字
     printf("create socket\r\n");
-    sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if(sock_fd < 0)
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if(sockfd < 0)
     {
         printf("socket failed!\r\n");
         goto done;
     }
 
     // int opt = 1;
-    // if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+    // if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
     //     perror("setsockopt");
     //     goto done; 
     // }
@@ -52,7 +52,7 @@ int socket_server_tcp_demo(void)
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
-    if(bind(sock_fd, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    if(bind(sockfd, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
         printf("bind failed!\r\n");
         goto done;
@@ -60,7 +60,7 @@ int socket_server_tcp_demo(void)
 
     // 开始监听
     printf("start listen ...\r\n");
-    if(listen(sock_fd, BACKLOG) < 0)
+    if(listen(sockfd, BACKLOG) < 0)
     {
         printf("listen failed!\r\n");
         goto done;
@@ -70,7 +70,7 @@ int socket_server_tcp_demo(void)
     {
         // 等待连接[阻塞]
         printf("wait connect... \r\n");
-        connect_fd = accept(sock_fd, (struct sockaddr *)&client_addr, &addrlen);
+        connect_fd = accept(sockfd, (struct sockaddr *)&client_addr, &addrlen);
         if(connect_fd < 0)
         {
             printf("accept failed\r\n");
@@ -99,14 +99,14 @@ int socket_server_tcp_demo(void)
                 goto done;
             }
 
-            // printf("recv:\n%s\n", recv_buf);  
+            printf("recv:\n%s\n", recv_buf);  
             send(connect_fd, recv_buf, length, 0);
         }
     }
 
     return 0;
 done:
-    close(sock_fd);
+    close(sockfd);
     return -1;
 }
 
