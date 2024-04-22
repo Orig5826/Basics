@@ -4,7 +4,8 @@ import sys
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-net_addr = ('127.0.0.1', 8080)
+# net_addr = ('127.0.0.1', 8080)
+net_addr = ('192.168.30.131', 8080)
 
 try:
 	# 建立连接:

@@ -79,11 +79,15 @@ int socket_server_tcp_demo(void)
         printf("new client connected from (%s, %d)\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
         recv_len = BUFFER_SIZE_MAX;
+        
+        uint32_t count = 0;
         while(1)
         {
             // 等待接收[阻塞]
             length = 0;
-            printf("wait recv... \r\n");
+            printf("wait recv... [%d]\r\n",count);
+            count++;
+            
             length = recv(connect_fd, recv_buf, recv_len, 0);
             if(length == 0)
             {
@@ -99,7 +103,8 @@ int socket_server_tcp_demo(void)
                 goto done;
             }
 
-            printf("recv:\n%s\n", recv_buf);  
+            // printf("recv:\n%s\n", recv_buf);  
+            printf("length=%d\r\n", length);  
             send(connect_fd, recv_buf, length, 0);
         }
     }
