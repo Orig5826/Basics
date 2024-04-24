@@ -181,11 +181,11 @@ void GetHIDConfig(HID_Config * pHid_cfg)
 
 int __cdecl main()
 {
-	unsigned char sBuf[0x40];
+	unsigned char sBuf[512];
 	unsigned int sLen = 0;
-	unsigned char rBuf[0x40];
+	unsigned char rBuf[512];
 	unsigned int rLen = 0;
-	unsigned char str[64];
+	unsigned char str[512];
 	unsigned int len = 0;
 	int i = 0;
 	unsigned short num = 0x00;
@@ -209,32 +209,42 @@ int __cdecl main()
 #define PACKAGE_COUNT 1
 		while (1)
 		{
-			for (i = 0; i < 64; i++)
+			for (i = 0; i < 512; i++)
 			{
 				sBuf[i] = (unsigned char)(num + i) & 0xff;
 			}
 
+#if 1
+			sLen = 248;
+			USB_HID_SetFeature(0, sBuf, sLen);
+			rLen = 248;
+			USB_HID_GetFeature(0, rBuf, &rLen);
+#else
 			for (int j = 0; j < PACKAGE_COUNT; j++)
 			{
 				// SetFeature
-				sLen = 0x40;
+				// sLen = 0x40;
+				sLen = 248;
+				// sLen = 256;
 				USB_HID_SetFeature(0, sBuf, sLen);
 
-				SET_CMD_RED();
-				printf("[SetFeatue] \n");
-				SET_CMD_DEFAULT();
-				Display(sBuf, sLen);
+				//SET_CMD_RED();
+				//printf("[SetFeatue] \n");
+				//SET_CMD_DEFAULT();
+				//Display(sBuf, sLen);
 			}
 			for (int j = 0; j < PACKAGE_COUNT; j++)
 			{
 				// GetFeatue
-				rLen = 0x40;
+				// rLen = 0x40;
+				rLen = 248;
+				// rLen = 256;
 				USB_HID_GetFeature(0, rBuf, &rLen);
 
-				SET_CMD_PURPLE();
-				printf("[GetFeatue] \n");
-				SET_CMD_DEFAULT();
-				Display(rBuf, rLen);
+				//SET_CMD_PURPLE();
+				//printf("[GetFeatue] \n");
+				//SET_CMD_DEFAULT();
+				//Display(rBuf, rLen);
 			}
 
 
@@ -255,10 +265,10 @@ int __cdecl main()
 			printf("[Read] \n");
 			SET_CMD_DEFAULT();
 			Display(rBuf, rLen);
-
+#endif
 			num++;
-			Sleep(1000);
-			printf("------------------------\n");
+			// Sleep(1000);
+			printf("num = %d\n",num);
 	
 		}
 	}
@@ -268,3 +278,35 @@ int __cdecl main()
 	system("pause");
 	return 0;
 }
+
+/**
+可参考HID报告描述符
+#define FEATURE_LEN		248
+
+	0x06, 0x00, 0xFF, //Usage Page:
+	0x09, 0x01, //Usage: Undefined
+	0xa1, 0x01, //Collection
+
+	0x09, 0x03, //Usage (vendor-defined)
+	0x15, 0x00, //Logical Minimum
+	0x25, 0xFF, //Logical Maximum
+	0x95, FEATURE_LEN, //Report Count
+	0x75, 0x08, //Report Size
+	0x81, 0x02, //Input (Data, Variable, Absolute,Buffered Bytes)
+
+	0x09, 0x04, //Usage (vendor-defined)
+	0x15, 0x00, //Logical Minimum
+	0x25, 0xFF, //Logical Maximum
+	0x95, FEATURE_LEN, //Report Count
+	0x75, 0x08, //Report Size
+	0x91, 0x02, //Output (Data, Variable, Absolute,Buffered Bytes)
+
+	0x09, 0x05, //Usage (vendor-defined)
+	0x15, 0x00, //Logical Minimum
+	0x25, 0xFF, //Logical Maximum
+	0x95, FEATURE_LEN, //Report Count
+	0x75, 0x08, //Report Size
+	0xb1, 0x02, //Feature (Data, Variable, Absolute,Buffered Bytes)
+
+	0xc0        //End Collection
+*/
