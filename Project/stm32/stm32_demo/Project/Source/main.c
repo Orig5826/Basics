@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	i2c_slave_example();
+	SPI_Example();
 	
 	return 0;
 }

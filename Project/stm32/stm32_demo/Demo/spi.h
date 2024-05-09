@@ -14,8 +14,15 @@
 #include "stm32f10x_conf.h"
 
 // 使能
-#define SPI_CS_EN()		GPIO_SetBits(GPIOA,GPIO_Pin_4)
-#define SPI_CS_DN()		GPIO_ResetBits(GPIOA,GPIO_Pin_4)
+//#define SPI_CS_EN()		GPIO_ResetBits(GPIOA,GPIO_Pin_4)
+//#define SPI_CS_DN()		GPIO_SetBits(GPIOA,GPIO_Pin_4)
+
+ #define SPI_CS_EN()     SPI_Cmd(SPI1,ENABLE)
+ #define SPI_CS_DN()     SPI_Cmd(SPI1,DISABLE)
+
+//#define SPI_CS_EN()       SPI_SSOutputCmd(SPI1, ENABLE)
+//#define SPI_CS_DN()       SPI_SSOutputCmd(SPI1, DISABLE)
+
 
 void SPI_Example(void);
 
