@@ -2,18 +2,8 @@
 #include "./ui_mainwindow.h"
 
 #include <QPainter>
+#include <QTimer>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -22,8 +12,9 @@ MainWindow::~MainWindow()
 #include <QDebug>
 #include <QFontMetrics>
 
-// #define FONT_SIZE       64
-#define FONT_SIZE       16
+#include <QByteArray>
+
+#define FONT_SIZE          16 // 16/64
 
 // #define FONT_TEXT       "好"
 // #define FONT_TEXT       "美"
@@ -40,6 +31,31 @@ MainWindow::~MainWindow()
 #define FONT_NAME       "宋体"
 // #define FONT_NAME       ""
 
+
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::timer_update);
+    // timer->start(200);  // ms
+    timer->start(10);  // ms
+}
+
+MainWindow::~MainWindow()
+{
+    delete timer;
+
+    delete ui;
+}
+
+void MainWindow::timer_update(void)
+{
+    this->update();
+}
 
 void MainWindow::draw_point(QPainter &painter,int i, int j, QColor color, bool fill)
 {
@@ -68,6 +84,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     painter.drawRect(0, 0, FONT_SIZE, FONT_SIZE);
     // painter.fillRect(240,240,240,240,QColor(255,0,0,255));
+    // painter.fillRect(this->rect(), QColor(255,255,255,255));
+
+    static uint32_t count = this->unicode;
+    count++;
+
+    QString str = QString(QChar(count));
 
     QFont font(FONT_NAME);
     font.setPixelSize(FONT_SIZE);
@@ -79,19 +101,19 @@ void MainWindow::paintEvent(QPaintEvent *event)
     //windows
     painter.setPen(QColor("black"));
     painter.setFont(font);
-    painter.drawText(QRect(0,0,FONT_SIZE,FONT_SIZE),Qt::AlignCenter, FONT_TEXT);
+    painter.drawText(QRect(0,0,FONT_SIZE,FONT_SIZE),Qt::AlignCenter, str);
+    QString str3 = QString::number(count, 16);
+    painter.drawText(QRect(100, 0, FONT_SIZE*5, FONT_SIZE),Qt::AlignCenter, str3);
 
     // image
     QImage image(FONT_SIZE, FONT_SIZE, QImage::Format_RGB32);
     image.fill(Qt::white);
-    // image.text("的");
 
     QPainter painter2(&image);
     painter2.setPen(QColor("black"));
     painter2.setFont(font);
-    painter2.drawText(QRect(0,0,FONT_SIZE,FONT_SIZE),Qt::AlignCenter, FONT_TEXT);
-    image.save("output.bmp");
-    image.save("output.png");
+    painter2.drawText(QRect(0,0,FONT_SIZE, FONT_SIZE),Qt::AlignCenter, str);
+    // image.save("output.bmp");
 
     for(uint32_t i = 0; i < image.width(); i++)
     {
