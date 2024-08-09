@@ -25,7 +25,7 @@ GUID GUID_USBCDROM = { 0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9
 
 
 #define SPT_SENSE_LENGTH 32					//!< 
-#define SPTWB_DATA_LENGTH (4096 + 16)		//!< 数据发送接收缓存大小,默认4k
+#define SPTWB_DATA_LENGTH (65536 + 16)		//!< 数据发送接收缓存大小,默认64k+
 											//!< 多余的空间是为了留有余量，防溢出
 
 /*
