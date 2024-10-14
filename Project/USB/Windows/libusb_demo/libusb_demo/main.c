@@ -166,10 +166,14 @@ int test_hid(void)
 		{
 			report_buffer[i] = (num + i) & 0xff;
 		}
+		memset(report_buffer, 0x00, 64);
+		memmove(report_buffer, "\x01\xef\x00\x00\x00\x00\x01\x00\x03\x26\x00\x2a", 12);
+		// memmove(report_buffer, "\x01\xef\xFF\xFF\xFF\xFF\x01\x00\x03\x26\x00\x2a", 12);
 
-#if 0
+#if 1
+		size = 64;
 		r = libusb_control_transfer(handle, LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE,
-			HID_SET_REPORT, (HID_REPORT_TYPE_OUTPUT << 8) | 0x00, 0, report_buffer, (uint16_t)size, 5000);
+			HID_SET_REPORT, (HID_REPORT_TYPE_FEATURE << 8) | 0x00, 0, report_buffer, (uint16_t)size, 5000);
 		if (r >= 0) {
 			//display_buffer_hex(report_buffer, size);
 		}
@@ -189,9 +193,12 @@ int test_hid(void)
 			}
 		}
 
+		Sleep(10);
+
+		size = 64;
 		memset(report_buffer, 0x00, size);
 		r = libusb_control_transfer(handle, LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE,
-			HID_GET_REPORT, (HID_REPORT_TYPE_INPUT << 8) | 0x00, 0, report_buffer, (uint16_t)size, 5000);
+			HID_GET_REPORT, (HID_REPORT_TYPE_FEATURE << 8) | 0x00, 0, report_buffer, (uint16_t)size, 5000);
 		if (r >= 0) {
 			display_buffer_hex(report_buffer, size);
 		}
@@ -211,7 +218,8 @@ int test_hid(void)
 			}
 		}
 
-		//Sleep(1000);
+		break;
+		// Sleep(1000);
 #else
 		//printf("\nTesting interrupt write using endpoint %02X...\n", endpoint_out);
 		r = libusb_interrupt_transfer(handle, endpoint_out, report_buffer, size, &size, 5000);

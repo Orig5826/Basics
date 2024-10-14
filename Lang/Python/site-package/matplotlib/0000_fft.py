@@ -26,8 +26,9 @@ A2 = 2
 f2 = 3  # 3Hz
 # x = A1*np.sin(2*np.pi*f1*t) 		#用标准sin测试一下
 # x = A0 + A1*np.sin(2*np.pi*f1*t) + A2*np.sin(2*np.pi*f2*t)
-x = A0 + A1*np.sin(2*np.pi*f1*t) + A2*np.sin(2*np.pi *
-                                             f2*t) + (-5)*np.random.random(N)
+
+x0 = A0 + A1*np.sin(2*np.pi*f1*t) + A2*np.sin(2*np.pi *f2*t)
+x = x0 + (-5)*np.random.random(N)
 
 # --------------------------
 # 进行fft变换
@@ -64,7 +65,10 @@ def filter(freq, ft, flag=0, threshold=5):
             # 若已经知道当前最大频率
             # 则再高的频率直接滤掉
             # 相对于方法4而言，效果要好一些
-            if np.abs(freq[i]) > 3.5:
+            r = np.abs(freq[i])
+            if 0 < r < 4:
+                pass
+            else:
                 ft[i] = 0
         else:
             print("no filter")
@@ -72,15 +76,21 @@ def filter(freq, ft, flag=0, threshold=5):
 
 figure, ax = plt.subplots()
 figure.suptitle('频谱&滤波')
+
+# 0.0 没干扰
+plt.subplot(325)
+plt.axis([0, 5, -10, 10])
+plt.plot(t, x0, 'b')
+
 # --------------------------
 # 1.0 显示原始图形
-plt.subplot(221)
+plt.subplot(321)
 plt.axis([0, 5, -10, 10])
 plt.plot(t, x, 'b')
 
 
 # 1.1 频谱
-plt.subplot(222)
+plt.subplot(322)
 plt.axis([-5, 5, 0, 3])
 y1 = np.abs(y)/N  # 显示绝对值
 plt.plot(freq, y1, 'r')
@@ -92,13 +102,13 @@ filter(freq, y, 5, threshold=2)
 x2 = np.fft.ifft(y)
 
 # 1.2 频谱
-plt.subplot(224)
+plt.subplot(324)
 plt.axis([-5, 5, 0, 3])
 y1 = np.abs(y)/N  # 显示绝对值
 plt.plot(freq, y1, 'r')
 
 # 2.1fft逆变换之后
-plt.subplot(223)
+plt.subplot(323)
 plt.axis([0, 5, -10, 10])
 plt.plot(t, x2.real, 'b')  # 直接x2这里有warning，是不是应该x2.real
 # 因为x2为Complex
