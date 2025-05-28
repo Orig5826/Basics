@@ -1,9 +1,8 @@
 
-#ifndef _FACTORY_
-#define _FACTORY_
+#ifndef _FACTORY_H_
+#define _FACTORY_H_
 
-#include <iostream>
-using namespace std;
+#include "animal.h"
 
 enum class AnimalType
 {
@@ -11,41 +10,31 @@ enum class AnimalType
     Dog,
 };
 
-class Animal
-{
-    public:
-    virtual ~Animal() = default;
-    void show() { cout << "I am an animal" << endl; };
-};
-
-class AnimalCat : public Animal
-{
-    public:
-    AnimalCat()
-    {
-        std::cout << "AnimalCat constructor" << std::endl;
-    };
-    ~AnimalCat() {};
-    void show() { cout << "I am a cat" << endl; }
-};
-
-class AnimalDog : public Animal
-{
-    public:
-    AnimalDog()
-    {
-        std::cout << "AnimalDog constructor" << std::endl;
-    };
-    ~AnimalDog() {};
-    void show() { cout << "I am a dog" << endl; }
-};
-
 class AnimalFactory
 {
     public:
     AnimalFactory() {};
     ~AnimalFactory() {};
-    Animal* create(AnimalType);
+    Animal* create(AnimalType type)
+    {
+        Animal* animal = nullptr;
+        switch (type)
+        {
+        case AnimalType::Cat:
+        {
+            animal = new AnimalCat();
+        }break;
+        case AnimalType::Dog:
+        {
+            animal = new AnimalDog();
+        }break;
+        default:
+        {
+
+        }break;
+        }
+        return animal;
+    }
 };
 
 void factory_demo();
