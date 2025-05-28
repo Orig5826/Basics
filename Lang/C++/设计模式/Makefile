@@ -1,16 +1,29 @@
-RM:= del
+ifeq ($(OS),Windows_NT)
+RM := del /q /f /s
+else
+RM := rm -f
+endif
 
+# compiler
 CC:= g++
 
+# header
 HEADER:= -I./Source/
 
-CPPFLAGS:= -std=c++17 -Wall -Wextra -Werror -pedantic
+# c++ flags
+CPPFLAGS:= -std=c++17 
+CPPFLAGS+= -g
+CPPFLAGS+= -O2
+CPPFLAGS+= -Wall
+#CPPFLAGS+= -Wextra
+#CPPFLAGS+= -Werror
+#CPPFLAGS+= -pedantic
 
-exe:= main.exe
-# 匹配所有 .cpp 文件，包括 Source 目录下的
-src := $(wildcard *.cpp ./Source/*.cpp) 
-# 将所有 .cpp 文件转换为 .o 文件
+# target 
+exe:= a.exe
+src := $(wildcard *.cpp Source/*.cpp) 
 obj := $(src:.cpp=.o)
+
 
 all: $(exe)
 
@@ -20,5 +33,6 @@ $(exe): $(obj)
 %.o: %.cpp
 	$(CC) -c $< -o $@ $(HEADER) $(CPPFLAGS)
 
+.PHONY: clean
 clean:
-	$(RM) $(obj) $(exe)
+	$(RM) *.o *.exe

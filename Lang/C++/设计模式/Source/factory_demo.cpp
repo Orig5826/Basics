@@ -1,13 +1,18 @@
 
 #include "factory.h"
 
-void factory_demo(void) 
+void factory_demo()
 {
-    AnimalCat* cat = AnimalFactory::create(AnimalType::Cat);
-    cat->show();
-    delete cat;
+    AnimalFactory factory;
+    AnimalCat* cat = static_cast<AnimalCat*>(factory.create(AnimalType::Cat));
+    if (cat) {
+        cat->show();
+        delete cat;
+    }
 
-    AnimalCat* dog = AnimalFactory::create(AnimalType::Dog);
-    dog->show();
-    delete dog;
+    AnimalDog* dog = static_cast<AnimalDog*>(factory.create(AnimalType::Dog));
+    if (dog) {
+        dog->show();
+        delete dog;
+    }
 }

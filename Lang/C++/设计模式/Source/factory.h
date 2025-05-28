@@ -45,7 +45,7 @@ class AnimalFactory
     public:
     AnimalFactory() {};
     ~AnimalFactory() {};
-    void* create(AnimalType);
+    Animal* create(AnimalType);
 };
 
 void factory_demo();

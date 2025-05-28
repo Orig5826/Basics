@@ -1,6 +1,6 @@
 #include "factory.h"
 
-void* AnimalFactory::create(AnimalType type)
+Animal* AnimalFactory::create(AnimalType type)
 {
     Animal* animal = nullptr;
     switch (type)
