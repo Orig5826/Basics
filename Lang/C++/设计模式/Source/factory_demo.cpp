@@ -3,16 +3,18 @@
 
 void factory_demo()
 {
-    AnimalFactory factory;
-    AnimalCat* cat = static_cast<AnimalCat*>(factory.create(AnimalType::Cat));
+    AnimalFactory* factory = new AnimalFactory();
+    AnimalCat* cat = dynamic_cast<AnimalCat*>(factory->create(AnimalType::Cat));
     if (cat) {
         cat->show();
         delete cat;
     }
 
-    AnimalDog* dog = static_cast<AnimalDog*>(factory.create(AnimalType::Dog));
+    AnimalDog* dog = dynamic_cast<AnimalDog*>(factory->create(AnimalType::Dog));
     if (dog) {
         dog->show();
         delete dog;
     }
+
+    delete factory;
 }
