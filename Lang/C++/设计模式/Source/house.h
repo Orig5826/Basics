@@ -8,7 +8,7 @@ using namespace std;
 class House
 {
     public:
-    ~House() = default;
+    virtual ~House() = default;
     virtual void show() = 0;
 };
 
