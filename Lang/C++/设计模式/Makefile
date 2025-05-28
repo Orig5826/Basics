@@ -24,7 +24,7 @@ exe:= a.exe
 src := $(wildcard *.cpp Source/*.cpp) 
 obj := $(src:.cpp=.o)
 
-
+.PHONY: all
 all: $(exe)
 
 $(exe): $(obj)

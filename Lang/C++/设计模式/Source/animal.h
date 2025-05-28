@@ -9,7 +9,7 @@ class Animal
 {
     public:
     virtual ~Animal() = default;
-    void show() { cout << "I am an animal" << endl; };
+    virtual void show() = 0;
 };
 
 class AnimalCat : public Animal
@@ -20,7 +20,7 @@ class AnimalCat : public Animal
         std::cout << "AnimalCat constructor" << std::endl;
     };
     ~AnimalCat() {};
-    void show() { cout << "I am a cat" << endl; }
+    void show() { cout << "cat" << endl; }
 };
 
 class AnimalDog : public Animal
@@ -31,7 +31,7 @@ class AnimalDog : public Animal
         std::cout << "AnimalDog constructor" << std::endl;
     };
     ~AnimalDog() {};
-    void show() { cout << "I am a dog" << endl; }
+    void show() { cout << "dog" << endl; }
 };
 
 #endif
