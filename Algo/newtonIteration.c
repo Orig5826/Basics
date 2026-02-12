@@ -20,11 +20,11 @@ double D_fun(double x)
 
 #define EPS         1e-9
 #define MAX_ITER    20
-#define PRECISION   "$%.10f"
+#define PRECISION   "%.10f"
 
 // #define EPS 1e-50
 // #define MAX_ITER 100
-// #define PRECISION "$%.50f"
+// #define PRECISION "%.50f"
 
 double calc_sqrt(double x)
 {
