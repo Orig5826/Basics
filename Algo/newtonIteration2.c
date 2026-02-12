@@ -34,11 +34,12 @@
 
 double getExpTerm(double Vd)
 {
-    // if(Vd > 0.8)
-    // {
-    //     return 0.8;
-    // }
-    return Vd/(N * VT);
+    double exp_term = Vd/(N * VT);
+    if(exp_term > 709)
+    {
+        exp_term = 709;
+    }
+    return exp_term;
 }
 
 double getId(double Vd)
@@ -55,10 +56,11 @@ double getIdDerivative(double Vd)
 
 double getVd(double Vs)
 {
-    double Vd = DIODE_VD_INIT;
+    int i = 0;
+    double Vd = Vs;
 
     double Vd_prev = 0;
-    for (int i = 0; i < MAX_ITER; i++)
+    for (i = 0; i < MAX_ITER; i++)
     {
         Vd_prev = Vd;
 
@@ -84,11 +86,10 @@ double getVd(double Vs)
             printf("Converged after %d iterations.\n", i);
             break;
         }
-
-        if(i == MAX_ITER)
-        {
-            printf("Iteration did not converge.\n");
-        }
+    }
+    if(i == MAX_ITER)
+    {
+        printf("Iteration did not converge.\n");
     }
     return Vd;
 }
