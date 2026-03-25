@@ -9,3 +9,4 @@ all: ${objs}
 
 clean:
 	del *.exe
+	del *.bin

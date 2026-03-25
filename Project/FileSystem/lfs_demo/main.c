@@ -6,7 +6,7 @@
 #include "lfs.h"
 
 // 硬件属性
-#define FILE_PAGE_SIZE		256
+#define FILE_PAGE_SIZE		128
 #define FILE_BLOCK_SIZE		256
 
 
@@ -60,9 +60,9 @@ const struct lfs_config cfg =
 	.sync = _block_sync,
 
 	// block device configuration
-	.read_size = 16,
-	.prog_size = 16,
-	.block_size = 256,	// BLOCK_SIZE
+	.read_size = 1,
+	.prog_size = FILE_PAGE_SIZE,
+	.block_size = FILE_BLOCK_SIZE,
 	.block_count = 20,
 	.lookahead_size = 256,
 	.cache_size = 256,
@@ -85,7 +85,7 @@ int main()
 
 	// read current count
 	uint32_t boot_count = 0;
-	lfs_file_open(&lfs, &file, "boot_count", LFS_O_RDWR | LFS_O_CREAT);
+	lfs_file_open(&lfs, &file, "@boot_count=", LFS_O_RDWR | LFS_O_CREAT);
 	lfs_file_read(&lfs, &file, &boot_count, sizeof(boot_count));
 
 	// update boot count
