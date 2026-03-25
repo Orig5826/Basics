@@ -64,9 +64,9 @@ const struct lfs_config cfg =
 	.prog_size = FILE_PAGE_SIZE,
 	.block_size = FILE_BLOCK_SIZE,
 	.block_count = 20,
-	.lookahead_size = 256,
-	.cache_size = 256,
-	.block_cycles = -1,//10,
+	.cache_size = FILE_BLOCK_SIZE,
+	.lookahead_size = 16,
+	.block_cycles = -1, //100,
 };
 
 
