@@ -208,12 +208,14 @@
 ## `0x0ff` LFS_TYPE_SUPERBLOCK
 > 超级块，总大小32字节
 
-| 含义 | 字节数 | 说明
-| :----: | :----: | :----:
-| Magic string | 8 | "littlefs"
-| Version | 4 | 0x00020000
-| Block size | 4 | 块大小
-| Block count | 4 | 块数量
-| Name max | 4 | 文件名最大长度
-| File max | 4 | 文件最大长度
-| Attribute max | 4 | 属性最大长度
+| 含义 | 字节数 | 默认值| 说明 
+| :----: | :----: | :----: | :----:
+| Magic string | 8 | "littlefs" |
+| Version | 4 | 0x00020001 |
+| Block size | 4 |  |块大小
+| Block count | 4 | |块数量
+| Name max | 4 | 0x000000ff |文件名最大长度
+| File max | 4 | 0x7fffffff | 文件最大长度
+| Attribute max | 4 | 0x000003fe |属性最大长度
+
+
