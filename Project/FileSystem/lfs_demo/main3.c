@@ -38,10 +38,6 @@ static int _block_read(const struct lfs_config *c, lfs_block_t block, lfs_off_t 
 
 static int _block_prog(const struct lfs_config *c, lfs_block_t block, lfs_off_t off, const void *buffer, lfs_size_t size)
 {
-	static uint32_t count = 0;
-	count++;
-	printf("block_prog: %d\n", count);
-
 	uint32_t addr = block * c->block_size + off;
 	file_write(FILE_NAME, addr, (uint8_t *)buffer, size);
 	return 0;
@@ -128,7 +124,7 @@ int main()
 }
 #else
 
-#define FILE_SIZE 1024 // (32 * 1024)
+#define FILE_SIZE (32 * 1024)
 static uint8_t file_data[FILE_SIZE];
 static uint8_t temp_buf[FILE_SIZE];
 
@@ -176,15 +172,6 @@ int main()
 	lfs_file_read(&lfs, &file, temp_buf, FILE_SIZE);
 	for (uint32_t i = 0; i < FILE_SIZE; i++)
 	{
-		if(i < 10)
-		{
-			printf("%02x ", temp_buf[i]);
-		}
-		if(i == 10)
-		{
-			printf("\n");
-		}
-
 		if (temp_buf[i] != file_data[i])
 		{
 			printf("[%d] %d %d\n", i, temp_buf[i], file_data[i]);
@@ -197,37 +184,9 @@ int main()
 	lfs_file_close(&lfs, &file);
 
 	// release any resources we were using
-	// lfs_unmount(&lfs);
+	lfs_unmount(&lfs);
 
 	printf("[OK] succeed!\n");
-
-	for (uint32_t i = 0; i < 10; i++)
-	{
-		file_data[i] = (i + 0x30) & 0xff;
-	}
-
-	// ret = lfs_file_opencfg(&lfs, &file, "file", LFS_O_RDWR | LFS_O_CREAT, &file_cfg);
-	ret = lfs_file_opencfg(&lfs, &file, "file", LFS_O_RDWR, &file_cfg);
-	printf("lfs_file_open: %d\n", ret);
-
-	length = lfs_fs_size(&lfs);
-	printf("lfs_fs_size: %d\n", length);
-
-	lfs_file_seek(&lfs, &file, 2, LFS_SEEK_SET);
-	length = lfs_file_write(&lfs, &file, file_data, 6);
-
-	lfs_file_rewind(&lfs, &file);
-	lfs_file_read(&lfs, &file, temp_buf, 10);
-	for (uint32_t i = 0; i < 10; i++)
-	{
-		if(i < 10)
-		{
-			printf("%02x ", temp_buf[i]);
-		}
-	}
-	printf("\n");
-
-	lfs_file_close(&lfs, &file);
 
 	return 0;
 }
