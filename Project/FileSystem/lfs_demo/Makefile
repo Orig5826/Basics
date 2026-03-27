@@ -1,12 +1,15 @@
 
+INCLUDES = -I.
+
 objs = file.o lfs_util.o lfs.o main.o
 
 all: ${objs}
-	gcc -o a.exe $^
+	gcc -o a.exe $^ ${INCLUDES}
 
 %.o : %.c
-	gcc -o $@ -c $<
+	gcc -o $@ -c $< ${INCLUDES}
 
 clean:
-	del *.exe
-	del *.bin
+	rm *.exe
+	rm *.bin
+	rm *.o

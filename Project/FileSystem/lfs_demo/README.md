@@ -219,3 +219,16 @@
 | Attribute max | 4 | 0x000003fe |属性最大长度
 
 
+
+
+## 注意事项
+
+### 不使用MALLOC情况下的关键注意事项
+1. cache_size 必须等于 prog_size，配置错误导致文件系统报错、无法写入。
+2. lookahead_buffer和lookahead_size
+3. file_cfg.buffer手动指定空间，大小为LFS_CACHE_SIZE
+
+其他小问题
+4. 误用函数：lfs_fs_size 是文件系统总占用大小，不是单个文件大小，查询文件大小需用 lfs_file_size。
+5. 文件指针问题：写入后未执行 lfs_file_rewind 就直接读取，导致读到文件末尾无效数据。
+6. API 理解偏差：lfs_file_write 只写缓存，close 会自动同步数据到 Flash，无需手动调用 lfs_file_sync，除非有必要。

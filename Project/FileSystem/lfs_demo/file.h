@@ -22,7 +22,7 @@ typedef enum _bool
 	true = !false,
 }bool;
 
-
+bool file_init(const char *file_name, uint32_t size);
 bool file_write(const char * file_name,uint32_t addr,uint8_t *data,uint32_t len);
 uint32_t file_read(const char* file_name, uint32_t addr, uint8_t* data, uint32_t len);
 
